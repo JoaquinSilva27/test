@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Inicio de Sesión</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="login.css">
+    <script src="login.js"></script>
 </head>
 <body>
     <header>
@@ -18,13 +19,13 @@
     <div class="contenedor">
         <div class="contenedor-form login">
             <h2>Iniciar Sesión</h2>
-            <form action="#">
+            <form id="loginForm" action="/auth/login" method="post">
                 <div class="input-box">
-                    <input type="rut" required>
+                    <input type="rut" name="rut" required>
                     <label>Rut</label>
                 </div>
                 <div class="input-box">
-                    <input type="password" required>
+                    <input type="password" name="password" required>
                     <label>Contraseña</label>
                 </div>
                 <button type="submit" class="btn">Acceder</button>
