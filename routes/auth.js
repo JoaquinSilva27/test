@@ -1,24 +1,21 @@
+// routes/auth.js
 const express = require('express');
 const router = express.Router();
 
-// Usuario de prueba (rut y contraseña hardcoded)
+// Datos del usuario de prueba (simulación para pruebas)
 const testUser = {
-    rut: "test",       // Cambia esto al RUT que quieras para pruebas
-    password: "test"    // Cambia esto a la contraseña que prefieras
+    rut: 'test',        // rut de prueba
+    password: 'test'    // contraseña de prueba
 };
 
-// Ruta de inicio de sesión
+// Ruta para procesar el inicio de sesión
 router.post('/login', (req, res) => {
     const { rut, password } = req.body;
 
     // Validación contra el usuario de prueba
     if (rut === testUser.rut && password === testUser.password) {
-        console.log("rut:", rut, "rut ingresado:", testUser.rut);
-        console.log("clave:", password, "pass ingresada:", testUser.password);
         res.json({ success: true, message: "Inicio de sesión exitoso" });
     } else {
-        console.log("rut:", rut, "rut ingresado:", testUser.rut);
-        console.log("clave:", password, "pass ingresada:", testUser.password);
         res.json({ success: false, message: "Rut o contraseña incorrectos" });
     }
 });
