@@ -1,3 +1,4 @@
+console.log("login.js cargado correctamente");
 document.getElementById('loginForm').addEventListener('submit', async (event) => {
     event.preventDefault(); // Evita que el formulario se envíe de manera predeterminada
 
@@ -17,8 +18,14 @@ document.getElementById('loginForm').addEventListener('submit', async (event) =>
 
         if (data.success) {
             alert(data.message); // Puedes redirigir a otra página aquí si el login es exitoso
-            // window.location.href = "/dashboard";
-        } else {
+            if (data.rol == "admin"){
+                window.location.href = "/admin.html";
+            }else if (data.rol === "visualizador") {
+                window.location.href = "/visualizador.html"; // Redirige a la página de visualización
+            }else {
+                alert("Rol desconocido. No se puede redirigir.");
+            }
+        }else {
             alert(data.message);
         }
 

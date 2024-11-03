@@ -1,26 +1,32 @@
 // app.js
-const express = require('express');
-const path = require('path');
+const express = require("express");
+const path = require("path");
 const app = express();
-const authRoutes = require('./routes/auth');  // Importa las rutas de autenticación
+
+// Importar rutas
+const authRoutes = require("./routes/auth");
+const adminRoutes = require("./routes/admin");
+// Agrega otras rutas si es necesario
 
 const PORT = process.env.PORT || 3000;
 
-// Middleware para parsear JSON y URL-encoded
+// Middleware para parsear JSON y datos de formulario
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Servir archivos estáticos desde la carpeta 'public'
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
-// Ruta para la página de inicio de sesión
-app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'login.html'));
+// Rutas
+app.use("/auth", authRoutes);
+app.use("/admin", adminRoutes); // Usa las rutas de admin
+
+// Ruta por defecto para la página de inicio
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Usar las rutas de autenticación
-app.use('/auth', authRoutes);  // Aquí montamos '/auth' en 'authRoutes'
-
+// Iniciar el servidor
 app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}/login`);
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

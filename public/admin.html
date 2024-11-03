@@ -1,0 +1,57 @@
+<!-- public/admin.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <header>
+        <h2>Panel de Administración</h2>
+        <nav>
+            <a href="/">Inicio</a>
+            <a href="/logout">Cerrar Sesión</a>
+        </nav>
+    </header>
+    <main>
+        <section class="gestion-usuarios">
+            <h3>Gestión de Usuarios y Roles</h3>
+            <form id="form-usuarios">
+                <input type="text" name="nombre" placeholder="Nombre de usuario">
+                <select name="rol">
+                    <option value="admin">Administrador</option>
+                    <option value="visualizador">Visualizador</option>
+                </select>
+                <button type="submit">Asignar Rol</button>
+            </form>
+        </section>
+        <section class="crud-operations">
+            <h3>Operaciones CRUD</h3>
+            <!-- Formulario para Crear o Editar Datos -->
+            <form id="form-crud">
+                <input type="text" name="campo1" placeholder="Campo 1">
+                <input type="text" name="campo2" placeholder="Campo 2">
+                <button type="submit">Guardar</button>
+            </form>
+            <div class="lista-datos">
+                <h4>Datos Registrados</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Campo 1</th>
+                            <th>Campo 2</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Aquí se llenarán los datos dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    <script src="js/admin.js"></script>
+</body>
+</html>

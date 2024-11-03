@@ -6,6 +6,7 @@ const router = express.Router();
 const testUser = {
   rut: "test", // rut de prueba
   password: "test", // contraseña de prueba
+  rol: "admin"
 };
 
 // Ruta para procesar el inicio de sesión
@@ -14,7 +15,7 @@ router.post("/login", (req, res) => {
 
   // Validación contra el usuario de prueba
   if (rut === testUser.rut && password === testUser.password) {
-    res.json({ success: true, message: "Inicio de sesión exitoso owo" });
+    res.json({ success: true, message: "Inicio de sesión exitoso owo", rol: testUser.rol});
   } else {
     res.json({ success: false, message: "Rut o contraseña incorrectos" });
   }
