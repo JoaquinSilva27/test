@@ -34,3 +34,4 @@ document.getElementById('loginForm').addEventListener('submit', async (event) =>
         alert("Hubo un problema con el inicio de sesión.");
     }
 });
+
