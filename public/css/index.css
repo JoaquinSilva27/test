@@ -16,6 +16,7 @@ body {
     background-color: #004643;
 }
 
+/*Aqui empieza el encabezado*/
 header {
     position: fixed;
     top: 0;
@@ -26,14 +27,26 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 99;
+    z-index: 100;
+    margin-top: -25px; /* Mueve el encabezado hacia arriba */
+}
+/* agregadopolis */
+.logo-menu {
+    display: flex;
+    align-items: center;
 }
 
-
+.icon-menu {
+    color: #ffffff;
+    font-size: 25px;
+    cursor: pointer;
+    margin-right: 10px; 
+}
+/* hasta aca agregadopolis*/
 
 .logo {
-    font-size: 2em;
-    color: #fffffe ;
+    font-size: 1.8em;
+    color: #fffffe;
     user-select: none;
 }
 
@@ -62,8 +75,6 @@ header {
 .navegacion a:hover::after {
     transform: scaleX(1);
 }
-
-
 
 .navegacion .btnLogin-popup {
     width: 130px;
@@ -110,4 +121,78 @@ header {
     outline: none;
     border-radius: 65px;
     background-color: #001e1d;
+}
+
+/*se vienen cositas*/
+.container .btn-menu, .logo {
+  float: left;
+  line-height: 100px;
+}
+.container .btn-menu label {
+  color: #fff;
+  font-size: 25px;
+  cursor: pointer;
+}
+.container .menu {
+  float: right;
+  line-height: 100px;
+}
+
+#btn-menu {
+    display: none;
+}
+
+.container-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    height: 100vh;
+    transition: all 500ms ease;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 100;
+}
+
+#btn-menu:checked ~ .container-menu {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cont-menu {
+    width: 100%;
+    max-width: 250px;
+    background: #1c1c1c;
+    height: 100vh;
+    position: relative;
+    transition: all 500ms ease;
+    transform: translateX(-100%);
+}
+
+#btn-menu:checked ~ .container-menu .cont-menu {
+    transform: translateX(0%);
+}
+
+.cont-menu nav a {
+    display: block;
+    text-decoration: none;
+    padding: 20px;
+    color: #c7c7c7;
+    border-left: 5px solid transparent;
+    transition: all 400ms ease;
+}
+
+.cont-menu nav a:hover {
+    border-left: 5px solid #c7c7c7;
+    background: #1f1f1f;
+}
+
+.cont-menu label {
+    position: absolute;
+    right: 5px;
+    top: 10px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px;
 }
