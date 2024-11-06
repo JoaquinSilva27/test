@@ -8,13 +8,13 @@
 </head>
 <body>
     <header>
-        <h2>Panel de Administración</h2>
-        <nav>
-            <a href="/">Inicio</a>
-            <a href="/logout">Cerrar Sesión</a>
+        <h2 class = "logo">LOGO</h2>
+        <nav class = "navegacion">
+            <a href="index.html">Inicio</a>
+            <a href="#">Sobre nosotros</a>
+            <button class="btnLogin-popup" onclick="window.location.href='login.html';">Cerrar Sesion</button>
         </nav>
     </header>
-    <main>
         <section class="gestion-usuarios">
             <h3>Gestión de Usuarios y Roles</h3>
             <form id="form-usuarios">
@@ -30,8 +30,8 @@
             <h3>Operaciones CRUD</h3>
             <!-- Formulario para Crear o Editar Datos -->
             <form id="form-crud">
-                <input type="text" name="campo1" placeholder="Campo 1">
-                <input type="text" name="campo2" placeholder="Campo 2">
+                <input type="text" name="campo1a" placeholder="Campo 1">
+                <input type="text" name="campo" placeholder="Campo 2">
                 <button type="submit">Guardar</button>
             </form>
             <div class="lista-datos">

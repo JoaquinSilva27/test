@@ -1,0 +1,30 @@
+<!-- public/Usuario.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Usuario</title>
+    <link rel="stylesheet" href="css/user.css">
+</head>
+<body>
+    <header>
+        <h2 class = "logo">LOGO</h2>
+        <nav class = "navegacion">
+            <a href="index.html">Inicio</a>
+            <a href="#">Sobre nosotros</a>
+            <button class="btnLogin-popup" onclick="window.location.href='login.html';">Cerrar Sesion</button>
+        </nav>
+    </header>
+    <div class="contenedor">
+        <div class="contenedor-form user">
+            <h2>¡Hola {nombre_usuario}!</h2>
+            <div class="informacion_usuario">
+                <h3>Monto a pagar:</h3>
+                <h3>Fecha termino plazo:</h3>
+            </div>
+            <button type="submit" class="btn">Pagar</button>
+        </div>
+    </div>
+    <script src="js/reportes.js"></script>
+</body>
+</html>
