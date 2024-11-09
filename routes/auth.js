@@ -1,4 +1,4 @@
-// routes/auth.js
+// routes/auth.js a
 const express = require("express");
 const router = express.Router();
 
@@ -16,7 +16,7 @@ router.post("/login", (req, res) => {
   const user = users.find(user => user.rut === rut && user.password === password);
 
   if (user) {
-    res.json({ success: true, message: "Inicio de sesión exitoso owo", rol: user.rol });
+    res.json({ success: true, message: "Inicio de sesión exitoso owon", rol: user.rol });
   } else {
     res.json({ success: false, message: "Rut o contraseña incorrectos" });
   }
