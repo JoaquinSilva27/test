@@ -1,6 +1,6 @@
-console.log("login.js cargado correctamente");
+// login.js
 document.getElementById('loginForm').addEventListener('submit', async (event) => {
-    event.preventDefault(); // Evita que el formulario se envíe de manera predeterminada
+    event.preventDefault();
 
     const rut = document.querySelector('input[name="rut"]').value;
     const password = document.querySelector('input[name="password"]').value;
@@ -15,23 +15,19 @@ document.getElementById('loginForm').addEventListener('submit', async (event) =>
         });
 
         const data = await response.json();
-
         if (data.success) {
-            alert(data.message); // Puedes redirigir a otra página aquí si el login es exitoso
-            if (data.rol == "admin"){
+            if (data.rol === "admin"){
                 window.location.href = "/admin.html";
-            }else if (data.rol === "user") {
-                window.location.href = "/user.html"; // Redirige a la página de visualización
-            }else {
-                alert("Rol desconocido. No se puede redirigir.");
+            } else if (data.rol === "user") {
+                window.location.href = "/user.html";
+            } else {
+                alert("Rol desconocido.");
             }
-        }else {
+        } else {
             alert(data.message);
         }
-
     } catch (error) {
         console.error("Error en la solicitud:", error);
         alert("Hubo un problema con el inicio de sesión.");
     }
 });
-

@@ -1,5 +1,7 @@
 // app.js
 const express = require("express");
+const session = require("express-session");
+
 const path = require("path");
 const app = express();
 
@@ -8,7 +10,15 @@ const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
 // Agrega otras rutas si es necesario
 
-const PORT = process.env.PORT || 3000;
+
+// Configuración del middleware de sesión
+app.use(session({
+    secret: "tu_secreto_seguro", // Usa una clave segura; en producción, configúrala en variables de entorno.
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 15000 } // Expira en 15 segundos
+  }));
+
 
 // Middleware para parsear JSON y datos de formulario
 app.use(express.json());
@@ -26,6 +36,9 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
+
+
+const PORT = process.env.PORT || 3000;
 // Iniciar el servidor
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);

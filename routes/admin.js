@@ -3,11 +3,20 @@ const express = require("express");
 const path = require("path");
 const router = express.Router();
 
-// Ruta para servir admin.html
-router.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../public/admin.html"));
+
+const { isAuthenticated, authorizeRoles } = require("../middleware/sessionMiddleware");
+
+
+// Ruta protegida para el administrador
+router.get("/mantenedor", isAuthenticated, authorizeRoles("admin"), (req, res) => {
+    res.json({ success: true, message: "Acceso al mantenedor" });
+  });
+
+router.post("/crear", isAuthenticated, authorizeRoles("admin"), (req, res) => {
+  res.json({ success: true, message: "Recurso creado por admin" });
 });
 
-// Agrega otras rutas si es necesario, por ejemplo, para visualizar CRUD o gestionar datos
+// Otras rutas de administrador
+// ...
 
 module.exports = router;

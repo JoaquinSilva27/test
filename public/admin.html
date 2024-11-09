@@ -6,6 +6,43 @@
     <title>Panel de Administración</title>
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    <script>
+        // Función autoejecutable para verificar si el usuario es administrador
+        (async () => {
+          try {
+            // Solicitud al servidor para verificar la sesión y el rol
+            const response = await fetch("/auth/verify-session");
+            const data = await response.json();
+    
+            if (!data.success || data.user.rol !== "admin") {
+                alert("Acceso Denegado")
+                window.location.href = "/user.html";
+            }
+          } catch (error) {
+            alert(error)
+            console.error("Error verificando la sesión:", error);
+            // En caso de error, redirige al login
+            window.location.href = "/login.html";
+          }
+        })();
+      </script>
+      <script>
+        // Función para verificar el estado de la sesión cada minuto
+        setInterval(async () => {
+          try {
+            const response = await fetch("/auth/check-session");
+            const data = await response.json();
+      
+            if (!data.success) {
+              // Si la sesión ha expirado, muestra una alerta y redirige al login
+              alert(data.message);
+              window.location.href = "/login.html";
+            }
+          } catch (error) {
+            console.error("Error verificando la sesión:", error);
+          }
+        }, 15000); // 60000 ms = 1 minuto
+      </script>
 </head>
 <body>
     <!-- Checkbox para activar la barra lateral -->
@@ -35,12 +72,9 @@
         </div>
         <nav class="navegacion">
             <a href="index.html">Inicio</a>
-            <a href="#">Sobre nosotros</a>
-            <button class="btnLogin-popup" onclick="window.location.href='login.html';">Cerrar Sesion</button>
+            <button id = "logoutButton" class="btnLogin-popup" onclick="window.location.href='login.html';">Cerrar Sesion</button>
         </nav>
     </header>
-        
-        
     </main>
     <script src="js/admin.js"></script>
 </body>
