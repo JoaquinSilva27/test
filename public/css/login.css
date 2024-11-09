@@ -30,9 +30,8 @@ header {
 }
 
 
-
 .logo {
-    font-size: 2em;
+    font-size: 1.8em;
     color: #fffffe ;
     user-select: none;
 }
@@ -62,8 +61,6 @@ header {
 .navegacion a:hover::after {
     transform: scaleX(1);
 }
-
-
 
 .navegacion .btnLogin-popup {
     width: 130px;

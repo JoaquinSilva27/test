@@ -20,8 +20,8 @@ document.getElementById('loginForm').addEventListener('submit', async (event) =>
             alert(data.message); // Puedes redirigir a otra página aquí si el login es exitoso
             if (data.rol == "admin"){
                 window.location.href = "/admin.html";
-            }else if (data.rol === "visualizador") {
-                window.location.href = "/visualizador.html"; // Redirige a la página de visualización
+            }else if (data.rol === "user") {
+                window.location.href = "/user.html"; // Redirige a la página de visualización
             }else {
                 alert("Rol desconocido. No se puede redirigir.");
             }

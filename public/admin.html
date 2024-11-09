@@ -5,52 +5,42 @@
     <meta charset="UTF-8">
     <title>Panel de Administración</title>
     <link rel="stylesheet" href="css/admin.css">
+    <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
-    <header>
-        <h2 class = "logo">LOGO</h2>
-        <nav class = "navegacion">
+    <!-- Checkbox para activar la barra lateral -->
+    <input type="checkbox" id="btn-menu" />
+
+    <!-- Barra lateral -->
+    <div class="container-menu">
+        <div class="cont-menu">
+            <header class="sidebar-header">
+                <label for="btn-menu" class="close-icon">☰</label>
+            </header>
+            <nav>
+                <a href="#">Te</a>
+                <a href="#">La</a>
+                <a href="#">Dedico</a>
+                <a href="#">Carla</a>
+                <a href="#">G</a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Header que debe permanecer fijo en la parte superior -->
+    <header class="main-header">
+        <div class="logo-menu">
+            <label for="btn-menu" class="icon-menu">☰</label>
+            <h2 class="logo">LOGO</h2>
+        </div>
+        <nav class="navegacion">
             <a href="index.html">Inicio</a>
             <a href="#">Sobre nosotros</a>
             <button class="btnLogin-popup" onclick="window.location.href='login.html';">Cerrar Sesion</button>
         </nav>
     </header>
-        <section class="gestion-usuarios">
-            <h3>Gestión de Usuarios y Roles</h3>
-            <form id="form-usuarios">
-                <input type="text" name="nombre" placeholder="Nombre de usuario">
-                <select name="rol">
-                    <option value="admin">Administrador</option>
-                    <option value="visualizador">Visualizador</option>
-                </select>
-                <button type="submit">Asignar Rol</button>
-            </form>
-        </section>
-        <section class="crud-operations">
-            <h3>Operaciones CRUD</h3>
-            <!-- Formulario para Crear o Editar Datos -->
-            <form id="form-crud">
-                <input type="text" name="campo1a" placeholder="Campo 1">
-                <input type="text" name="campo" placeholder="Campo 2">
-                <button type="submit">Guardar</button>
-            </form>
-            <div class="lista-datos">
-                <h4>Datos Registrados</h4>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Campo 1</th>
-                            <th>Campo 2a</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Aquí se llenarán los datos dinámicamente -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
+        
+        
     </main>
     <script src="js/admin.js"></script>
 </body>
