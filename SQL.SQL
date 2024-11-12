@@ -195,6 +195,52 @@ CREATE TABLE SA_JS_JO_NR_CELADORES( --MANTENEDOR LISTO
 	CONSTRAINT FK_SA_JS_JO_NR_CELADORES_CANALES FOREIGN KEY(COD_CANAL) REFERENCES SA_JS_JO_NR_CANALES(COD_CANAL)
 );
 
+
+-- Triggers (2 por ahora)
+
+-- función: verifica que existan los codigos de region y de calle asociados a la comuna que se inserte o actualice en las tablas de regiones y direcciones
+CREATE OR REPLACE TRIGGER SA_JS_JO_NR_trg_verifica_integridad_comunas
+BEFORE INSERT OR UPDATE ON SA_JS_JO_NR_COMUNAS
+FOR EACH ROW
+DECLARE
+    v_region_exists NUMBER;
+    v_direccion_exists NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_region_exists
+    FROM SA_JS_JO_NR_REGIONES
+    WHERE COD_REGION = :NEW.COD_REGION;
+
+    IF v_region_exists = 0 THEN
+        RAISE_APPLICATION_ERROR(-20001, 'La región no existe :,v.');
+    END IF;
+
+    SELECT COUNT(*) INTO v_direccion_exists
+    FROM SA_JS_JO_NR_DIRECCIONES
+    WHERE COD_CALLEN = :NEW.COD_CALLEN;
+
+    IF v_direccion_exists = 0 THEN
+        RAISE_APPLICATION_ERROR(-20002, 'La dirección no existe papu :c.');
+    END IF;
+END;
+/
+
+-- funcion: verifica que no haya ninguna comuna asociada a la region que se desea eliminar, si existe entonces no se elimna
+CREATE OR REPLACE TRIGGER SA_JS_JO_NR_trg_prevenir_eliminacion_region
+BEFORE DELETE ON SA_JS_JO_NR_REGIONES
+FOR EACH ROW
+DECLARE
+    v_comuna_exists NUMBER;
+BEGIN
+    SELECT COUNT(*) INTO v_comuna_exists
+    FROM SA_JS_JO_NR_COMUNAS
+    WHERE COD_REGION = :OLD.COD_REGION;
+
+    IF v_comuna_exists > 0 THEN
+        RAISE_APPLICATION_ERROR(-20003, 'No se puede eliminar la región porque tiene comunas dentro de ella. Borra la/s comunas primero');
+    END IF;
+END;
+/
+
 -- MANTENEDORES
 
 -- REGIONES
