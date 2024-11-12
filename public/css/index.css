@@ -8,13 +8,7 @@
     font-family: 'Poppins', sans-serif;
 }
 
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #004643;
-}
+
 
 /*Aqui empieza el encabezado*/
 header {
@@ -30,7 +24,6 @@ header {
     z-index: 100;
     
 }
-
 
 .logo {
     font-size: 1.8em;
@@ -85,29 +78,55 @@ header {
     border: 2px solid #f9bc60;
 }
 
-.container {
+
+
+.hero-section {
+    min-height: 100vh;
+    background: #004643 ;
+}
+
+.hero-section .section-content {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    text-align: center;
+    min-height: 100vh;
+    color: #e8e4e6;
+    justify-content: space-between;
+    margin: 0 auto;
+    padding: 0 20px;
+    max-width: 1300px;
 }
 
-.titulo {
-    font-size: 4.5em;
-    margin-bottom: 0px;
-    margin: 0;
-    padding: 20px;
+.hero-section .hero-details .title {
+    font-size: 100px;
+    color: #f9bc60;
 }
 
-.logoucm {
-    display: block;
-    margin: 0 auto; 
-    max-width: 200px; 
-    width: 100%;      
-    height: auto; 
-    border: none;
-    outline: none;
-    border-radius: 65px;
-    background-color: #001e1d;
+
+.hero-section .hero-details .subtitle{
+    margin-top: 8px;
+    max-width: 70%;
+    font-size: 30px;
+    font-weight: 600;
+    color: #fffffe;
 }
 
+.hero-section .hero-details .description{
+    max-width: 70%;
+    margin: 24px 0 40px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #abd1c6
+}
+
+.hero-section .hero-image-wrapper{
+    
+    margin-right: 40px;
+    background-color: #e8e4e6;
+    border-radius: 50%;
+    box-shadow: #001e1d;
+    display: flex;
+    justify-content: center;
+    width:400px;
+    height:400px;
+    line-height:25px;
+}

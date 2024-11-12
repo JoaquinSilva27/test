@@ -2032,7 +2032,6 @@ Este gestor muestra la lista de celadores asignados a cada canal, lo cual es út
 
 
 --REPORTES
-
 1. Reporte de Usuarios y Cuotas Pendientes
 Este reporte muestra a los usuarios que tienen cuotas pendientes, mostrando la cuota y fecha de vencimiento y interes acumulado.
 2. Reporte de Proyectos por Estado
