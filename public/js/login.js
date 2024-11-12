@@ -1,4 +1,4 @@
-// login.js
+// public/js/login.js
 document.getElementById('loginForm').addEventListener('submit', async (event) => {
     event.preventDefault();
 

@@ -1966,6 +1966,57 @@ EXCEPTION
 END;
 /
 
+-- Funciones
+
+-- Funcion para calcular interes
+CREATE OR REPLACE FUNCTION calcular_total_con_interes(
+    p_cod_cuota NUMBER
+) RETURN NUMBER IS
+    v_total_con_interes NUMBER := 0;
+    v_dias_vencidos NUMBER := 0;
+    v_total_cuota NUMBER;
+    v_fecha_vencimiento DATE;
+BEGIN
+    SELECT TOTAL_CUOTA, FECHA_VENCIMIENTO_CUOTA 
+    INTO v_total_cuota, v_fecha_vencimiento
+    FROM SA_JS_JO_NR_CUOTAS
+    WHERE COD_CUOTA = p_cod_cuota;
+
+    IF v_fecha_vencimiento < SYSDATE THEN
+        v_dias_vencidos := SYSDATE - v_fecha_vencimiento;
+    END IF;
+    -- Calcular el total con interés (0.05% por día de atraso) (cambiar)
+    v_total_con_interes := v_total_cuota + (v_total_cuota * 0.0005 * v_dias_vencidos);
+    RETURN v_total_con_interes;
+END;
+
+-- EJEMPLO DE USO:
+SELECT COD_CUOTA,
+       TOTAL_CUOTA,
+       calcular_total_con_interes(COD_CUOTA) AS TOTAL_CON_INTERES
+FROM SA_JS_JO_NR_CUOTAS
+WHERE COD_CUOTA = 101;  -- Reemplaza 101 con el código de la cuota que deseas consultar
+
+
+-- fUNCION PARA VERIFICAR DISPONIBILIDAD DEL PROYECTO 
+CREATE OR REPLACE FUNCTION verificar_disponibilidad_proyecto(
+    p_cod_proyecto NUMBER
+) RETURN BOOLEAN IS
+    v_disponible BOOLEAN := TRUE;
+    v_estado VARCHAR2(20);
+    v_cuotas_vencidas NUMBER;
+BEGIN
+    -- Verificar si el proyecto está activo
+    SELECT estado INTO v_estado
+    FROM SA_JS_JO_NR_PROYECTOS  -- Suponiendo que existe una tabla de proyectos
+    WHERE cod_proyecto = p_cod_proyecto;
+
+    IF v_estado != 'Activo' THEN
+        v_disponible := FALSE;
+    END IF;
+    RETURN v_disponible;
+END verificar_disponibilidad_proyecto;
+
 -- GESTORES
 
 1. Gestor de Cuotas Pendientes por Usuario
@@ -1979,10 +2030,11 @@ Este gestor muestra todos los servicios asociados a cada canal, mostrando su rel
 5. Gestor de Celadores por Canal
 Este gestor muestra la lista de celadores asignados a cada canal, lo cual es útil para analizar la distribución de personal.
 
+
 --REPORTES
 
 1. Reporte de Usuarios y Cuotas Pendientes
-Este reporte muestra a los usuarios que tienen cuotas pendientes, mostrando la cuota y fecha de vencimiento.
+Este reporte muestra a los usuarios que tienen cuotas pendientes, mostrando la cuota y fecha de vencimiento y interes acumulado.
 2. Reporte de Proyectos por Estado
 Este reporte muestra el estado de cada proyecto en la base de datos, organizado por estado.
 3. Reporte de Historial de Pagos

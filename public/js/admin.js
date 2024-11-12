@@ -1,3 +1,4 @@
+// public/js/admin.js
 document.getElementById("logoutButton").addEventListener("click", async () => {
     try {
       const response = await fetch("/auth/logout", {
