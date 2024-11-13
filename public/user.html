@@ -8,44 +8,32 @@
     <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
-    <!-- Loader -->
-    <div id="loader" style="display: none;"> 
-        <div id="box"></div>
-        <div id="hill"></div>
-      </div>  
-    <!-- Checkbox para activar la barra lateral -->
-    <input type="checkbox" id="btn-menu" />
 
-    <!-- Barra lateral -->
-    <div class="container-menu">
-        <div class="cont-menu">
-            <header class="sidebar-header">
-                <label for="btn-menu" class="close-icon">☰</label>
-            </header>
-            <nav>
-                <a href="#">Te</a>
-                <a href="#">La</a>
-                <a href="#">Dedico</a>
-                <a href="#">Carla</a>
-                <a href="#">G</a>
-            </nav>
-        </div>
-    </div>
-
-    <!-- Header que debe permanecer fijo en la parte superior -->
-    <header class="main-header">
-        <div class="logo-menu">
-            <label for="btn-menu" class="icon-menu">☰</label>
-            <h2 class="logo">Riego Maule Sur</h2>
-        </div>
-        <nav class="navegacion">
-            <a href="index.html">Inicio</a>
-            <button class="btnLogin-popup" onclick="window.location.href='login.html';">Cerrar Sesion</button>
+    <!-- Sidebar Container -->
+    <div id="sidebar-container" class="sidebar">
+        <header class="sidebar-header">
+        </header>
+        <nav>
+            <a href="#">Te</a>
+            <a href="#">La</a>
+            <a href="#">Dedico</a>
+            <a href="#">Carla</a>
+            <a href="#">G</a>
         </nav>
-    </header>
-
-    <!-- Contenido principal que se desplazará cuando la barra lateral esté activa -->
-    <div class="main-content">
+    </div>
+    
+    <!-- Main Content Container -->
+    <div id="content-container" class="main-content">
+        <header class="main-header">
+            <div class="logo-menu">
+                <span class="icon-menu" onclick="toggleSidebar()">☰</span>
+                <h2 class="logo">Riego Maule Sur</h2>
+            </div>
+            <nav class="navegacion">
+                <a href="index.html">Inicio</a>
+                <button class="btnLogin-popup" onclick="window.location.href='login.html';">Cerrar Sesion</button>
+            </nav>
+        </header>
         <div class="contenedor">
             <div class="contenedor-form user">
                 <h2>¡Hola {nombre_usuario}!</h2>
@@ -58,8 +46,8 @@
         </div>
     </div>
 
+
+    <script src="js/sidebar.js"></script>
     <script src="js/reportes.js"></script>
 </body>
-
-
 </html>

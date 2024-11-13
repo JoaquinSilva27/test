@@ -1,155 +1,54 @@
-/* Estilo del contenedor que agrupa header y main-content */
 
-.main-header {
+
+.sidebar {
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100%;
-    padding: 20px 100px;
-    background: #004643;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 99;
-    /* Asegura que no se superponga con el contenido desplazado */
-    box-sizing: border-box;
-}
-
-.main-content {
-    margin-top: 100px; /* Ajusta el margen superior según la altura del header */
-    transition: margin-left 0.5s ease; /* Transición suave para el desplazamiento */
-    margin-left: 0; /* Estado inicial sin desplazamiento */
-}
-
-.main-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: calc(100% - 90px); /* Ajusta el ancho cuando la barra está abierta */
-    padding: 20px 100px;
-    background: #004643;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 99;
-    transition: margin-left 0.5s ease, width 0.5s ease; /* Transición aplicada aquí para ambos cambios */
-    /* Transición suave para el ajuste de ancho */
-    box-sizing: border-box;
-}
-
-#btn-menu:not(:checked) ~ .main-header {
-    width: 100%;
-}
-
-#btn-menu:checked ~ .main-content {
-    margin-left: 250px; /* Desplaza el contenido principal hacia la derecha */
-}
-
-#btn-menu:checked ~ .main-header {
-    margin-left: 120px; /* Desplaza el contenido principal hacia la derecha */
-}
-
-.logo-menu {
-    display: flex;
-    align-items: center;
-    transition: padding-left 0.5s ease; /* Transición suave para el movimiento */
-}
-
-.icon-menu {
-    color: #ffffff;
-    font-size: 25px;
-    cursor: pointer;
-    margin-right: 10px; 
-}
-
-.container .btn-menu, .logo {
-  float: left;
-  line-height: 100px;
-}
-
-.container .menu {
-  float: right;
-  line-height: 100px;
-}
-
-#btn-menu {
-    display: none;
-}
-
-.container-menu {
-    position: fixed;
-    top: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.5);
-    width: 100%;
+    left: -250px;
+    width: 250px;
     height: 100vh;
-    transition: all 500ms ease;
-    opacity: 0;
-    visibility: hidden;
+    background: #abd1c6;
+    transition: left 0.3s ease;
     z-index: 100;
 }
 
-#btn-menu:checked ~ .container-menu {
-    opacity: 1;
-    visibility: visible;
-}
-
-.cont-menu {
-    width: 100%;
-    max-width: 250px;
-    background: #abd1c6;
-    height: 100vh;
-    position: relative;
-    transition: all 500ms ease;
-    transform: translateX(-100%);
-    display: flex;
-    flex-direction: column; 
-}
-
-#btn-menu:checked ~ .container-menu .cont-menu {
-    transform: translateX(0%);
-}
-
-
 .sidebar-header {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
     padding: 20px;
     background-color: #004643;
-    width: 100%;
-    box-sizing: border-box;
-    height: 120px; /* Fija la altura del header para asegurar espacio suficiente */
+    color: #ffffff;
+    z-index: 101;
 }
 
+.main-content {
+    margin-left: 0;
+    transition: margin-left 0.3s ease;
+}
+
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: calc(100% - 250px); /* Ajusta el ancho cuando el sidebar está abierto */
+    padding: 20px 100px;
+    background: #004643;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 102; /* Coloca el header principal sobre el sidebar */
+    transition: margin-left 0.3s ease, width 0.3s ease; /* Hace que el header se ajuste suavemente */
+}
+
+.sidebar.open {
+    left: 0; /* Hace visible el sidebar */
+}
+
+.main-content.expanded,
+.main-header.expanded {
+    margin-left: 250px; /* Desplaza el contenido y el header de main-content */
+}
+
+.icon-menu,
 .close-icon {
+    cursor: pointer;
     font-size: 25px;
     color: #ffffff;
-    cursor: pointer;
-    margin-top: 20px;
 }
-
-.cont-menu nav {
-    display: flex;
-    flex-direction: column;
-    padding: 20px 0;
-    margin-top: 75px;
-}
-
-.cont-menu nav a {
-    font-size: .875em; 
-    font-weight: 600;
-    padding: 20px 20px;
-    text-decoration: none;
-    color: #001e1d;
-    border-left: 5px solid transparent;
-    transition: all 400ms ease;
-}
-
-
-.cont-menu nav a:hover {
-    border-left: 5px solid #f9bc60;
-    background: #004643;
-    color: #fffffe;
-}
-
