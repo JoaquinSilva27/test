@@ -1,20 +1,22 @@
-
-
 .sidebar {
     position: fixed;
     top: 0;
-    left: -250px;
+    left: -250px; /* Oculto inicialmente */
     width: 250px;
     height: 100vh;
     background: #abd1c6;
-    transition: left 0.3s ease;
+    transition: left 0.3s ease; /* Transición para mover el sidebar */
     z-index: 100;
+    display: flex;
+    flex-direction: column; /* Asegura que el contenido se alinee verticalmente */
 }
 
 .sidebar-header {
+    width: 100%;
     padding: 20px;
-    background-color: #004643;
+    background-color: #000000;
     color: #ffffff;
+    position: relative; /* Cambia a relative para que no se desplace con el sidebar */
     z-index: 101;
 }
 
@@ -23,18 +25,25 @@
     transition: margin-left 0.3s ease;
 }
 
+/* Sidebar cerrado: El header ocupa el 100% del ancho */
 .main-header {
     position: fixed;
     top: 0;
     left: 0;
-    width: calc(100% - 250px); /* Ajusta el ancho cuando el sidebar está abierto */
-    padding: 20px 100px;
+    width: 100%; /* Asegura que ocupe el ancho completo cuando el sidebar está cerrado */
+    padding: 44px 100px;
     background: #004643;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 102; /* Coloca el header principal sobre el sidebar */
-    transition: margin-left 0.3s ease, width 0.3s ease; /* Hace que el header se ajuste suavemente */
+    z-index: 102; /* Asegura que esté por encima del sidebar */
+    transition: margin-left 0.3s ease, width 0.3s ease; /* Transición suave para cambios de ancho y margen */
+}
+
+/* Sidebar abierto: El header se ajusta a un ancho menor */
+.main-header.expanded {
+    width: calc(100% - 250px); /* Ajusta el ancho cuando el sidebar está abierto */
+    margin-left: 250px; /* Desplaza el header para alinearse con el contenido */
 }
 
 .sidebar.open {
@@ -46,9 +55,21 @@
     margin-left: 250px; /* Desplaza el contenido y el header de main-content */
 }
 
+.logo-menu {
+    display: flex;
+    align-items: center;
+    transition: padding-left 0.5s ease; /* Transición suave para el movimiento */
+  }
+
 .icon-menu,
 .close-icon {
-    cursor: pointer;
-    font-size: 25px;
     color: #ffffff;
+    font-size: 25px;
+    cursor: pointer;
+    margin-right: 10px; 
 }
+
+#btn-menu {
+    display: none;
+  }
+
