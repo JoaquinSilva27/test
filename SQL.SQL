@@ -1957,7 +1957,7 @@ BEGIN
         v_dias_vencidos := SYSDATE - v_fecha_vencimiento;
     END IF;
     -- Calcular el total con interés (0.05% por día de atraso) (cambiar)
-    v_total_con_interes := v_total_cuota + (v_total_cuota * 0.0005 * v_dias_vencidos);
+    v_total_con_interes := v_total_cuota + (v_total_cuota * 0.00053 * v_dias_vencidos);
     RETURN v_total_con_interes;
 END;
 
