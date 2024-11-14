@@ -98,7 +98,7 @@
 }
 
 .sidebar nav a{
-    font-size: 1.275em; 
+    font-size: 1.075em; 
     font-weight: 600;
     padding: 20px 20px;
     text-decoration: none;
@@ -114,5 +114,11 @@ border-left: 5px solid #f9bc60;
 border-right: 5px solid #f9bc60;
 background: #004643;
 color: #fffffe;
+}
+
+.main-content {
+    margin-left: 0;
+    transition: margin-left 0.3s ease;
+    padding-top: 80px; /* Espacio para el encabezado */
 }
   

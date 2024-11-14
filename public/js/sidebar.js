@@ -10,13 +10,6 @@ function toggleSidebar() {
         sidebar.classList.toggle('open');
         content.classList.toggle('expanded');
         mainHeader.classList.toggle('expanded');
-
-        // Cambia el icono al hacer clic
-        if (sidebar.classList.contains('open')) {
-            menuIcon.textContent = '✕'; // Cambia el icono a una "X" para cerrar
-        } else {
-            menuIcon.textContent = '☰'; // Cambia el icono a "☰" para abrir
-        }
     } else {
         console.error("No se encontraron los elementos sidebar, content o mainHeader.");
     }

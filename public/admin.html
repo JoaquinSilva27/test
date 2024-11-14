@@ -6,6 +6,7 @@
     <title>Panel de Administración</title>
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    <!--
     <script>
         // Función autoejecutable para verificar si el usuario es administrador
         (async () => {
@@ -43,6 +44,7 @@
           }
         }, 600000); // 60000 ms = 1 minuto
       </script>
+    -->
 </head>
 <body>
   <!-- Sidebar Container -->
@@ -50,7 +52,8 @@
     <header class="sidebar-header">MENU
     </header>
     <nav>
-      <a href="#">Te</a>
+      <a href="#" onclick="showMsj()">Inicio</a>
+      <a href="#" onclick="showAdminRegistros()">Administracion de Registros</a>
       <a href="#">La</a>
       <a href="#">Dedico</a>
       <a href="#">Carla</a>
@@ -61,18 +64,36 @@
   <!-- Main Content Container -->
   <div id="content-container" class="main-content">
     <header class="main-header">
-      <div class="logo-menu">
-        <span class="icon-menu" onclick="toggleSidebar()">☰</span>
-          <h2 class="logo">Riego Maule Sur</h2>
-      </div>
-      <nav class="navegacion">
-        <a href="index.html">Inicio</a>
-        <button class="btnLogin-popup" onclick="window.location.href='login.html';">Cerrar Sesion</button>
-      </nav>
+        <div class="logo-menu">
+            <span class="icon-menu" onclick="toggleSidebar()">☰</span>
+            <h2 class="logo">Riego Maule Sur</h2>
+        </div>
+        <nav class="navegacion">
+            <a href="index.html">Inicio</a>
+            <button class="btnLogin-popup" onclick="window.location.href='login.html';">Cerrar Sesion</button>
+        </nav>
     </header>
-    <div class="mensaje-inicio">
-      <h2>¡Bienvenido/a {nombre_usuario}!</h2>
+
+    <!-- Contenido principal (mensaje de bienvenida) -->
+    <div class="contenedor" style="display: block;">
+        <h2 class="mensaje-inicio">¡Bienvenido/a {nombre_usuario}!</h2>
     </div>
+
+    <!-- Contenedor de Administración de Registros (inicialmente oculto) -->
+    <div id="admin-registros-container" class="container-crud" style="display: none;">
+        <div class="contenedor-form-crud">
+          <h2>Administración de Registros</h2>
+        </div>
+        <div id="admin-options">
+            <h3>¿Qué acción deseas realizar?</h3>
+            <button class="btn" onclick="selectAction('Agregar')">Agregar</button>
+            <button class="btn" onclick="selectAction('Consultar')">Consultar</button>
+            <button class="btn" onclick="selectAction('Modificar')">Modificar</button>
+            <button class="btn" onclick="selectAction('Eliminar')">Eliminar</button>
+        </div>
+      <div id="form-container"></div>
+  </div>
+
   </div>
   <script src="js/admin.js"></script>
   <script src="js/sidebar.js"></script>

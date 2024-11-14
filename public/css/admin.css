@@ -9,7 +9,6 @@
 }
 
 body {
-    display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
@@ -29,6 +28,8 @@ header {
     z-index: 99;
     margin-top: -25px;
 }
+
+
 
 .logo {
     font-size: 1.8em;
@@ -85,8 +86,171 @@ header {
     border: 2px solid #f9bc60;
 }
 
-.mensaje-inicio{
-    color: #e8e4e6;
-    font-size: 2em;
+.contenedor {
+    position: absolute;
+    top: 44%;
+    width: 65%;
+    height: 500px;
+    margin-left: 19%;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
 }
 
+.mensaje-inicio {
+    font-size: 3em;
+    color: #fffffe;
+    text-align: center;
+}
+
+.main-content {
+    position: relative; /* Establece un contexto para posicionamiento absoluto */
+    margin-left: 220px; /* Deja espacio para el sidebar */
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden; /* Asegura que el contenido adicional no desborde */
+}
+
+.container-crud {
+    position: absolute;
+    top: 25%;
+    width: 65%;
+    height: 500px;
+    margin-left: 20%;
+    background: #e8e4e6;
+    border: 2px solid rgba(255,255,255,.5);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 30px rgba(0,0,0,.5);
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+
+.container-crud .contenedor-form-crud{
+    width: 100%;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.contenedor-form-crud h2{
+    font-size: 2em;
+    color: #001e1d;
+    text-align: center;
+    
+}
+
+#admin-options{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 0;
+}
+
+#admin-options h3{
+    margin-left: 25px;
+}
+
+
+#admin-options .btn {
+    width: 150px;
+    height: 50px;
+    background: transparent;
+    border: 2px solid #004643;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    color: #001e1d;
+    font-weight: 500;
+    margin-right: 20px;
+    transition: .5s;
+}
+
+#admin-options .btn:hover {
+    background: #f9bc60;
+    color:#001e1d;
+    border: 2px solid #f9bc60;
+}
+
+
+/* Contenedor del Formulario */
+#form-container {
+    width: 80%;
+    margin: 0 auto; /* Centrado horizontal */
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 40px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#form-container h3 {
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    color: #001e1d;
+}
+
+/* Estilo general para el Select Box */
+#tableSelect {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 2px solid #004643;
+    border-radius: 5px;
+    font-size: 1em;
+    color: #333;
+    background-color: #ffffff;
+    appearance: none; /* Oculta el ícono predeterminado del navegador */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-chevron-down" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/> </svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 1em;
+    outline: none;
+    transition: border-color 0.3s ease;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+#tableSelect:focus {
+    border-color: #f9bc60; /* Cambia el color del borde al enfocarse */
+}
+
+/* Estilo para las Opciones del Select */
+#tableSelect option {
+    padding: 10px;
+    color: #333;
+    background-color: #fff;
+}
+
+/* Estilo del Botón de Guardar */
+.btn-guardar {
+    width: 100%; /* O ajusta al tamaño deseado */
+    padding: 12px 20px;
+    background-color: #004643;
+    color: #ffffff;
+    border: 2px solid #004643;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+}
+
+.btn-guardar:hover {
+    background-color: #f9bc60;
+    color: #004643;
+}
+
+.btn-guardar:active {
+    background-color: #e6a555; /* Color un poco más oscuro para el clic */
+}
