@@ -6,7 +6,6 @@
     <title>Panel de Administración</title>
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/dashboard.css">
-    <!--
     <script>
         // Función autoejecutable para verificar si el usuario es administrador
         (async () => {
@@ -42,9 +41,8 @@
           } catch (error) {
             console.error("Error verificando la sesión:", error);
           }
-        }, 600000); // 60000 ms = 1 minuto
+        }, 15000); // 60000 ms = 1 minuto
       </script>
-    -->
 </head>
 <body>
   <!-- Sidebar Container -->
@@ -73,7 +71,6 @@
             <button class="btnLogin-popup" onclick="window.location.href='login.html';">Cerrar Sesion</button>
         </nav>
     </header>
-
     <!-- Contenido principal (mensaje de bienvenida) -->
     <div class="contenedor" style="display: block;">
         <h2 class="mensaje-inicio">¡Bienvenido/a {nombre_usuario}!</h2>
