@@ -41,40 +41,40 @@
           } catch (error) {
             console.error("Error verificando la sesión:", error);
           }
-        }, 15000); // 60000 ms = 1 minuto
+        }, 600000); // 60000 ms = 1 minuto
       </script>
 </head>
 <body>
-    <!-- Checkbox para activar la barra lateral -->
-    <input type="checkbox" id="btn-menu" />
-    <!-- Barra lateral -->
-    <div class="container-menu">
-        <div class="cont-menu">
-            <header class="sidebar-header">
-                <label for="btn-menu" class="close-icon">☰</label>
-            </header>
-            <nav>
-                <a href="#">Te</a>
-                <a href="#">La</a>
-                <a href="#">Dedico</a>
-                <a href="#">Carla</a>
-                <a href="#">G</a>
-            </nav>
-        </div>
-    </div>
-
-    <!-- Header que debe permanecer fijo en la parte superior -->
-    <header class="main-header">
-        <div class="logo-menu">
-            <label for="btn-menu" class="icon-menu">☰</label>
-            <h2 class="logo">Riego Maule Sur</h2>
-        </div>
-        <nav class="navegacion">
-            <a href="index.html">Inicio</a>
-            <button id = "logoutButton" class="btnLogin-popup" onclick="window.location.href='login.html';">Cerrar Sesion</button>
-        </nav>
+  <!-- Sidebar Container -->
+  <div id="sidebar-container" class="sidebar">
+    <header class="sidebar-header">MENU
     </header>
-    </main>
-    <script src="js/admin.js"></script>
+    <nav>
+      <a href="#">Te</a>
+      <a href="#">La</a>
+      <a href="#">Dedico</a>
+      <a href="#">Carla</a>
+      <a href="#">G</a>
+    </nav>
+  </div>
+
+  <!-- Main Content Container -->
+  <div id="content-container" class="main-content">
+    <header class="main-header">
+      <div class="logo-menu">
+        <span class="icon-menu" onclick="toggleSidebar()">☰</span>
+          <h2 class="logo">Riego Maule Sur</h2>
+      </div>
+      <nav class="navegacion">
+        <a href="index.html">Inicio</a>
+        <button class="btnLogin-popup" onclick="window.location.href='login.html';">Cerrar Sesion</button>
+      </nav>
+    </header>
+    <div class="mensaje-inicio">
+      <h2>¡Bienvenido/a {nombre_usuario}!</h2>
+    </div>
+  </div>
+  <script src="js/admin.js"></script>
+  <script src="js/sidebar.js"></script>
 </body>
 </html>

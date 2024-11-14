@@ -4,7 +4,7 @@
     left: -250px; /* Oculto inicialmente */
     width: 250px;
     height: 100vh;
-    background: #abd1c6;
+    background: #001e1d;
     transition: left 0.3s ease; /* Transición para mover el sidebar */
     z-index: 100;
     display: flex;
@@ -12,12 +12,20 @@
 }
 
 .sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    padding: 20px;
-    background-color: #000000;
-    color: #ffffff;
+    height: 90px;
+    font-size: 1.8em; 
+    font-weight: 600;
+    padding: 0;
+    margin: 0;
+    background-color: #f9bc60;
+    color: #001e1d;
     position: relative; /* Cambia a relative para que no se desplace con el sidebar */
     z-index: 101;
+    cursor: default;
 }
 
 .main-content {
@@ -63,13 +71,48 @@
 
 .icon-menu,
 .close-icon {
-    color: #ffffff;
-    font-size: 25px;
+    color: #f9bc60;
+    font-size: 30px;
     cursor: pointer;
     margin-right: 10px; 
+    text-shadow:
+        -1px -1px 0 #000,  /* Capa 1 alrededor del símbolo */
+        1px -1px 0 #000,
+        -1px  1px 0 #000,
+        1px  1px 0 #000,
+        -2px -2px 0 #000,  /* Capa 2, más lejos */
+         2px -2px 0 #000,
+        -2px  2px 0 #000,
+         2px  2px 0 #000
 }
 
 #btn-menu {
     display: none;
   }
 
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    padding: 0px 0;
+}
+
+.sidebar nav a{
+    font-size: 1.275em; 
+    font-weight: 600;
+    padding: 20px 20px;
+    text-decoration: none;
+    color: #fffffe;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    transition: all 400ms ease;
+    text-align: center;
+}
+
+.sidebar nav a:hover {
+border-left: 5px solid #f9bc60;
+border-right: 5px solid #f9bc60;
+background: #004643;
+color: #fffffe;
+}
+  

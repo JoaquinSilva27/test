@@ -16,7 +16,7 @@ app.use(session({
     secret: "tu_secreto_seguro", // Usa una clave segura; en producción, configúrala en variables de entorno.
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 60000 } // Expira en 15 segundos
+    cookie: { maxAge: 49120390124 } // Expira en 15 segundos
   }));
 
 
