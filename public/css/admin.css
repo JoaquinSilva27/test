@@ -142,7 +142,6 @@ header {
     font-size: 2em;
     color: #001e1d;
     text-align: center;
-    
 }
 
 #admin-options{
@@ -253,4 +252,82 @@ header {
 
 .btn-guardar:active {
     background-color: #e6a555; /* Color un poco más oscuro para el clic */
+}
+
+#second-section {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 600px;
+    margin: auto;
+    text-align: center;
+    min-height: 200px; /* Altura mínima para al menos 2 campos */
+    max-height: 70vh; /* Altura máxima para limitar el tamaño */
+    overflow-y: auto; /* Habilita el desplazamiento */
+}
+
+#second-form-container h3 {
+    font-size: 2em;
+    color: #001e1d;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Adaptación del estilo de los campos */
+.input-box {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    border-bottom: 2px solid #004643;
+    margin: 30px 0;
+}
+
+.input-box label {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    font-size: 1em;
+    color: #001e1d;
+    font-weight: 500;
+    pointer-events: none;
+    transition: .5s;
+}
+
+.input-box input:focus~label,
+.input-box input:valid~label {
+    top: -5px;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1em;
+    color: #001e1d;
+    font-weight: 600;
+    padding: 0 35px 0 5px;
+}
+
+/* Botón de guardar */
+.btn-guardar {
+    width: 100%;
+    height: 45px;
+    background-color: #f9bc60;
+    border: none;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: #001e1d;
+    transition: background-color 0.3s ease;
+}
+
+.btn-guardar:hover {
+    background-color: #d8a24a;
 }

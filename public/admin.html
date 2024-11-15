@@ -6,7 +6,7 @@
     <title>Panel de Administración</title>
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/dashboard.css">
-    <script>
+    <!--<script>
         // Función autoejecutable para verificar si el usuario es administrador
         (async () => {
           try {
@@ -42,16 +42,15 @@
             console.error("Error verificando la sesión:", error);
           }
         }, 15000); // 60000 ms = 1 minuto
-      </script>
+      </script>-->
 </head>
 <body>
   <!-- Sidebar Container -->
   <div id="sidebar-container" class="sidebar">
-    <header class="sidebar-header">MENU
-    </header>
+    <header class="sidebar-header">MENU</header>
     <nav>
       <a href="#" onclick="showMsj()">Inicio</a>
-      <a href="#" onclick="showAdminRegistros()">Administracion de Registros</a>
+      <a href="#" onclick="showAdminRegistros()">Administración de Registros</a>
       <a href="#">La</a>
       <a href="#">Dedico</a>
       <a href="#">Carla</a>
@@ -68,9 +67,10 @@
         </div>
         <nav class="navegacion">
             <a href="index.html">Inicio</a>
-            <button class="btnLogin-popup" onclick="window.location.href='login.html';">Cerrar Sesion</button>
+            <button class="btnLogin-popup" onclick="window.location.href='login.html';">Cerrar Sesión</button>
         </nav>
     </header>
+
     <!-- Contenido principal (mensaje de bienvenida) -->
     <div class="contenedor" style="display: block;">
         <h2 class="mensaje-inicio">¡Bienvenido/a {nombre_usuario}!</h2>
@@ -89,8 +89,16 @@
             <button class="btn" onclick="selectAction('Eliminar')">Eliminar</button>
         </div>
       <div id="form-container"></div>
-  </div>
+    </div>
 
+    <!-- Segundo formulario que aparecerá al hacer clic en "Siguiente" -->
+    <section id="second-section" style="display: none;">
+      <div id="second-form-container">
+          <h3 id="second-form-title"></h3>
+          <div id="fields-container"></div>
+          <button class="btn-guardar" onclick="submitFinalForm()">Enviar</button>
+      </div>
+    </section>
   </div>
   <script src="js/admin.js"></script>
   <script src="js/sidebar.js"></script>
