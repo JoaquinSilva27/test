@@ -5,7 +5,7 @@
 2) conectar todo a la base de datos Oracle
 3) Start UML modificar el prefijo a usuario se le añadió atributo (rol varchar2 (10))
 4) opciones en admin:
-    operaciones crud (frikz)
+    operaciones crud (frikz) (semi listo) (falta integrarlo a la bd)
     ver reportes 
 5) opciones en user:
     Historial de pagos

@@ -73,7 +73,7 @@
 
     <!-- Contenido principal (mensaje de bienvenida) -->
     <div class="contenedor" style="display: block;">
-        <h2 class="mensaje-inicio">¡Bienvenido/a {nombre_usuario}!</h2>
+        <h2 class="mensaje-inicio" id="mensaje-inicio">¡Bienvenido/a!</h2>
     </div>
 
     <!-- Contenedor de Administración de Registros (inicialmente oculto) -->
@@ -94,9 +94,54 @@
     <!-- Segundo formulario que aparecerá al hacer clic en "Siguiente" -->
     <section id="second-section" style="display: none;">
       <div id="second-form-container">
-          <h3 id="second-form-title"></h3>
-          <div id="fields-container"></div>
-          <button class="btn-guardar" onclick="submitFinalForm()">Enviar</button>
+          <!-- Título estático -->
+          <div class="fixed-header">
+            <h3 id="second-form-title"></h3>
+          </div>
+          <!-- Contenido desplazable -->
+          <div class="scrollable-content">
+            <div id="fields-container"></div>
+          </div>
+          <!-- Botón de enviar estático -->
+          <div class="fixed-footer">
+            <button class="btn-guardar" onclick="agregarEntidad()">Enviar</button>
+          </div>
+      </div>
+    </section>
+    <!-- Sección de Consultar (diseño específico) -->
+    <section id="consultar-section" style="display: none;">
+      <div id="consultar-container">
+        <!-- Contenedor de búsqueda -->
+        <div class="consultar-busqueda">
+          <h3>Consultar</h3>
+          <input type="text" id="consulta-input" placeholder="RUT, Nombre o Clave Primaria" required>
+          <button class="btn-consultar" onclick="consultarEntidad()">Consultar</button>
+        </div>
+
+        <!-- Contenedor de resultados -->
+        <div class="resultado-consulta">
+          <div class="header-resultados">
+            <h3>Datos de la Entidad Seleccionada</h3>
+          </div>
+          <div class="campos-resultado">
+            <div class="campo">
+              <label>Campo 1</label>
+              <input type="text" id="campo1" disabled />
+            </div>
+            <div class="campo">
+              <label>Campo 2</label>
+              <input type="text" id="campo2" disabled />
+            </div>
+            <div class="campo">
+              <label>Campo 3</label>
+              <input type="text" id="campo3" disabled />
+            </div>
+            <div class="campo">
+              <label>Campo 4</label>
+              <input type="text" id="campo4" disabled />
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </div>

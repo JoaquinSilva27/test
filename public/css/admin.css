@@ -118,7 +118,7 @@ header {
     top: 25%;
     width: 65%;
     height: 500px;
-    margin-left: 20%;
+    margin-left: 15%;
     background: #e8e4e6;
     border: 2px solid rgba(255,255,255,.5);
     border-radius: 20px;
@@ -127,6 +127,7 @@ header {
     display: flex;
     justify-content: center;
     align-items: center; 
+    min-width: 700px;
 }
 
 .container-crud .contenedor-form-crud{
@@ -178,6 +179,13 @@ header {
     border: 2px solid #f9bc60;
 }
 
+/* Estilo para el botón cuando está seleccionado */
+#admin-options .btn.selected {
+    background: #f9bc60;
+    color: #001e1d;
+    border: 2px solid #f9bc60;
+}
+
 
 /* Contenedor del Formulario */
 #form-container {
@@ -186,7 +194,7 @@ header {
     background-color: #f0f0f0;
     padding: 20px;
     border-radius: 10px;
-    margin-top: 40px;
+    margin-top: 30px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -256,7 +264,7 @@ header {
 
 #second-section {
     background-color: #ffffff;
-    padding: 40px;
+    padding: 0;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: 90%;
@@ -265,14 +273,62 @@ header {
     text-align: center;
     min-height: 200px; /* Altura mínima para al menos 2 campos */
     max-height: 70vh; /* Altura máxima para limitar el tamaño */
-    overflow-y: auto; /* Habilita el desplazamiento */
+    overflow: hidden; /* Habilita el desplazamiento */
 }
 
-#second-form-container h3 {
+.fixed-header {
+    background-color: #ffffff;
+    padding: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.fixed-header h3 {
     font-size: 2em;
     color: #001e1d;
+    margin: 0; /* Sin margen para evitar movimientos */
     text-align: center;
-    margin-bottom: 20px;
+}
+
+.scrollable-content {
+    overflow-y: auto; /* Habilitamos el desplazamiento vertical */
+    max-height: calc(70vh - 125px); /* Ajustamos la altura para el contenido desplazable */
+    padding-right: 20px;
+    margin-top: -10px;
+    margin-left: 60px;
+    margin-right: 10px; /* Mueve el scroll hacia el borde */
+}
+
+.fixed-footer {
+    background-color: #ffffff;
+    padding: 10px 20px;
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    text-align: center;
+}
+
+.fixed-footer .btn-guardar {
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #004643;
+    color: #ffffff;
+    border: 2px solid #004643;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.fixed-footer .btn-guardar:hover {
+    background-color: #f9bc60;
+    color: #004643;
+}
+
+.fixed-footer .btn-guardar:active {
+    background-color: #e6a555; /* Color más oscuro al presionar */
 }
 
 /* Adaptación del estilo de los campos */
@@ -313,21 +369,134 @@ header {
     padding: 0 35px 0 5px;
 }
 
-/* Botón de guardar */
-.btn-guardar {
+/* Estilo para navegadores basados en WebKit (Chrome, Edge, Safari) */
+.scrollable-content::-webkit-scrollbar {
+    width: 12px; /* Ancho de la barra de desplazamiento */
+    height: 12px; /* Altura para scroll horizontal (si aplica) */
+}
+
+
+.scrollable-content::-webkit-scrollbar-thumb:hover {
+    background: #f9bc60; /* Cambia de color cuando el usuario pasa el cursor */
+}
+
+.scrollable-content::-webkit-scrollbar-track {
+    border-radius: 20px; /* Redondeado */
+}
+
+/* Para navegadores basados en Firefox */
+.scrollable-content {
+    scrollbar-width: thin; /* Tamaño de la barra de desplazamiento */
+    scrollbar-color: #004643 #fffffe; /* Color del pulgar y del track */
+    border-radius: 20px; /* Redondeado */
+}
+
+
+/* Estilos para el contenedor principal de Consultar */
+#consultar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: #004643; /* Fondo de la sección */
+    border-radius: 20px;
+    width: 80%;
+    max-width: 600px;
+    margin: auto;
+}
+
+/* Contenedor de búsqueda */
+.consultar-busqueda {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fffffe;
+    padding: 20px;
+    border-radius: 15px;
     width: 100%;
-    height: 45px;
-    background-color: #f9bc60;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    margin-top: 70px;
+}
+
+.consultar-busqueda h3 {
+    font-size: 1.5em;
+    color: #001e1d;
+    margin-bottom: 15px;
+}
+
+
+.consultar-busqueda input {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #004643;
+    width: 100%;
+    font-size: 1em;
+    text-align: center;
+    background-color: #e8e4e6;
+}
+
+.btn-consultar {
+    background-color: #004643;
+    color: #fffffe;
+    padding: 10px 20px;
     border: none;
-    outline: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 1.1em;
     font-weight: 600;
-    color: #001e1d;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.btn-guardar:hover {
-    background-color: #d8a24a;
+.btn-consultar:hover {
+    background-color: #f9bc60;
+    color: #001e1d;
+}
+
+.resultado-consulta {
+    background-color: #fffffe;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 160%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.resultado-consulta h3 {
+    font-size: 1.5em;
+    color: #001e1d;
+    margin-bottom: 20px;
+}
+
+.campos-resultado {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 45%;
+}
+
+.campo label {
+    font-size: 0.9em;
+    color: #004643;
+    margin-bottom: 5px;
+}
+
+.campo input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #004643;
+    background-color: #e8e4e6;
+    font-size: 1em;
 }
