@@ -6,7 +6,7 @@
     <title>Panel de Administración</title>
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/dashboard.css">
-    <script>
+    <!--<script>
         // Función autoejecutable para verificar si el usuario es administrador
         (async () => {
           try {
@@ -42,7 +42,7 @@
             console.error("Error verificando la sesión:", error);
           }
         }, 600000); // 60000 ms = 1 minuto
-      </script>
+      </script>-->
 </head>
 <body>
   <!-- Sidebar Container -->
@@ -51,10 +51,8 @@
     <nav>
       <a href="#" onclick="showMsj()">Inicio</a>
       <a href="#" onclick="showAdminRegistros()">Administración de Registros</a>
-      <a href="#">La</a>
-      <a href="#">Dedico</a>
-      <a href="#">Carla</a>
-      <a href="#">G</a>
+      <a href="#">Gestores</a>
+      <a href="#" onclick="showReportes()">Reportes</a>
     </nav>
   </div>
 
@@ -72,7 +70,7 @@
     </header>
 
     <!-- Contenido principal (mensaje de bienvenida) -->
-    <div class="contenedor" style="display: block;">
+    <div class="contenedor" id="contenedor" style="display: block;">
         <h2 class="mensaje-inicio" id="mensaje-inicio">¡Bienvenido/a!</h2>
     </div>
 
@@ -91,7 +89,8 @@
       <div id="form-container"></div>
     </div>
 
-    <!-- Segundo formulario que aparecerá al hacer clic en "Siguiente" -->
+
+    <!-- Seccion de agregar -->
     <section id="second-section" style="display: none;">
       <div id="second-form-container">
           <!-- Título estático -->
@@ -108,7 +107,9 @@
           </div>
       </div>
     </section>
-    <!-- Sección de Consultar (diseño específico) -->
+
+
+    <!-- Sección de Consultas -->
     <section id="consultar-section" style="display: none;">
       <div id="consultar-container">
         <!-- Contenedor de búsqueda -->
@@ -144,6 +145,62 @@
         </div>
       </div>
     </section>
+
+    <!-- Sección de Modificar -->
+    <section id="modificar-section" style="display: none;">
+      <div class="modificar-busqueda">
+        <h3>Modificar Registro</h3>
+        <input type="text" id="modificar-input" placeholder="Ingrese el criterio de búsqueda">
+        <button class="btn-guardar" id="btn-modificar" onclick="buscarParaModificar()">Buscar</button>
+      </div>
+
+      <div class="resultado-modificar">
+        <h3>Editar Datos de la Entidad</h3>
+        <div class="campos-modificar">
+        </div>
+        <button class="btn-guardar" id="btn-guardar-modificar" onclick="guardarModificaciones()">Guardar Cambios</button>
+      </div>
+    </section>
+
+    <!-- Sección de Eliminar -->
+    <section id="eliminar-section" style="display: none;">
+      <div class="eliminar-busqueda">
+        <h3>Eliminar Registro</h3>
+        <input type="text" id="eliminar-input" placeholder="Ingrese la clave primaria (RUT, nombre, etc.)">
+        <button class="btn-guardar" id="btn-eliminar" onclick="confirmarEliminar()">Eliminar</button>
+      </div>
+    </section>
+
+
+    <!-- Sección de Reportes -->
+    <section id="reportes-section" style="display: none;">
+      <div class="reportes-container">
+        <h2>Generación de Reportes</h2>
+        <select id="reporte-select" onchange="mostrarOpcionesReporte()">
+          <option value="">Seleccione un tipo de reporte</option>
+          <option value="regantes-por-canal">Regantes por Canal</option>
+          <option value="regantes-y-predios">Regantes y sus Predios</option>
+          <option value="ingresos-por-fecha">Informe de Ingresos (Rango de Fechas)</option>
+          <option value="proyectos-activos-terminados">Proyectos Activos/Terminados</option>
+          <option value="deudas-por-canal">Deudas por Canal</option>
+        </select>
+
+        <!-- Opciones adicionales dinámicas -->
+        <div id="opciones-reporte" style="margin-top: 20px;"></div>
+
+        <!-- Botón para generar el reporte -->
+        <button class="btn-guardar" onclick="generarReporte()">Generar Reporte</button>
+
+        <!-- Contenedor para mostrar los resultados del reporte -->
+        <div id="resultado-reporte" style="margin-top: 30px;">
+          <h3>Resultados del Reporte</h3>
+          <div id="reporte-resultados">
+            <!-- Aquí se mostrarán los datos generados dinámicamente -->
+          </div>
+        </div>
+      </div>
+    </section>
+
   </div>
   <script src="js/admin.js"></script>
   <script src="js/sidebar.js"></script>

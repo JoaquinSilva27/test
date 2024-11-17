@@ -500,3 +500,263 @@ header {
     background-color: #e8e4e6;
     font-size: 1em;
 }
+
+
+/* Estilo general para la sección de Modificar */
+#modificar-section {
+    display: none; /* Se oculta por defecto */
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+    max-width: 700px;
+    text-align: center;
+    margin-top: 6%;
+  }
+  
+  /* Estilo para el encabezado del formulario de Modificar */
+  #modificar-section h3 {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #004643;
+    margin-bottom: 20px;
+  }
+  
+  /* Estilo para el campo de búsqueda en Modificar */
+  .modificar-busqueda {
+    margin-bottom: 20px;
+  }
+  
+  .modificar-busqueda input {
+    width: 80%;
+    padding: 10px;
+    font-size: 1em;
+    border: 2px solid #004643;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .modificar-busqueda input:focus {
+    border-color: #f9bc60;
+  }
+  
+  .modificar-busqueda button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #004643;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .modificar-busqueda button:hover {
+    background-color: #f9bc60;
+    color: #004643;
+  }
+  
+  /* Contenedor de los resultados para Modificar */
+  .resultado-modificar {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .resultado-modificar h3 {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #004643;
+    margin-bottom: 15px;
+  }
+  
+  /* Estilo para los campos de modificación */
+  .campos-modificar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .campos-modificar .campo {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .campos-modificar .campo label {
+    font-size: 1em;
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 5px;
+  }
+  
+  .campos-modificar .campo input {
+    padding: 10px;
+    font-size: 1em;
+    border: 2px solid #004643; /* Borde estándar */
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    background-color: #ffffff; /* Fondo blanco para que sea visible */
+    color: #333333; /* Texto negro */
+    cursor: text; /* Indicar que es editable */
+  }
+  
+  /* Al enfocar un campo */
+.campos-modificar .campo input:focus {
+  border-color: #f9bc60; /* Cambiar el color del borde al enfocarse */
+  background-color: #fff7e6; /* Fondo ligeramente diferente al enfocar */
+}
+  
+  /* Estilo para el botón de Guardar Cambios */
+  #btn-guardar-modificar {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #004643;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  #btn-guardar-modificar:hover {
+    background-color: #f9bc60;
+    color: #004643;
+  }
+
+
+  /* Sección de Eliminar */
+#eliminar-section {
+    display: none; /* Oculta por defecto */
+    padding: 20px;
+    background-color: #ffffff; /* Fondo blanco */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    margin: 20px auto;
+    max-width: 500px;
+    text-align: center;
+    margin-top: 300px;
+  }
+  
+  #eliminar-section h3 {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #004643;
+    margin-bottom: 20px;
+  }
+  
+  /* Campo de búsqueda */
+  .eliminar-busqueda input {
+    width: 80%;
+    padding: 10px;
+    font-size: 1em;
+    border: 2px solid #004643;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    background-color: #ffffff;
+  }
+  
+  .eliminar-busqueda input:focus {
+    border-color: #f9bc60;
+  }
+  
+  /* Botón de eliminar */
+  .eliminar-busqueda button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #e63946; /* Rojo para destacar peligro */
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .eliminar-busqueda button:hover {
+    background-color: #d62828; /* Rojo más oscuro al pasar el cursor */
+    color: #001e1d;
+  }
+
+
+  /* Sección de Reportes */
+#reportes-section {
+    padding: 20px;
+    background-color: #e8e4e6;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+    max-width: 800px;
+    text-align: center;
+    margin-top: 200px;
+  }
+  
+  #reportes-section h2 {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #001e1d;
+    margin-bottom: 20px;
+  }
+  
+  #reporte-select {
+    width: 60%;
+    padding: 10px;
+    font-size: 1em;
+    border: 2px solid #004643;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  #reporte-select:focus {
+    border-color: #f9bc60;
+  }
+  
+  #opciones-reporte input, #opciones-reporte select {
+    width: 80%;
+    padding: 10px;
+    font-size: 1em;
+    border: 2px solid #004643;
+    border-radius: 5px;
+    outline: none;
+    margin-top: 10px;
+  }
+  
+  #opciones-reporte input:focus {
+    border-color: #f9bc60;
+  }
+  
+  #reporte-resultados {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: left;
+  }
+  
+  .btn-guardar {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #004643;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-guardar:hover {
+    background-color: #f9bc60;
+    color: #001e1d;
+  }
