@@ -397,34 +397,45 @@ function mostrarOpcionesReporte() {
 
 function generarReporte() {
   const selectedReporte = document.getElementById('reporte-select').value;
+  const opcionesContainer = document.getElementById('reporte-opciones-container');
+  const detalleContainer = document.getElementById('reporte-detalle-container');
   const resultadosContainer = document.getElementById('reporte-resultados');
+  const reporteTitulo = document.getElementById('reporte-titulo');
+
+  // Ocultar el contenedor de opciones
+  opcionesContainer.style.display = 'none';
+
+  // Mostrar el contenedor de detalles
+  detalleContainer.style.display = 'block';
+
+  // Actualizar el título del reporte
+  const titulosReportes = {
+    'regantes-por-canal': 'Reporte: Regantes por Canal',
+    'regantes-y-predios': 'Reporte: Regantes y sus Predios',
+    'ingresos-por-fecha': 'Reporte: Informe de Ingresos',
+    'proyectos-activos': 'Reporte: Proyectos Activos',
+    'deudas-por-canal': 'Reporte: Deudas por Canal'
+  };
+  reporteTitulo.textContent = titulosReportes[selectedReporte] || 'Reporte';
+
+  // Simulación de datos
+  const datosSimulados = [
+    { nombre: 'Regante 1', canal: 'Canal A' },
+    { nombre: 'Regante 2', canal: 'Canal B' },
+    { nombre: 'Regante 3', canal: 'Canal C' }
+  ];
+
+  // Generar resultados
   resultadosContainer.innerHTML = ''; // Limpiar resultados previos
+  datosSimulados.forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'reporte-item';
+    div.textContent = `${item.nombre} - ${item.canal}`;
+    resultadosContainer.appendChild(div);
+  });
+}
 
-  if (!selectedReporte) {
-    alert('Por favor, seleccione un tipo de reporte.');
-    return;
-  }
-
-  // Simulación de resultados para los reportes
-  let resultadosHTML = `<ul>`;
-  if (selectedReporte === 'regantes-por-canal') {
-    resultadosHTML += `<li>Regante 1: Canal A</li>`;
-    resultadosHTML += `<li>Regante 2: Canal B</li>`;
-  } else if (selectedReporte === 'regantes-y-predios') {
-    resultadosHTML += `<li>Regante 1: Predio 1, Predio 2</li>`;
-    resultadosHTML += `<li>Regante 2: Predio 3</li>`;
-  } else if (selectedReporte === 'ingresos-por-fecha') {
-    const fechaInicio = document.getElementById('fecha-inicio').value;
-    const fechaFin = document.getElementById('fecha-fin').value;
-    resultadosHTML += `<li>Ingresos entre ${fechaInicio} y ${fechaFin}: $100,000</li>`;
-  } else if (selectedReporte === 'proyectos-activos-terminados') {
-    resultadosHTML += `<li>Proyectos Activos: 5</li>`;
-    resultadosHTML += `<li>Proyectos Terminados: 10</li>`;
-  } else if (selectedReporte === 'deudas-por-canal') {
-    const canal = document.getElementById('canal-input').value;
-    resultadosHTML += `<li>Deudas para el canal ${canal}: $50,000</li>`;
-  }
-  resultadosHTML += `</ul>`;
-
-  resultadosContainer.innerHTML = resultadosHTML;
+function volverAReporteOpciones() {
+  document.getElementById('reporte-opciones-container').style.display = 'block';
+  document.getElementById('reporte-detalle-container').style.display = 'none';
 }

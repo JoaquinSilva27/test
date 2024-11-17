@@ -174,30 +174,28 @@
 
     <!-- Sección de Reportes -->
     <section id="reportes-section" style="display: none;">
-      <div class="reportes-container">
+      <div id="reporte-opciones-container">
         <h2>Generación de Reportes</h2>
-        <select id="reporte-select" onchange="mostrarOpcionesReporte()">
-          <option value="">Seleccione un tipo de reporte</option>
+        <select id="reporte-select">
           <option value="regantes-por-canal">Regantes por Canal</option>
           <option value="regantes-y-predios">Regantes y sus Predios</option>
-          <option value="ingresos-por-fecha">Informe de Ingresos (Rango de Fechas)</option>
-          <option value="proyectos-activos-terminados">Proyectos Activos/Terminados</option>
+          <option value="ingresos-por-fecha">Informe de Ingresos</option>
+          <option value="proyectos-activos">Proyectos Activos</option>
           <option value="deudas-por-canal">Deudas por Canal</option>
         </select>
-
-        <!-- Opciones adicionales dinámicas -->
-        <div id="opciones-reporte" style="margin-top: 20px;"></div>
-
-        <!-- Botón para generar el reporte -->
+        <div id="opciones-reporte"></div>
         <button class="btn-guardar" onclick="generarReporte()">Generar Reporte</button>
-
-        <!-- Contenedor para mostrar los resultados del reporte -->
-        <div id="resultado-reporte" style="margin-top: 30px;">
-          <h3>Resultados del Reporte</h3>
-          <div id="reporte-resultados">
-            <!-- Aquí se mostrarán los datos generados dinámicamente -->
-          </div>
+      </div>
+      
+      <div id="reporte-detalle-container" style="display: none;">
+        <div class="reporte-detalle-header">
+          <!-- Botón de volver con imagen -->
+          <button onclick="volverAReporteOpciones()" class="btn-volver">
+            <img src="https://cdn-icons-png.flaticon.com/512/271/271218.png" alt="Volver">
+          </button>
+          <h2 id="reporte-titulo">Reporte: Regantes por Canal</h2>
         </div>
+        <div id="reporte-resultados" class="reporte-detalle-contenido"></div>
       </div>
     </section>
 

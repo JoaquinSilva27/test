@@ -688,7 +688,7 @@ header {
   }
 
 
-  /* Sección de Reportes */
+ /* Sección de Reportes */
 #reportes-section {
     padding: 20px;
     background-color: #e8e4e6;
@@ -708,7 +708,7 @@ header {
   }
   
   #reporte-select {
-    width: 60%;
+    width: 80%;
     padding: 10px;
     font-size: 1em;
     border: 2px solid #004643;
@@ -760,3 +760,55 @@ header {
     background-color: #f9bc60;
     color: #001e1d;
   }
+
+
+/* Contenedor del reporte */
+#reporte-detalle-container {
+  padding: 40px; /* Espaciado interno */
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  max-width: 90%; /* Ajustar al 90% del ancho de la pantalla */
+  width: 800px; /* Tamaño fijo si es necesario */
+  margin: 50px auto; /* Centrado */
+  position: relative; /* Para posicionar el botón de volver */
+  min-height: 400px; /* Altura mínima */
+  max-height: 90vh; /* Altura máxima para evitar que sea más grande que la página */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  overflow-y: auto; /* Scroll interno si es necesario */
+}
+
+/* Cabecera del reporte */
+.reporte-detalle-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  position: relative;
+  padding-bottom: 10px; /* Añade separación */
+  border-bottom: 1px solid #ddd; /* Línea divisoria */
+}
+
+/* Botón de volver */
+.btn-volver {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.btn-volver img {
+  width: 36px;
+  height: 36px;
+  margin-right: 10px; /* Separación del título */
+}
+
+/* Título del reporte */
+#reporte-titulo {
+  font-size: 1.8em;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  flex-grow: 1; /* Ocupa el espacio restante */
+}
