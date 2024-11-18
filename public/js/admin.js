@@ -49,6 +49,7 @@ function showAdminRegistros() {
   document.getElementById('modificar-section').style.display = 'none';
   document.getElementById('eliminar-section').style.display = 'none';
   document.getElementById('reportes-section').style.display = 'none';
+  document.getElementById('reporte-detalle-container').style.display = 'none';
 }
 
 function showMsj() {
@@ -60,6 +61,7 @@ function showMsj() {
   document.getElementById('modificar-section').style.display = 'none';
   document.getElementById('eliminar-section').style.display = 'none';
   document.getElementById('reportes-section').style.display = 'none';
+  document.getElementById('reporte-detalle-container').style.display = 'none';
 }
 
 // Manejo de selección de acciones (Agregar, Consultar, Modificar, Eliminar, Reportes)
@@ -105,6 +107,7 @@ function showReportes() {
   document.getElementById('modificar-section').style.display = 'none';
   document.getElementById('contenedor').style.display = 'none';
   document.getElementById('reportes-section').style.display = 'block';
+  document.getElementById('reporte-detalle-container').style.display = 'none';
 }
 
 function prepararFormularioModificar(selectedTable) {

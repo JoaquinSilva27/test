@@ -7,6 +7,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     margin: 20px auto;
     max-width: 800px;
+    min-width: 700px;
     text-align: center;
     margin-top: 200px; /* Reducido para mantener uniformidad */
   }

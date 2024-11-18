@@ -7,6 +7,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave */
     margin: 20px auto;
     max-width: 500px;
+    min-width: 700px;
     text-align: center;
     margin-top: 300px;
   }
@@ -17,6 +18,11 @@
     color: #004643;
     margin-bottom: 20px;
   }
+
+.eliminar-busqueda {
+    margin-bottom: 20px;
+    position: relative; /* Necesario para posicionar las sugerencias */
+}
   
   /* Campo de búsqueda */
   .eliminar-busqueda input {
@@ -27,7 +33,7 @@
     border-radius: 5px;
     outline: none;
     transition: border-color 0.3s ease;
-    background-color: #ffffff;
+    margin-bottom: 10px;
   }
   
   .eliminar-busqueda input:focus {
@@ -51,3 +57,34 @@
     background-color: #d62828; /* Rojo más oscuro al pasar el cursor */
     color: #001e1d;
   }
+
+/* Estilos para el contenedor de sugerencias */
+.sugerencias-consultas {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #004643;
+  border-radius: 5px;
+  background-color: #ffffff;
+  max-height: 150px; /* Altura máxima con scroll */
+  overflow-y: auto;
+  position: absolute;
+  width: 80%; /* Ajustar al ancho del input */
+  z-index: 1000; /* Por encima de otros elementos */
+  left: 10%; /* Alinear con el input */
+  top: 110px; /* Justo debajo del input */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.sugerencias-consultas li {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 1em;
+  color: #004643;
+}
+
+.sugerencias-consultas li:hover {
+  background-color: #f9bc60;
+  color: #001e1d;
+}

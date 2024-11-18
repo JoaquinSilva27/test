@@ -57,4 +57,5 @@ document.getElementById('modificar-section').style.display = 'none';
 document.getElementById('eliminar-section').style.display = 'none';
 document.getElementById('reportes-section').style.display = 'none';
 document.getElementById('contenedor').style.display = 'none';
+document.getElementById('reporte-detalle-container').style.display = 'none';
 }

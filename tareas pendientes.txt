@@ -1,14 +1,22 @@
 ------------------------------LISTA DE COSAS QUE QUEDAN POR HACER------------------------------
+
 1) código de la base de datos:
     reportes (pelao): (regantes por canal, regantes y sus predios, informe de ingresos desde x fecha hasta y fecha, informes de proyectos: activos/terminados y deudas por canal)
     gestores: (detalles, historial, tablas intermedias prácticamente, calcular la cuota en base al factor)
-2) conectar todo a la base de datos Oracle
-3) Start UML modificar el prefijo a usuario se le añadió atributo (rol varchar2 (10))
-4) opciones en admin:
-    operaciones crud (frikz) (semi listo) (falta integrarlo a la bd)
-    ver reportes 
-5) opciones en user:
+
+
+2) Start UML modificar el prefijo a usuario se le añadió atributo (rol varchar2 (10))
+
+
+3) opciones en admin:
+    operaciones crud (falta integrarlo a la bd)
+    ver reportes  (falta integrarlo a la bd)
+    gestores (falta hacer la interfaz y integrarlo a la bd)
+
+
+4) opciones en user: (falta todo xd)
     Historial de pagos
     datos del usuario
     perfil (canal asociado, directiva, comuna, región, etc)
-6) PPT
+
+5) PPT

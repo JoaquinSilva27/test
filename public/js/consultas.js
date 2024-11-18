@@ -54,6 +54,7 @@ function mostrarFormularioConsulta(selectedTable) {
   document.getElementById('second-section').style.display = 'none';
   document.getElementById('consultar-section').style.display = 'block';
   document.getElementById('contenedor').style.display = 'none';
+  document.getElementById('reporte-detalle-container').style.display = 'none';
 
   // Configura el autocompletado
   configurarBusquedaConsulta(selectedTable);
