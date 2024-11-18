@@ -1,0 +1,138 @@
+/* Estilos para el contenedor principal de Consultar */
+#consultar-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: #004643; /* Fondo de la sección */
+    border-radius: 20px;
+    width: 80%;
+    max-width: 600px;
+    margin: auto;
+}
+
+/* Contenedor de búsqueda */
+.consultar-busqueda {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fffffe;
+    padding: 20px;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    margin-top: 70px;
+}
+
+.consultar-busqueda h3 {
+    font-size: 1.5em;
+    color: #001e1d;
+    margin-bottom: 15px;
+}
+
+
+.consultar-busqueda input {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    border: 1px solid #004643;
+    width: 100%;
+    font-size: 1em;
+    text-align: center;
+    background-color: #e8e4e6;
+}
+
+.btn-consultar {
+    background-color: #004643;
+    color: #fffffe;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-consultar:hover {
+    background-color: #f9bc60;
+    color: #001e1d;
+}
+
+.resultado-consulta {
+    background-color: #fffffe;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 160%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.resultado-consulta h3 {
+    font-size: 1.5em;
+    color: #001e1d;
+    margin-bottom: 20px;
+}
+
+.campos-resultado {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 45%;
+}
+
+.campo label {
+    font-size: 0.9em;
+    color: #004643;
+    margin-bottom: 5px;
+}
+
+.campo input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #004643;
+    background-color: #e8e4e6;
+    font-size: 1em;
+}
+
+
+/* Sugerencias específicas para la sección de consulta */
+.sugerencias-consultas {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    border: 1px solid #004643;
+    border-radius: 5px;
+    background-color: #ffffff;
+    max-height: 150px;
+    overflow-y: auto;
+    position: absolute;
+    width: 360px; /* Ajuste al ancho del input */
+    z-index: 1000;
+    top: 207px; /* Ajusta según el diseño */
+}
+
+.sugerencias-consultas li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1em;
+    color: #004643;
+}
+
+.sugerencias-consultas li:hover {
+    background-color: #f9bc60;
+    color: #001e1d;
+}

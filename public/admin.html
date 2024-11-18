@@ -6,6 +6,11 @@
     <title>Panel de Administración</title>
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/admin/agregar.css">
+    <link rel="stylesheet" href="css/admin/consultar.css">
+    <link rel="stylesheet" href="css/admin/modificar.css">
+    <link rel="stylesheet" href="css/admin/eliminar.css">
+    <link rel="stylesheet" href="css/admin/reportes.css">
     <!--<script>
         // Función autoejecutable para verificar si el usuario es administrador
         (async () => {
@@ -111,36 +116,21 @@
 
     <!-- Sección de Consultas -->
     <section id="consultar-section" style="display: none;">
-      <div id="consultar-container">
-        <!-- Contenedor de búsqueda -->
+      <div id="consultar-container" style="position: relative;">
         <div class="consultar-busqueda">
           <h3>Consultar</h3>
           <input type="text" id="consulta-input" placeholder="RUT, Nombre o Clave Primaria" required>
+          <ul id="sugerencias-consulta" class="sugerencias-consultas"></ul>
           <button class="btn-consultar" onclick="consultarEntidad()">Consultar</button>
-        </div>
-
+      </div>
+      
         <!-- Contenedor de resultados -->
         <div class="resultado-consulta">
           <div class="header-resultados">
             <h3>Datos de la Entidad Seleccionada</h3>
           </div>
           <div class="campos-resultado">
-            <div class="campo">
-              <label>Campo 1</label>
-              <input type="text" id="campo1" disabled />
-            </div>
-            <div class="campo">
-              <label>Campo 2</label>
-              <input type="text" id="campo2" disabled />
-            </div>
-            <div class="campo">
-              <label>Campo 3</label>
-              <input type="text" id="campo3" disabled />
-            </div>
-            <div class="campo">
-              <label>Campo 4</label>
-              <input type="text" id="campo4" disabled />
-            </div>
+            <!-- Aquí se generarán dinámicamente los campos -->
           </div>
         </div>
       </div>
@@ -149,13 +139,14 @@
     <!-- Sección de Modificar -->
     <section id="modificar-section" style="display: none;">
       <div class="modificar-busqueda">
-        <h3>Modificar Registro</h3>
+        <h3>Modificar clientes</h3>
         <input type="text" id="modificar-input" placeholder="Ingrese el criterio de búsqueda">
-        <button class="btn-guardar" id="btn-modificar" onclick="buscarParaModificar()">Buscar</button>
+        <ul id="sugerencias-modificar" class="sugerencias-modificar"></ul>
+        <button onclick="buscarParaModificar()">Buscar</button>
       </div>
 
       <div class="resultado-modificar">
-        <h3>Editar Datos de la Entidad</h3>
+        <h3>Editar Datos</h3>
         <div class="campos-modificar">
         </div>
         <button class="btn-guardar" id="btn-guardar-modificar" onclick="guardarModificaciones()">Guardar Cambios</button>
@@ -174,33 +165,47 @@
 
     <!-- Sección de Reportes -->
     <section id="reportes-section" style="display: none;">
-      <div id="reporte-opciones-container">
+      <div class="reportes-container">
         <h2>Generación de Reportes</h2>
-        <select id="reporte-select">
+        <select id="reporte-select" onchange="mostrarOpcionesReporte()">
+          <option value="">Seleccione un tipo de reporte</option>
           <option value="regantes-por-canal">Regantes por Canal</option>
           <option value="regantes-y-predios">Regantes y sus Predios</option>
-          <option value="ingresos-por-fecha">Informe de Ingresos</option>
-          <option value="proyectos-activos">Proyectos Activos</option>
+          <option value="ingresos-por-fecha">Informe de Ingresos (Rango de Fechas)</option>
+          <option value="proyectos-activos-terminados">Proyectos Activos/Terminados</option>
           <option value="deudas-por-canal">Deudas por Canal</option>
         </select>
-        <div id="opciones-reporte"></div>
+
+        <!-- Opciones adicionales dinámicas -->
+        <div id="opciones-reporte" style="margin-top: 20px;"></div>
+
+        <!-- Botón para generar el reporte -->
         <button class="btn-guardar" onclick="generarReporte()">Generar Reporte</button>
       </div>
-      
-      <div id="reporte-detalle-container" style="display: none;">
+    </section>
+
+    <!-- Contenedor dinámico del reporte generado -->
+    <section id="reporte-detalle-container" style="display: none;">
+      <div class="reporte-detalle">
         <div class="reporte-detalle-header">
-          <!-- Botón de volver con imagen -->
-          <button onclick="volverAReporteOpciones()" class="btn-volver">
-            <img src="https://cdn-icons-png.flaticon.com/512/271/271218.png" alt="Volver">
+          <button class="btn-volver" onclick="volverASeleccion()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="48" d="M328 112L184 256l144 144"/></svg>
           </button>
-          <h2 id="reporte-titulo">Reporte: Regantes por Canal</h2>
+          <h2 id="reporte-titulo">Reporte Generado</h2>
         </div>
-        <div id="reporte-resultados" class="reporte-detalle-contenido"></div>
+        <div class="reporte-detalle-contenido" id="reporte-detalle-contenido">
+          <!-- Aquí se generará el contenido dinámico del reporte -->
+        </div>
       </div>
     </section>
 
   </div>
   <script src="js/admin.js"></script>
   <script src="js/sidebar.js"></script>
+  <script src="js/agregar.js"></script>
+  <script src="js/consultas.js"></script>
+  <script src="js/modificar.js"></script>
+  <script src="js/eliminar.js"></script>
+  <script src="js/reportes.js"></script>
 </body>
 </html>

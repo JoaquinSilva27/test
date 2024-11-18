@@ -1,0 +1,53 @@
+/* Sección de Eliminar */
+#eliminar-section {
+    display: none; /* Oculta por defecto */
+    padding: 20px;
+    background-color: #ffffff; /* Fondo blanco */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    margin: 20px auto;
+    max-width: 500px;
+    text-align: center;
+    margin-top: 300px;
+  }
+  
+  #eliminar-section h3 {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #004643;
+    margin-bottom: 20px;
+  }
+  
+  /* Campo de búsqueda */
+  .eliminar-busqueda input {
+    width: 80%;
+    padding: 10px;
+    font-size: 1em;
+    border: 2px solid #004643;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    background-color: #ffffff;
+  }
+  
+  .eliminar-busqueda input:focus {
+    border-color: #f9bc60;
+  }
+  
+  /* Botón de eliminar */
+  .eliminar-busqueda button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #e63946; /* Rojo para destacar peligro */
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .eliminar-busqueda button:hover {
+    background-color: #d62828; /* Rojo más oscuro al pasar el cursor */
+    color: #001e1d;
+  }
