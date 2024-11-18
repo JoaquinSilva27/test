@@ -1,0 +1,190 @@
+/* Estilo general para la sección de Modificar */
+#modificar-section {
+    display: none; /* Se oculta por defecto */
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+    max-width: 700px;
+    min-width: 570px;
+    text-align: center;
+    margin-top: 70px;
+  }
+  
+  /* Estilo para el encabezado del formulario de Modificar */
+  #modificar-section h3 {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #004643;
+    margin-bottom: 20px;
+  }
+  
+  /* Estilo para el campo de búsqueda en Modificar */
+  .modificar-busqueda {
+    margin-bottom: 20px;
+  }
+  
+  .modificar-busqueda input {
+    width: 80%;
+    padding: 10px;
+    font-size: 1em;
+    border: 2px solid #004643;
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  .modificar-busqueda input:focus {
+    border-color: #004643;
+  }
+  
+  .modificar-busqueda button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #004643;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .modificar-busqueda button:hover {
+    background-color: #004643;
+    color: #f9f9f9;
+  }
+  
+  /* Contenedor de los resultados para Modificar */
+  .resultado-modificar {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .resultado-modificar h3 {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #004643;
+    margin-bottom: 15px;
+  }
+  
+  /* Estilo para los campos de modificación */
+  .campos-modificar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .campos-modificar .campo {
+    width: 45%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .campos-modificar .campo label {
+    font-size: 1em;
+    font-weight: bold;
+    color: #333333;
+    margin-bottom: 5px;
+  }
+  
+  .campos-modificar .campo input {
+    padding: 10px;
+    font-size: 1em;
+    border: 2px solid #004643; /* Borde estándar */
+    border-radius: 5px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    background-color: #ffffff; /* Fondo blanco para que sea visible */
+    color: #333333; /* Texto negro */
+    cursor: text; /* Indicar que es editable */
+  }
+  
+  /* Al enfocar un campo */
+.campos-modificar .campo input:focus {
+  border-color: #004643; /* Cambiar el color del borde al enfocarse */
+  background-color: #fff7e6; /* Fondo ligeramente diferente al enfocar */
+}
+  
+  /* Estilo para el botón de Guardar Cambios */
+  #btn-guardar-modificar {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #004643;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  #btn-guardar-modificar:hover {
+    background-color: #f9bc60;
+    color: #004643;
+  }
+
+
+/* Sugerencias para modificar */
+.sugerencias-modificar {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  width: 420px; /* Ajusta al ancho del input */
+  margin-left: 3px;
+  background-color: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 5px;
+  max-height: 150px; /* Altura máxima con scroll */
+  overflow-y: auto;
+  z-index: 10; /* Asegura que esté encima de otros elementos */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.sugerencias-modificar li {
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.sugerencias-modificar li:hover {
+  background-color: #f9bc60;
+  color: #001e1d;
+}
+
+/* Diseño de tres columnas para los campos */
+.campos-modificar {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  max-height: 300px; /* Altura máxima */
+  overflow-y: auto; /* Permite scroll */
+}
+
+.campos-modificar .campo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Alineación a la izquierda */
+  justify-content: center;
+  width: 100%; /* Hace que el ancho sea consistente */
+}
+
+
+.campos-modificar .campo label {
+  font-size: 0.9em;
+  font-weight: bold;
+  color: #004643;
+  margin-bottom: 5px;
+}
+
+.campos-modificar .campo input {
+  width: 100%; /* Asegura que el input ocupe todo el espacio disponible */
+  max-width: 300px; /* Máximo ancho para evitar inputs enormes */
+  box-sizing: border-box; /* Asegura que padding no afecte el ancho */
+}
