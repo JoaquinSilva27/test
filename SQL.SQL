@@ -245,7 +245,7 @@ END;
 -- MANTENEDORES
 
 -- REGIONES
-CREATE OR REPLACE PROCEDURE INSERTAR_REGION(
+CREATE OR REPLACE PROCEDURE INSERT_REGION(
     P_NOMBRE_REGION VARCHAR2
 ) 
 IS
@@ -1992,7 +1992,8 @@ BEGIN
         v_disponible := FALSE;
     END IF;
     RETURN v_disponible;
-END verificar_disponibilidad_proyecto;
+    verificar_disponibilidad_proyecto;
+END;
 
 -- GESTORES
 
@@ -2009,9 +2010,24 @@ Este gestor muestra la lista de celadores asignados a cada canal, lo cual es út
 
 
 --REPORTES
-1. Reporte de Usuarios y Cuotas Pendientes
-Este reporte muestra a los usuarios que tienen cuotas pendientes, mostrando la cuota y fecha de vencimiento y interes acumulado.
-2. Reporte de Proyectos por Estado
-Este reporte muestra el estado de cada proyecto en la base de datos, organizado por estado.
-3. Reporte de Historial de Pagos
-Este reporte muestra todos los pagos realizados para un periodo específico. Se puede adaptar para usar un parámetro de fechas para limitar el periodo.
+--1. Reporte de Usuarios y Cuotas Pendientes
+--Este reporte muestra a los usuarios que tienen cuotas pendientes, mostrando la cuota y fecha de vencimiento y interes acumulado.
+CREATE OR REPLACE VIEW SA_JS_JO_NR_CUOTAS_PENDIENTES AS
+SELECT U.ID_USUARIO, U.NOMBRE, C.COD_CUOTA, C.MONTO_CUOTA, C.FECHA_VENCIMIENTO, C.INTERES_ACUMULADO
+FROM SA_JS_JO_NR_USUARIOS U
+JOIN SA_JS_JO_NR_CUOTAS C ON U.ID_USUARIO = C.ID_USUARIO
+WHERE C.ESTADO = 'Pendiente';
+
+--2. Reporte de Proyectos por Estado
+--Este reporte muestra el estado de cada proyecto en la base de datos, organizado por estado.
+CREATE OR REPLACE VIEW SA_JS_JO_NR_PROYECTOS_ESTADO AS
+SELECT P.ESTADO, P.ID_PROYECTO, P.NOMBRE_PROYECTO, P.FECHA_INICIO, P.FECHA_ESTIMADA_FIN
+FROM SA_JS_JO_NR_PROYECTOS P
+ORDER BY P.ESTADO;
+
+--3. Reporte de Historial de Pagos
+--Este reporte muestra todos los pagos realizados para un periodo específico. Se puede adaptar para usar un parámetro de fechas para limitar el periodo.
+CREATE OR REPLACE VIEW SA_JS_JO_NR_HISTORIAL_PAGOS AS
+SELECT P.ID_PAGO, U.NOMBRE AS USUARIO, P.MONTO, P.FECHA_PAGO
+FROM SA_JS_JO_NR_PAGOS P
+JOIN SA_JS_JO_NR_USUARIOS U ON P.ID_USUARIO = U.ID_USUARIO;
