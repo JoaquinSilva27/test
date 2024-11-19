@@ -201,8 +201,8 @@
     position: absolute; /* Asegura que se posicione relativo al input */
     width: 70%; 
     z-index: 1000;
-    top: calc(100% + 5px); /* Aparece justo debajo del input */
-    left: 55px; /* Alineado con el inicio del input */
+    top: 100%;
+    left: 100px; /* Alineado con el inicio del input */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para destacar */
   }
   
