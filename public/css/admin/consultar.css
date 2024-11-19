@@ -109,9 +109,10 @@
 
 
 /* Sugerencias específicas para la sección de consulta */
-.sugerencias-consultas {
+.consultar-busqueda .sugerencias-consultas {
     list-style-type: none;
     margin: 0;
+    margin-left: 61px;
     padding: 0;
     border: 1px solid #004643;
     border-radius: 5px;
@@ -119,9 +120,9 @@
     max-height: 150px;
     overflow-y: auto;
     position: absolute;
-    width: 360px; /* Ajuste al ancho del input */
+    width: 355px; /* Ajuste al ancho del input */
     z-index: 1000;
-    top: 207px; /* Ajusta según el diseño */
+    top: 205px; /* Ajusta según el diseño */
 }
 
 .sugerencias-consultas li {
