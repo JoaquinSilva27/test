@@ -5,7 +5,7 @@
     gestores: (detalles, historial, tablas intermedias prácticamente, calcular la cuota en base al factor)
 
 
-2) Start UML modificar el prefijo a usuario se le añadió atributo (rol varchar2 (10))
+2) Start UML modificar el prefijo a usuario se le añadió atributo (rol varchar2 (10)) //hecho por checho
 
 
 3) opciones en admin:
