@@ -86,16 +86,6 @@ header {
     border: 2px solid #f9bc60;
 }
 
-.contenedor {
-    position: absolute;
-    top: 44%;
-    width: 65%;
-    height: 500px;
-    margin-left: 19%;
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-}
 
 .mensaje-inicio {
     font-size: 3em;
@@ -115,10 +105,13 @@ header {
 
 .container-crud {
     position: absolute;
-    top: 25%;
-    width: 65%;
-    height: 500px;
-    margin-left: 15%;
+    top: 50%; /* Centrado vertical */
+    left: 50%; /* Centrado horizontal */
+    transform: translate(-50%, -50%); /* Corrección del desplazamiento */
+    width: 90%; /* Adapta a pantallas pequeñas */
+    max-width: 800px; /* Límite superior */
+    height: auto; /* Ajustable al contenido */
+    padding: 2rem; /* Espaciado interno */
     background: #e8e4e6;
     border: 2px solid rgba(255,255,255,.5);
     border-radius: 20px;
@@ -126,8 +119,21 @@ header {
     box-shadow: 0 0 30px rgba(0,0,0,.5);
     display: flex;
     justify-content: center;
-    align-items: center; 
-    min-width: 700px;
+    align-items: center;
+}
+
+.mensaje-inicio{
+    position: absolute;
+    top: 50%; /* Centrado vertical */
+    left: 50%; /* Centrado horizontal */
+    transform: translate(-50%, -50%); /* Corrección del desplazamiento */
+    width: 90%; /* Adapta a pantallas pequeñas */
+    max-width: 800px; /* Límite superior */
+    height: auto; /* Ajustable al contenido */
+    padding: 2rem; /* Espaciado interno */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .container-crud .contenedor-form-crud{
