@@ -3,17 +3,14 @@ const session = require("express-session");
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require("path");
-const { testConnection } = require("./config/configbd");
-
-
-const testRoutes = require('./routes/testConnection'); // Asegúrate de que la ruta al archivo es correcta
-app.use('/api', testRoutes);
-
-
 const dotenv = require("dotenv");
-dotenv.config(); // Carga las variables de entorno
 
-// Importar rutas
+// Carga las variables de entorno
+dotenv.config();
+
+// Importar funciones y rutas
+const { testConnection } = require("./config/configbd");
+const testRoutes = require('./routes/testConnection'); // Ruta de prueba para conexión
 const crudRoutes = require('./routes/registros');
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
@@ -22,16 +19,21 @@ const entitiesRoutes = require('./routes/entities'); // Nueva ruta para las enti
 // Crear la aplicación Express
 const app = express();
 
-// Verifica la conexión con la base de datos al iniciar el servidor
+// Verificar conexión con la base de datos antes de iniciar el servidor
 (async () => {
-    const connected = await testConnection();
-    if (!connected) {
-        console.error("No se pudo establecer la conexión con la base de datos. Verifica tus credenciales.");
-        process.exit(1); // Finaliza el servidor si no hay conexión
+    try {
+        const connected = await testConnection();
+        if (!connected) {
+            console.error("No se pudo establecer la conexión con la base de datos. Verifica tus credenciales.");
+            process.exit(1); // Detiene el servidor si no hay conexión
+        } else {
+            console.log("Conexión con la base de datos establecida exitosamente.");
+        }
+    } catch (err) {
+        console.error("Error al conectar con la base de datos:", err);
+        process.exit(1); // Detiene el servidor en caso de error
     }
 })();
-
-
 
 // Configuración del middleware de sesión
 app.use(
@@ -57,7 +59,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Registrar rutas
-//app.use('/api', crudRoutes); // Operaciones CRUD generales
+app.use("/api", testRoutes); // Ruta de prueba para conexión
+app.use("/api/crud", crudRoutes); // Operaciones CRUD generales
 app.use("/auth", authRoutes); // Autenticación
 app.use("/admin", adminRoutes); // Administración
 app.use("/api/entities", entitiesRoutes); // Nueva ruta para las entidades

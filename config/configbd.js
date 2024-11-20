@@ -2,9 +2,9 @@ const oracledb = require('oracledb');
 require("dotenv").config(); // Carga las variables del archivo .env
 
 const cns = {
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    connectString: process.env.DB_CONNECTION
+    user: process.env.DB_USER || "system",
+    password: process.env.DB_PASSWORD || "basededatos",
+    connectString: "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=xe)))",
 };
 
 async function OpenProcedure(procedure, binds, autoCommit = false) {
