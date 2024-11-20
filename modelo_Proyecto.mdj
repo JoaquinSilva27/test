@@ -24318,6 +24318,22 @@
 											"top": 507,
 											"width": 235.30615234375,
 											"height": 13
+										},
+										{
+											"_type": "ERDColumnView",
+											"_id": "AAAAAAGTRvz26+j5TSo=",
+											"_parent": {
+												"$ref": "AAAAAAGTLSBdRh0OuZQ="
+											},
+											"model": {
+												"$ref": "AAAAAAGTRvz24uj2Nw4="
+											},
+											"font": "Arial;13;0",
+											"parentStyle": true,
+											"left": 357,
+											"top": 522,
+											"width": 235.30615234375,
+											"height": 13
 										}
 									],
 									"font": "Arial;13;0",
@@ -24325,7 +24341,7 @@
 									"left": 352,
 									"top": 367,
 									"width": 245.30615234375,
-									"height": 158
+									"height": 173
 								}
 							],
 							"font": "Arial;13;0",
@@ -24333,7 +24349,7 @@
 							"left": 352,
 							"top": 344,
 							"width": 245.30615234375,
-							"height": 181,
+							"height": 196,
 							"nameLabel": {
 								"$ref": "AAAAAAGTLSBdRh0E/38="
 							},
@@ -28039,8 +28055,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 281,
-									"top": 445,
+									"left": 309,
+									"top": 435,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -28076,7 +28092,7 @@
 									"font": "Arial;13;0",
 									"parentStyle": false,
 									"left": 326,
-									"top": 427,
+									"top": 435,
 									"height": 13,
 									"alpha": -0.5235987755982988,
 									"distance": 30,
@@ -28094,7 +28110,7 @@
 								"$ref": "AAAAAAGTLSBdSB3IAn0="
 							},
 							"lineStyle": 2,
-							"points": "267:456;296:456;296:448;352:448",
+							"points": "267:456;352:456",
 							"nameLabel": {
 								"$ref": "AAAAAAGTLSBdSB3W87I="
 							},
@@ -29126,6 +29142,16 @@
 							"type": "number",
 							"length": 0,
 							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AAAAAAGTRvz24uj2Nw4=",
+							"_parent": {
+								"$ref": "AAAAAAGTLSBdSR4XZ8U="
+							},
+							"name": "deuda",
+							"type": "number",
+							"length": 0
 						}
 					]
 				},
