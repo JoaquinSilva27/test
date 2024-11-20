@@ -2279,8 +2279,57 @@ END;
 /
 
 -- trigger que se encargue de calcular el atributo deuda de usuario en base factor_canal y hectareas_predio
+CREATE OR REPLACE TRIGGER trg_calcular_deuda_usuario
+BEFORE INSERT ON SA_JS_JO_NR_USUARIOS
+FOR EACH ROW
+DECLARE
+    v_factor_canal NUMBER;
+    v_hectareas_predio NUMBER;
+    v_cod_canal NUMBER;
+BEGIN
+    -- Obtener el COD_CANAL asociado al COD_PREDIO del usuario
+    SELECT min(COD_CANAL) INTO v_cod_canal
+    FROM SA_JS_JO_NR_DETALLE_PREDIO_CANAL
+    WHERE COD_PREDIO = :NEW.COD_PREDIO;
+
+    -- Obtener el FACTOR_CANAL del canal asociado
+    SELECT max(FACTOR_CANAL) INTO v_factor_canal
+    FROM SA_JS_JO_NR_CANALES
+    WHERE COD_CANAL = v_cod_canal;
+
+    -- Obtener las HECTAREAS_PREDIO del predio asociado
+    SELECT HECTAREAS_PREDIO INTO v_hectareas_predio
+    FROM SA_JS_JO_NR_PREDIOS
+    WHERE COD_PREDIO = :NEW.COD_PREDIO;
+
+    -- Calcular la deuda y asignarla al usuario
+    :NEW.DEUDA := v_factor_canal * v_hectareas_predio;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20004, 'Error al calcular la deuda: no se encontró información relacionada con el predio o canal.');
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20005, 'Ocurrió un error al calcular la deuda del usuario.');
+END;
+/
 
 -- triger que se encartgue de aumentar la deuda de un usuario si la cuota vencio
+CREATE OR REPLACE TRIGGER trg_actualizar_deuda_por_vencimiento
+AFTER UPDATE OF FECHA_VENCIMIENTO_CUOTA ON SA_JS_JO_NR_CUOTAS
+FOR EACH ROW
+BEGIN
+    -- Verificar si la fecha de vencimiento ya pasó
+    IF :NEW.FECHA_VENCIMIENTO_CUOTA < SYSDATE THEN
+        -- Actualizar la deuda del usuario asociado
+        UPDATE SA_JS_JO_NR_USUARIOS
+        SET DEUDA = DEUDA*(1.15)
+        WHERE COD_CUOTA = :NEW.COD_CUOTA;
+    END IF;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20006, 'Error al incrementar la deuda por vencimiento de cuota.');
+END;
+/
+
 
 -- 
 
