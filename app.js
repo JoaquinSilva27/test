@@ -5,6 +5,11 @@ const cors = require('cors');
 const path = require("path");
 const { testConnection } = require("./config/configbd");
 
+
+const testRoutes = require('./routes/testConnection'); // Asegúrate de que la ruta al archivo es correcta
+app.use('/api', testRoutes);
+
+
 const dotenv = require("dotenv");
 dotenv.config(); // Carga las variables de entorno
 
@@ -52,7 +57,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
 // Registrar rutas
-app.use('/api', crudRoutes); // Operaciones CRUD generales
+//app.use('/api', crudRoutes); // Operaciones CRUD generales
 app.use("/auth", authRoutes); // Autenticación
 app.use("/admin", adminRoutes); // Administración
 app.use("/api/entities", entitiesRoutes); // Nueva ruta para las entidades
