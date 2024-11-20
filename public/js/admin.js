@@ -14,7 +14,7 @@ buttons.forEach(button => {
 
 async function fetchEntities() {
   try {
-      const response = await fetch('/api/getEntities'); // Llama al endpoint del backend
+      const response = await fetch('/entities/getEntities'); // Llama al endpoint del backend
       if (!response.ok) {
           throw new Error('Error al obtener las entidades.');
       }

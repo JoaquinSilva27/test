@@ -3,14 +3,12 @@ const session = require("express-session");
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require("path");
-const dotenv = require("dotenv");
+const { Open, testConnection } = require("./config/configbd"); // Asegúrate de que la ruta sea correcta
 
-// Carga las variables de entorno
-dotenv.config();
+
+
 
 // Importar funciones y rutas
-const { testConnection } = require("./config/configbd");
-const testRoutes = require('./routes/testConnection'); // Ruta de prueba para conexión
 const crudRoutes = require('./routes/registros');
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
@@ -20,20 +18,7 @@ const entitiesRoutes = require('./routes/entities'); // Nueva ruta para las enti
 const app = express();
 
 // Verificar conexión con la base de datos antes de iniciar el servidor
-(async () => {
-    try {
-        const connected = await testConnection();
-        if (!connected) {
-            console.error("No se pudo establecer la conexión con la base de datos. Verifica tus credenciales.");
-            process.exit(1); // Detiene el servidor si no hay conexión
-        } else {
-            console.log("Conexión con la base de datos establecida exitosamente.");
-        }
-    } catch (err) {
-        console.error("Error al conectar con la base de datos:", err);
-        process.exit(1); // Detiene el servidor en caso de error
-    }
-})();
+
 
 // Configuración del middleware de sesión
 app.use(
@@ -58,12 +43,34 @@ app.use(express.urlencoded({ extended: true }));
 // Servir archivos estáticos desde la carpeta 'public'
 app.use(express.static(path.join(__dirname, "public")));
 
-// Registrar rutas
-app.use("/api", testRoutes); // Ruta de prueba para conexión
-app.use("/api/crud", crudRoutes); // Operaciones CRUD generales
+
+// Rutas de prueba
+app.get("/test-db", async (req, res) => {
+    try {
+        await testConnection(); // Probar conexión
+        res.json({ success: true, message: "Conexión exitosa" });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+app.get("/execute-query", async (req, res) => {
+    const sql = "SELECT table_name FROM user_tables WHERE table_name LIKE 'SA_JS_JO_NR%'"; // Cambia a tu consulta
+    try {
+        const result = await Open(sql);
+        res.json({ success: true, data: result.rows });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+
+
 app.use("/auth", authRoutes); // Autenticación
 app.use("/admin", adminRoutes); // Administración
-app.use("/api/entities", entitiesRoutes); // Nueva ruta para las entidades
+app.use('/api', crudRoutes); // Rutas para CRUD (Registros)
+app.use('/entities', entitiesRoutes); // Asegúrate de que esta línea esté en app.js
+
 
 // Ruta por defecto para la página de inicio
 app.get("/", (req, res) => {

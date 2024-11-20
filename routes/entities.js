@@ -5,17 +5,15 @@ const BD = require('../config/configbd');
 // Endpoint para obtener las entidades de la base de datos
 router.get('/getEntities', async (req, res) => {
     try {
-        const sql = `SELECT table_name FROM user_tables WHERE table_name LIKE SA_JS_JO_NR%;`;
+        const sql = `SELECT table_name FROM user_tables WHERE table_name LIKE 'SA_JS_JO_NR%'`;
         const result = await BD.Open(sql, [], false);
 
-        console.log('Resultado de la consulta:', result.rows);
+        console.log('Datos obtenidos:', result.rows);
 
-        if (result.rows.length === 0) {
-            console.log('No se encontraron tablas con el prefijo especificado.');
-        }
+        // Extraer correctamente los nombres de las tablas
+        const entities = result.rows.map(row => row.TABLE_NAME);
 
-        const entities = result.rows.map(row => row[0]); // Extraer nombres de las tablas
-        res.status(200).json(entities);
+        res.status(200).json(entities); // Devolver la lista de nombres de tablas
     } catch (err) {
         console.error('Error al obtener las tablas:', err);
         res.status(500).send('Error al obtener las entidades desde la base de datos');
