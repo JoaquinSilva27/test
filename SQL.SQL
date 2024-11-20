@@ -2204,7 +2204,7 @@ BEGIN
     BEGIN
         SELECT RUT_USUARIO INTO v_rut_usuario
         FROM SA_JS_JO_NR_USUARIOS
-        WHERE COD_PREDIO = :NEW.COD_PREDIO;
+        WHERE COD_PREDIO = :OLD.COD_PREDIO;
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
             RAISE_APPLICATION_ERROR(-20001, 'No se encontró un usuario asociado al predio.');
@@ -2216,12 +2216,12 @@ BEGIN
     )
     VALUES (
         v_cod_historial_cambio,
-        :NEW.COD_PREDIO,
-        'Modificación en el predio: ' || :NEW.COD_PREDIO,
+        :OLD.COD_PREDIO,
+        'Modificación en el predio: ' || :OLD.COD_PREDIO,
         SYSDATE
     );
 
-/*    -- Insertar un registro en la tabla Detalle_Historial_Usuarios
+    -- Insertar un registro en la tabla Detalle_Historial_Usuarios
     INSERT INTO SA_JS_JO_NR_DETALLE_HISTORIAL_USUARIOS (
         RUT_USUARIO, COD_HISTORIAL_CAMBIO
     )
@@ -2233,7 +2233,7 @@ EXCEPTION
     WHEN OTHERS THEN
         RAISE;
 END;
-/ */
+/ 
 
 -- historial pagos
 CREATE OR REPLACE SEQUENCE SEQ_HISTORIAL_PAGOS
@@ -2269,7 +2269,7 @@ BEGIN
             :NEW.NOMBRE_USUARIO || ' ' || :NEW.APELLIDO1_USUARIO || ' ' || :NEW.APELLIDO2_USUARIO,
             v_detalle_pago,
             SYSDATE,
-            :NEW.COD_PREDIO
+            :OLD.COD_PREDIO
         );
     END IF;
 EXCEPTION
@@ -2278,6 +2278,11 @@ EXCEPTION
 END;
 /
 
+-- trigger que se encargue de calcular el atributo deuda de usuario en base factor_canal y hectareas_predio
+
+-- triger que se encartgue de aumentar la deuda de un usuario si la cuota vencio
+
+-- 
 
 --REPORTES
 --1. Reporte de Usuarios y Cuotas Pendientes
