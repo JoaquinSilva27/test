@@ -65,6 +65,7 @@ CREATE TABLE SA_JS_JO_NR_USUARIOS( --MANTENEDOR LISTO
 	TELEFONO_USUARIO NUMBER,
 	COD_CUOTA NUMBER,
 	COD_PREDIO NUMBER,
+    DEUDA NUMBER,
 	CONSTRAINT PK_SA_JS_JO_NR_USUARIOS PRIMARY KEY(RUT_USUARIO),
 	CONSTRAINT FK_SA_JS_JO_NR_USUARIOS_REGIONES FOREIGN KEY(COD_REGION) REFERENCES SA_JS_JO_NR_REGIONES(COD_REGION),
 	CONSTRAINT FK_SA_JS_JO_NR_USUARIOS_CUOTAS FOREIGN KEY(COD_CUOTA) REFERENCES SA_JS_JO_NR_CUOTAS(COD_CUOTA),
@@ -899,7 +900,8 @@ CREATE OR REPLACE PROCEDURE INSERTAR_USUARIO(
     P_CORREO_USUARIO VARCHAR2,
     P_TELEFONO_USUARIO NUMBER,
     P_COD_CUOTA NUMBER,
-    P_COD_PREDIO NUMBER
+    P_COD_PREDIO NUMBER,
+    P_DEUDA NUMBER
 ) 
 IS
     --DECLARE PK NUMBER := 0;
@@ -913,12 +915,12 @@ BEGIN
     -- Inserción del registro
     INSERT INTO SA_JS_JO_NR_USUARIOS (
         RUT_USUARIO, ROL, NOMBRE_USUARIO, APELLIDO1_USUARIO, APELLIDO2_USUARIO,
-        COD_REGION, CORREO_USUARIO, TELEFONO_USUARIO, COD_CUOTA, COD_PREDIO
+        COD_REGION, CORREO_USUARIO, TELEFONO_USUARIO, COD_CUOTA, COD_PREDIO, DEUDA
     )
     VALUES (
         P_RUT_USUARIO, P_ROL, P_NOMBRE_USUARIO, P_APELLIDO1_USUARIO, 
         P_APELLIDO2_USUARIO, P_COD_REGION, P_CORREO_USUARIO, P_TELEFONO_USUARIO, 
-        P_COD_CUOTA, P_COD_PREDIO
+        P_COD_CUOTA, P_COD_PREDIO, P_DEUDA
     );
     COMMIT;
 EXCEPTION
@@ -937,7 +939,7 @@ CREATE OR REPLACE PROCEDURE LEER_USUARIO(
 BEGIN
     OPEN P_CURSOR FOR 
         SELECT RUT_USUARIO, ROL, NOMBRE_USUARIO, APELLIDO1_USUARIO, APELLIDO2_USUARIO, 
-               COD_REGION, CORREO_USUARIO, TELEFONO_USUARIO, COD_CUOTA, COD_PREDIO
+               COD_REGION, CORREO_USUARIO, TELEFONO_USUARIO, COD_CUOTA, COD_PREDIO, DEUDA
         FROM SA_JS_JO_NR_USUARIOS;
 END LEER_USUARIO;
 /
@@ -952,7 +954,8 @@ CREATE OR REPLACE PROCEDURE ACTUALIZAR_USUARIO(
     P_CORREO_USUARIO VARCHAR2,
     P_TELEFONO_USUARIO NUMBER,
     P_COD_CUOTA NUMBER,
-    P_COD_PREDIO NUMBER
+    P_COD_PREDIO NUMBER,
+    P_DEUDA NUMBER
 ) 
 IS
     CONTADOR NUMBER := 0;
@@ -978,7 +981,8 @@ BEGIN
             CORREO_USUARIO = P_CORREO_USUARIO,
             TELEFONO_USUARIO = P_TELEFONO_USUARIO,
             COD_CUOTA = P_COD_CUOTA,
-            COD_PREDIO = P_COD_PREDIO
+            COD_PREDIO = P_COD_PREDIO,
+            DEUDA = P_DEUDA
         WHERE RUT_USUARIO = P_RUT_USUARIO;
         COMMIT;
     END IF;
@@ -1995,8 +1999,7 @@ BEGIN
     verificar_disponibilidad_proyecto;
 END;
 
--- GESTORES
-
+/* GESTORES
 1. Gestor de Cuotas Pendientes por Usuario
 Este gestor calcula el total de cuotas pendientes por usuario. Puede ser útil para monitorear qué usuarios tienen pagos atrasados.
 2. Gestor de Proyectos Activos por Canal
@@ -2006,7 +2009,112 @@ Este gestor devuelve un historial de pagos para cada predio, útil para ver el h
 4. Gestor de Servicios por Canal
 Este gestor muestra todos los servicios asociados a cada canal, mostrando su relación en detalle.
 5. Gestor de Celadores por Canal
-Este gestor muestra la lista de celadores asignados a cada canal, lo cual es útil para analizar la distribución de personal.
+Este gestor muestra la lista de celadores asignados a cada canal, lo cual es útil para analizar la distribución de personal.*/
+
+/* ideas gestores
+-automatizacion para las tablas detalle_historial_usuario, historial_cambios, historial_pagos, detalle_servicio_canal y detalle_predio_canal
+-calcular valor cuota en base al factor
+*/
+--detalle_historial_cambios
+CREATE OR REPLACE SEQUENCE SEQ_HISTORIAL_CAMBIO
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    MAXVALUE 1000
+    CACHE 50
+    NOCYCLE;
+
+CREATE OR REPLACE TRIGGER trg_historial_cambios
+AFTER UPDATE ON SA_JS_JO_NR_PREDIOS
+FOR EACH ROW
+DECLARE
+    v_cod_historial_cambio NUMBER;
+    v_rut_usuario NUMBER;
+BEGIN
+    -- Generar el próximo valor de la secuencia
+    SELECT SEQ_HISTORIAL_CAMBIO.NEXTVAL INTO v_cod_historial_cambio FROM DUAL;
+
+    -- Obtener el RUT del usuario asociado al predio
+    BEGIN
+        SELECT RUT_USUARIO INTO v_rut_usuario
+        FROM SA_JS_JO_NR_USUARIOS
+        WHERE COD_PREDIO = :NEW.COD_PREDIO;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            RAISE_APPLICATION_ERROR(-20001, 'No se encontró un usuario asociado al predio.');
+    END;
+
+    -- Insertar un nuevo registro en la tabla Historial_Cambios
+    INSERT INTO SA_JS_JO_NR_HISTORIAL_CAMBIOS (
+        COD_HISTORIAL_CAMBIO, COD_PREDIO, DETALLE_CAMBIO, FECHA_CAMBIO
+    )
+    VALUES (
+        v_cod_historial_cambio,
+        :NEW.COD_PREDIO,
+        'Modificación en el predio: ' || :NEW.COD_PREDIO,
+        SYSDATE
+    );
+
+    -- Insertar un registro en la tabla Detalle_Historial_Usuarios
+    INSERT INTO SA_JS_JO_NR_DETALLE_HISTORIAL_USUARIOS (
+        RUT_USUARIO, COD_HISTORIAL_CAMBIO
+    )
+    VALUES (
+        v_rut_usuario,
+        v_cod_historial_cambio
+    );
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE;
+END;
+/
+
+-- historial pagos
+CREATE OR REPLACE SEQUENCE SEQ_HISTORIAL_PAGO
+    START WITH 1
+    INCREMENT BY 1
+    MINVALUE 1
+    MAXVALUE 1000
+    CACHE 50
+    NOCYCLE;
+-- ver el tema de que hacer al pagarla, si se vborra el codigo de usuarios o alguna manera
+-- de ver si esta pagada o por pagar
+CREATE OR REPLACE TRIGGER trg_registrar_historial_pagos
+AFTER UPDATE ON SA_JS_JO_NR_CUOTAS
+FOR EACH ROW
+DECLARE
+    v_nombre_usuario VARCHAR2(100);
+    v_cod_predio NUMBER;
+BEGIN
+    -- Validar que la cuota se ha pagado
+    --IF :NEW.ESTADO = 'Pagada' THEN
+    -- Obtener el nombre del usuario asociado al predio
+    SELECT U.NOMBRE_USUARIO, P.COD_PREDIO
+    INTO v_nombre_usuario, v_cod_predio
+    FROM SA_JS_JO_NR_USUARIOS U
+    JOIN SA_JS_JO_NR_PREDIOS P ON U.COD_PREDIO = P.COD_PREDIO
+    WHERE P.COD_CUOTA = :NEW.COD_CUOTA;
+
+    -- Insertar el registro en SA_JS_JO_NR_HISTORIAL_PAGOS
+    INSERT INTO SA_JS_JO_NR_HISTORIAL_PAGOS (
+        COD_HISTORIAL_PAGO ,NOMBRE_PAGADOR, DETALLE_PAGO, FECHA_PAGO, COD_PREDIO
+    )
+    VALUES (
+        SEQ_HISTORIAL_PAGO.NEXTVAL,
+        v_nombre_usuario,
+        'Se pagó cuota por $' || :NEW.TOTAL_CUOTA ||'.',
+        SYSDATE,
+        v_cod_predio
+    );
+    --END IF;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20002, 'No se encontró un usuario o predio asociado a la cuota.');
+    WHEN OTHERS THEN
+        RAISE;
+END;
+/
+
 
 
 --REPORTES
