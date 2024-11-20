@@ -12,33 +12,39 @@ buttons.forEach(button => {
     });
 });
 
-// Simulación de las tablas y sus atributos
-const tableSchemas = {
-  clientes: [
-      { name: 'rut', type: 'text', placeholder: 'rut' },
-      { name: 'nombre', type: 'text', placeholder: 'Nombre del cliente' },
-      { name: 'apellido1', type: 'text', placeholder: 'apellido del cliente' },
-      { name: 'apellido2', type: 'text', placeholder: 'apellido2 del cliente' },
-      { name: 'cod_region', type: 'number', placeholder: 'cod_region' },
-      { name: 'correo', type: 'text', placeholder: 'correo del cliente' },
-      { name: 'telefono', type: 'number', placeholder: 'telefono del cliente' },
-      { name: 'cod_cuota', type: 'number', placeholder: 'cod_cuota del cliente' },
-      { name: 'cod_predio', type: 'number', placeholder: 'cod_predio' }
-  ],
-  terrenos: [
-      { name: 'ubicacion', type: 'text', placeholder: 'Ubicación' },
-      { name: 'tamaño', type: 'number', placeholder: 'Tamaño en hectáreas' },
-      { name: 'canal', type: 'text', placeholder: 'canal' }
-  ],
-  pagos: [
-      { name: 'monto', type: 'number', placeholder: 'Monto del pago' },
-      { name: 'fecha', type: 'date', placeholder: 'Fecha de pago' }
-  ],
-  productos: [
-      { name: 'producto', type: 'text', placeholder: 'Nombre del producto' },
-      { name: 'precio', type: 'number', placeholder: 'Precio del producto' }
-  ]
-};
+async function fetchEntities() {
+  try {
+      const response = await fetch('/api/getEntities'); // Llama al endpoint del backend
+      if (!response.ok) {
+          throw new Error('Error al obtener las entidades.');
+      }
+      const entities = await response.json();
+      populateEntitySelect(entities);
+  } catch (error) {
+      console.error('Error al cargar entidades:', error);
+      alert('No se pudieron cargar las entidades desde la base de datos.');
+  }
+}
+
+// Poblar el selector con las entidades obtenidas
+function populateEntitySelect(entities) {
+  const formContainer = document.getElementById('form-container');
+  formContainer.innerHTML = ''; // Limpia el contenido previo
+
+  const options = entities.map(entity =>
+      `<option value="${entity}">${entity.charAt(0).toUpperCase() + entity.slice(1).toLowerCase()}</option>`
+  ).join('');
+
+  formContainer.innerHTML = `
+      <h3>Seleccione la entidad</h3>
+      <select id="entitySelect">
+          <option value="" disabled selected>Seleccione una entidad</option>
+          ${options}
+      </select>
+      <button class="btn-guardar" onclick="selectAction()">Siguiente</button>
+  `;
+}
+
 
 // Funciones generales para mostrar/ocultar secciones del panel
 function showAdminRegistros() {
@@ -64,40 +70,31 @@ function showMsj() {
   document.getElementById('reporte-detalle-container').style.display = 'none';
 }
 
-// Manejo de selección de acciones (Agregar, Consultar, Modificar, Eliminar, Reportes)
-function selectAction(action) {
-  const formContainer = document.getElementById('form-container');
-  formContainer.innerHTML = ''; // Limpia el contenido previo
-  formContainer.innerHTML = `
-      <h3>${action.charAt(0).toUpperCase() + action.slice(1)} Registro</h3>
-      <select id="tableSelect">
-          <option value="clientes">Clientes</option>
-          <option value="terrenos">Terrenos</option>
-          <option value="pagos">Pagos</option>
-          <option value="productos">Productos</option>
-      </select>
-      <button class="btn-guardar" onclick="showNextForm('${action}')">Siguiente</button>
-  `;
-}
+// Manejar la acción seleccionada por el usuario
+function selectAction() {
+  const selectedEntity = document.getElementById('entitySelect').value;
 
-// Lógica para mostrar el siguiente paso según la acción seleccionada
-function showNextForm(action) {
-  const selectedTable = document.getElementById('tableSelect').value; // Obtén la tabla seleccionada
+  if (!selectedEntity) {
+      alert('Por favor, seleccione una entidad antes de continuar.');
+      return;
+  }
 
-    if (!selectedTable) {
-        alert('Por favor, seleccione una tabla antes de continuar.');
-        return;
-    }
+  const action = document.querySelector('#admin-options .btn.selected').textContent.trim();
+
   if (action === "Agregar") {
-      mostrarFormularioAgregar(selectedTable); // Llamará a la función en agregar.js
+      mostrarFormularioAgregar(selectedEntity); // Llamará a la función en agregar.js
   } else if (action === "Consultar") {
-      mostrarFormularioConsulta(selectedTable); // Llamará a la función en consultar.js
+      mostrarFormularioConsulta(selectedEntity); // Llamará a la función en consultar.js
   } else if (action === "Modificar") {
-      prepararFormularioModificar(selectedTable); // Llamará a la función en modificar.js
+      prepararFormularioModificar(selectedEntity); // Llamará a la función en modificar.js
   } else if (action === "Eliminar") {
-      mostrarFormularioEliminar(selectedTable); // Llamará a la función en eliminar.js
+      prepararFormularioEliminar(selectedEntity); // Llamará a la función en eliminar.js
   }
 }
+
+// Llamar a fetchEntities cuando se cargue la página
+document.addEventListener('DOMContentLoaded', fetchEntities);
+
 
 // Función para mostrar la sección de reportes
 function showReportes() {

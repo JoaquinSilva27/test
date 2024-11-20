@@ -30,23 +30,34 @@ function mostrarFormularioAgregar(selectedTable) {
     ocultarOtrasSecciones();
   }
   
-  // Función para enviar los datos de la entidad
-function agregarEntidad() {
-const selectedTable = document.getElementById('tableSelect').value;
-const fields = tableSchemas[selectedTable] || [];
-const formData = {};
 
-fields.forEach(field => {
-    const input = document.querySelector(`#fields-container input[name="${field.name}"]`);
-    formData[field.name] = input ? input.value : null;
-});
+// Función para enviar los datos de la entidad a la base de datos
+async function agregarEntidad() {
+  const selectedTable = document.getElementById('tableSelect').value;
+  const fields = tableSchemas[selectedTable] || [];
+  const formData = {};
 
-alert(`Datos enviados para la tabla ${selectedTable}:\n${JSON.stringify(formData, null, 2)}`);
+  fields.forEach(field => {
+      const input = document.querySelector(`#fields-container input[name="${field.name}"]`);
+      formData[field.name] = input ? input.value : null;
+  });
 
-// Redirige al contenedor principal CRUD después de enviar
-document.getElementById('second-section').style.display = 'none'; // Ocultar la sección de formulario
-document.getElementById('admin-registros-container').style.display = 'block'; // Mostrar el contenedor CRUD
-document.getElementById('contenedor').style.display = 'none';
+  try {
+      const response = await fetch(`http://localhost:3000/api/${selectedTable}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+          alert(result.message);
+      } else {
+          alert(`Error: ${result.error}`);
+      }
+  } catch (error) {
+      console.error("Error al agregar el registro:", error);
+  }
 }
 
 
