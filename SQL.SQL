@@ -2113,28 +2113,25 @@ END;
 /
 
 
-
-
-
 --REPORTES
 --1. Reporte de Usuarios y Cuotas Pendientes
 --Este reporte muestra a los usuarios que tienen cuotas pendientes, mostrando la cuota y fecha de vencimiento y interes acumulado.
 CREATE OR REPLACE VIEW SA_JS_JO_NR_CUOTAS_PENDIENTES AS
-SELECT U.ID_USUARIO, U.NOMBRE, C.COD_CUOTA, C.MONTO_CUOTA, C.FECHA_VENCIMIENTO, C.INTERES_ACUMULADO
-FROM SA_JS_JO_NR_USUARIOS U
-JOIN SA_JS_JO_NR_CUOTAS C ON U.ID_USUARIO = C.ID_USUARIO
-WHERE C.ESTADO = 'Pendiente';
+SELECT U.rut_usuario AS ID_USUARIO, U.nombre_usuario AS NOMBRE, C.cod_cuota AS COD_CUOTA, C.total_cuota AS MONTO_CUOTA, C.fecha_vencimiento_cuota AS FECHA_VENCIMIENTO, ROUND((C.total_cuota * 0.02 * (SYSDATE - C.fecha_vencimiento_cuota)), 2) AS INTERES_ACUMULADO
+FROM SA_JS_JO_NR_Usuarios U
+JOIN SA_JS_JO_NR_Cuotas C ON U.cod_cuota = C.cod_cuota
+WHERE C.fecha_vencimiento_cuota < SYSDATE;
 
 --2. Reporte de Proyectos por Estado
 --Este reporte muestra el estado de cada proyecto en la base de datos, organizado por estado.
 CREATE OR REPLACE VIEW SA_JS_JO_NR_PROYECTOS_ESTADO AS
-SELECT P.ESTADO, P.ID_PROYECTO, P.NOMBRE_PROYECTO, P.FECHA_INICIO, P.FECHA_ESTIMADA_FIN
-FROM SA_JS_JO_NR_PROYECTOS P
-ORDER BY P.ESTADO;
+SELECT P.estado_proyecto AS ESTADO, P.cod_proyecto AS ID_PROYECTO, P.nombre_proyecto AS NOMBRE_PROYECTO, P.fecha_inicio_proyecto AS FECHA_INICIO, P.fecha_fin_proyecto AS FECHA_ESTIMADA_FIN
+FROM SA_JS_JO_NR_Proyectos P
+ORDER BY P.estado_proyecto;
 
 --3. Reporte de Historial de Pagos
 --Este reporte muestra todos los pagos realizados para un periodo específico. Se puede adaptar para usar un parámetro de fechas para limitar el periodo.
 CREATE OR REPLACE VIEW SA_JS_JO_NR_HISTORIAL_PAGOS AS
-SELECT P.ID_PAGO, U.NOMBRE AS USUARIO, P.MONTO, P.FECHA_PAGO
-FROM SA_JS_JO_NR_PAGOS P
-JOIN SA_JS_JO_NR_USUARIOS U ON P.ID_USUARIO = U.ID_USUARIO;
+SELECT H.cod_historial_pago AS ID_PAGO, U.nombre_usuario AS USUARIO, H.detalle_pago AS MONTO, H.fecha_pago AS FECHA_PAGO
+FROM SA_JS_JO_NR_Historial_Pagos H
+JOIN SA_JS_JO_NR_Usuarios U ON H.cod_predio = U.cod_cuota;
