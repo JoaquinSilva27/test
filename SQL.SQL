@@ -246,7 +246,7 @@ END;
 -- MANTENEDORES
 
 -- REGIONES
-CREATE OR REPLACE PROCEDURE INSERT_REGION(
+CREATE OR REPLACE PROCEDURE INSERTAR_REGION(
     P_NOMBRE_REGION VARCHAR2
 ) 
 IS
@@ -278,7 +278,7 @@ BEGIN
 END LEER_REGIONES;
 /
 
-CREATE OR REPLACE PROCEDURE UPDATE_REGION(
+CREATE OR REPLACE PROCEDURE ACTUALIZAR_REGION(
     P_COD_REGION NUMBER,
     P_NOMBRE_REGION VARCHAR2
 ) 
@@ -1967,7 +1967,7 @@ BEGIN
         v_dias_vencidos := SYSDATE - v_fecha_vencimiento;
     END IF;
     -- Calcular el total con interés (0.05% por día de atraso) (cambiar)
-    v_total_con_interes := v_total_cuota + (v_total_cuota * 0.00053 * v_dias_vencidos);
+    v_total_con_interes := v_total_cuota + (v_total_cuota * 0.0005 * v_dias_vencidos);
     RETURN v_total_con_interes;
 END;
 
@@ -2055,7 +2055,7 @@ BEGIN
         SYSDATE
     );
 
-    -- Insertar un registro en la tabla Detalle_Historial_Usuarios
+/*    -- Insertar un registro en la tabla Detalle_Historial_Usuarios
     INSERT INTO SA_JS_JO_NR_DETALLE_HISTORIAL_USUARIOS (
         RUT_USUARIO, COD_HISTORIAL_CAMBIO
     )
@@ -2067,7 +2067,7 @@ EXCEPTION
     WHEN OTHERS THEN
         RAISE;
 END;
-/
+/ */
 
 -- historial pagos
 CREATE OR REPLACE SEQUENCE SEQ_HISTORIAL_PAGO
@@ -2077,43 +2077,42 @@ CREATE OR REPLACE SEQUENCE SEQ_HISTORIAL_PAGO
     MAXVALUE 1000
     CACHE 50
     NOCYCLE;
--- ver el tema de que hacer al pagarla, si se vborra el codigo de usuarios o alguna manera
--- de ver si esta pagada o por pagar
-CREATE OR REPLACE TRIGGER trg_registrar_historial_pagos
-AFTER UPDATE ON SA_JS_JO_NR_CUOTAS
+
+CREATE OR REPLACE TRIGGER trg_actualizar_historial_pagos
+AFTER UPDATE OF DEUDA ON SA_JS_JO_NR_USUARIOS
 FOR EACH ROW
 DECLARE
-    v_nombre_usuario VARCHAR2(100);
-    v_cod_predio NUMBER;
+    v_cod_historial_pago NUMBER; -- Variable para almacenar el valor de la secuencia
+    v_detalle_pago VARCHAR2(200); -- Variable para el mensaje del detalle
 BEGIN
-    -- Validar que la cuota se ha pagado
-    --IF :NEW.ESTADO = 'Pagada' THEN
-    -- Obtener el nombre del usuario asociado al predio
-    SELECT U.NOMBRE_USUARIO, P.COD_PREDIO
-    INTO v_nombre_usuario, v_cod_predio
-    FROM SA_JS_JO_NR_USUARIOS U
-    JOIN SA_JS_JO_NR_PREDIOS P ON U.COD_PREDIO = P.COD_PREDIO
-    WHERE P.COD_CUOTA = :NEW.COD_CUOTA;
+    IF :OLD.DEUDA > :NEW.DEUDA THEN
+        SELECT SEQ_HISTORIAL_PAGO.NEXTVAL INTO v_cod_historial_pago FROM DUAL;
 
-    -- Insertar el registro en SA_JS_JO_NR_HISTORIAL_PAGOS
-    INSERT INTO SA_JS_JO_NR_HISTORIAL_PAGOS (
-        COD_HISTORIAL_PAGO ,NOMBRE_PAGADOR, DETALLE_PAGO, FECHA_PAGO, COD_PREDIO
-    )
-    VALUES (
-        SEQ_HISTORIAL_PAGO.NEXTVAL,
-        v_nombre_usuario,
-        'Se pagó cuota por $' || :NEW.TOTAL_CUOTA ||'.',
-        SYSDATE,
-        v_cod_predio
-    );
-    --END IF;
+        IF :NEW.DEUDA = 0 THEN
+            v_detalle_pago := 'Se pagó la totalidad de la deuda de $' || :OLD.DEUDA || 'con exito.';
+        ELSE
+            v_detalle_pago := 'Se realizó un abono por $'|| (:NEW.DEUDA - :OLD.DEUDA) || '. Deuda restante ' || :NEW.DEUDA || '.';
+        END IF;
+
+        -- Insertar un registro en SA_JS_JO_NR_HISTORIAL_PAGOS
+        INSERT INTO SA_JS_JO_NR_HISTORIAL_PAGOS (
+            COD_HISTORIAL_PAGO, NOMBRE_PAGADOR, DETALLE_PAGO, FECHA_PAGO, COD_PREDIO
+        )
+        VALUES (
+            v_cod_historial_pago,
+            :NEW.NOMBRE_USUARIO || ' ' || :NEW.APELLIDO1_USUARIO || ' ' || :NEW.APELLIDO2_USUARIO,
+            v_detalle_pago,
+            SYSDATE,
+            :NEW.COD_PREDIO
+        );
+    END IF;
 EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RAISE_APPLICATION_ERROR(-20002, 'No se encontró un usuario o predio asociado a la cuota.');
     WHEN OTHERS THEN
-        RAISE;
+        RAISE_APPLICATION_ERROR(-20003, 'Error al registrar el pago en el historial.');
 END;
 /
+
+
 
 
 
