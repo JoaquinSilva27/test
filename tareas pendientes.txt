@@ -1,7 +1,7 @@
 ------------------------------LISTA DE COSAS QUE QUEDAN POR HACER------------------------------
 
 1) código de la base de datos:
-    reportes (pelao): (regantes por canal, regantes y sus predios, informe de ingresos desde x fecha hasta y fecha, informes de proyectos: activos/terminados y deudas por canal)
+    reportes (pelao): (informe de ingresos desde x fecha hasta y fecha, informes de proyectos: activos/terminados y deudas por canal)
     gestores: (detalles, historial, tablas intermedias prácticamente, calcular la cuota en base al factor)
 
 

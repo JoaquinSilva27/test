@@ -140,7 +140,7 @@
     <section id="modificar-section" style="display: none;">
       <div class="modificar-busqueda">
         <h3>Modificar clientes</h3>
-        <input type="text" id="modificar-input" placeholder="Ingrese el criterio de búsqueda">
+        <input type="text" id="modificar-input" placeholder="Ingrese el criterio de búsqueda" autocomplete="off">
         <ul id="sugerencias-modificar" class="sugerencias-modificar"></ul>
         <button onclick="buscarParaModificar()">Buscar</button>
       </div>
@@ -157,7 +157,7 @@
     <section id="eliminar-section" style="display: none;">
       <div class="eliminar-busqueda">
         <h3>Eliminar Registro</h3>
-        <input type="text" id="eliminar-input" placeholder="Ingrese el rut, nombre o código">
+        <input type="text" id="eliminar-input" placeholder="Ingrese el rut, nombre o código" autocomplete="off">
         <button class="btn-guardar" id="btn-eliminar" onclick="confirmarEliminar()">Eliminar</button>
       </div>
     </section>
@@ -169,8 +169,8 @@
         <h2>Generación de Reportes</h2>
         <select id="reporte-select" onchange="mostrarOpcionesReporte()">
           <option value="">Seleccione un tipo de reporte</option>
-          <option value="regantes-por-canal">Regantes por Canal</option>
-          <option value="regantes-y-predios">Regantes y sus Predios</option>
+          <!--<option value="regantes-por-canal">Regantes por Canal</option>
+          <option value="regantes-y-predios">Regantes y sus Predios</option>-->
           <option value="ingresos-por-fecha">Informe de Ingresos (Rango de Fechas)</option>
           <option value="proyectos-activos-terminados">Proyectos Activos/Terminados</option>
           <option value="deudas-por-canal">Deudas por Canal</option>
