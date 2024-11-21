@@ -87,18 +87,33 @@ header {
     border: 2px solid #f9bc60;
 }
 
+/* Base para todos los contenedores */
 .contenedor {
     position: relative;
     width: 500px;
     height: 490px;
     background: #e8e4e6;
-    border: 2px solid rgba(255,255,255,.5);
+    border: 2px solid rgba(255, 255, 255, 0.5);
     border-radius: 20px;
     backdrop-filter: blur(20px);
-    box-shadow: 0 0 30px rgba(0,0,0,.5);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.contenedor-vacio {
+    background: none; /* Sin fondo */
+    border: none;     /* Sin bordes */
+    width: auto;      /* Se adapta al contenido */
+    height: auto;     /* Se adapta al contenido */
+    box-shadow: none; /* Sin sombras */
+}
+
+.mensaje-inicio {
+    font-size: 3em;
+    color: #fffffe;
+    text-align: center;
 }
 
 .contenedor-form h2{
@@ -106,6 +121,23 @@ header {
     color: #001e1d;
     text-align: center;
 }
+
+.contenedor-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.informacion_usuario h3 {
+    margin: 10px 0; /* Espaciado entre las líneas */
+}
+
 
 .informacion_usuario{
     position: relative;
@@ -124,5 +156,134 @@ header {
     cursor: pointer;
     font-size: 1.1em;
     font-weight: 600;
+    color: #001e1d;
+}
+
+/* Contenedor de perfil */
+.contenedor-perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90%; /* Ocupa casi todo el ancho de la pantalla */
+    max-width: 1200px; /* Ancho máximo */
+    margin: 20px auto; /* Centrado con margen superior e inferior */
+    background-color: #ffffff; /* Fondo blanco */
+    border-radius: 20px; /* Bordes redondeados */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    padding: 30px;
+    box-sizing: border-box; /* Incluye padding en el tamaño total */
+}
+
+/* Cabecera del perfil */
+.perfil-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px; /* Espacio entre la cabecera y los datos */
+}
+
+/* Foto de perfil */
+.foto-perfil {
+    width: 150px; /* Tamaño del círculo */
+    height: 150px;
+    border-radius: 50%; /* Hace que sea circular */
+    overflow: hidden; /* Asegura que la imagen no se salga del contenedor */
+    border: 4px solid #004643; /* Bordes alrededor de la foto */
+    margin-bottom: 15px; /* Espaciado entre la foto y el nombre */
+}
+
+.imagen-redonda {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ajusta la imagen al círculo */
+}
+
+/* Nombre del usuario */
+.nombre-usuario {
+    font-size: 1.8em;
+    color: #001e1d;
+    text-align: center;
+    margin: 0;
+}
+
+/* Datos del perfil */
+.perfil-datos {
+    width: 100%; /* Ocupa todo el ancho disponible */
+    text-align: left; /* Alinea el texto a la izquierda */
+    font-size: 1.2em;
+    color: #001e1d;
+    line-height: 1.8em; /* Espaciado entre líneas */
+}
+
+.perfil-datos p {
+    margin: 10px 0; /* Espaciado entre líneas */
+}
+
+.contenedor-datos {
+    text-align: left;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.lista-datos {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.lista-datos li {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #001e1d;
+}
+
+.lista-datos li strong {
+    font-weight: bold;
+}
+
+.contenedor-datos h2 {
+    text-align: center;
+    font-size: 2em;
+    color: #001e1d;
+    margin-bottom: 20px;
+}
+
+.contenedor-historial {
+    text-align: center;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.contenedor-historial h2 {
+    font-size: 2em;
+    color: #001e1d;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+label {
+    font-size: 1.2em;
+    color: #001e1d;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.dropdown {
+    width: 100%;
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.resultado-historial {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 1.2em;
     color: #001e1d;
 }

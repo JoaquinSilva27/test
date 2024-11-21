@@ -14,11 +14,11 @@
         <header class="sidebar-header">MENU
         </header>
         <nav>
-            <a href="#">Te</a>
-            <a href="#">La</a>
-            <a href="#">Dedico</a>
-            <a href="#">Carla</a>
-            <a href="#">G</a>
+            <a href="#"onclick="showMsj()">Inicio</a>
+            <a href="#"onclick="showpa()">Pagar</a>
+            <a href="#"onclick="showpe()">Perfil</a>
+            <a href="#"onclick="showmd()">Mis datos</a>
+            <a href="#"onclick="showhdp()">Historial de pagos</a>
         </nav>
     </div>
     
@@ -34,7 +34,15 @@
                 <button class="btnLogin-popup" onclick="window.location.href='login.html';">Cerrar Sesion</button>
             </nav>
         </header>
-        <div class="contenedor">
+
+
+        <!-- Inicio -->
+        <div class="contenedor contenedor-vacio" id="contenedor" style="display: block;">
+            <h2 class="mensaje-inicio" id="mensaje-inicio">¡Bienvenido/a Usuario :D!</h2>
+        </div>
+
+        <!-- Pagar -->
+        <div class="contenedor" id="pagar-contenedor" style="display:none;">
             <div class="contenedor-form user">
                 <h2>¡Hola {nombre_usuario}!</h2>
                 <div class="informacion_usuario">
@@ -44,10 +52,79 @@
                 <button type="submit" class="btn">Pagar</button>
             </div>
         </div>
+        <!-- Perfil -->
+        <div class="contenedor-perfil" id="perfil-contenedor" style="display:none;">
+            <div class="perfil-header">
+                <div class="foto-perfil">
+                    <img src="img/perfil.jpg" alt="Foto de perfil" class="imagen-redonda">
+                </div>
+                <h2 class="nombre-usuario">LorsonBlack (Tú Bélláqúító)</h2>
+            </div>
+            <div class="perfil-datos">
+                <p><strong>Canal:</strong> Ladrillo</p>
+                <p><strong>Directiva:</strong> La Rut</p>
+                <p><strong>Comuna:</strong> Las Obras</p>
+                <p><strong>Región:</strong> Magallanes</p>
+            </div>
+        </div>
+        <!-- Mis Datos -->
+        <!-- Mis Datos -->
+        <div class="contenedor" id="mis-datos-contenedor" style="display:none;">
+            <div class="contenedor-datos">
+                <h2>Mis Datos</h2>
+                <ul class="lista-datos">
+                    <li><strong>RUT:</strong> 21.316.930-0</li>
+                    <li><strong>Rol:</strong> Usuario</li>
+                    <li><strong>Nombre:</strong> Nicolás Eduardo</li>
+                    <li><strong>Apellido Paterno:</strong> Montecino</li>
+                    <li><strong>Apellido Materno:</strong> Urrea</li>
+                    <li><strong>Región:</strong> Región del Maule</li>
+                    <li><strong>Correo:</strong> lorsonblack@akuarela.com</li>
+                    <li><strong>Teléfono:</strong> +56 9 5411 6566</li>
+                </ul>
+                <button class="btn" onclick="mostrarMantenimiento()">Solicitar cambio de datos</button>
+            </div>
+        </div>
+        <!-- Historial -->
+        <div class="contenedor" id="historial-pagos-contenedor" style="display:none;">
+            <div class="contenedor-historial">
+                <h2>Historial de Pagos</h2>
+                <form id="form-historial" onsubmit="mostrarHistorial(event)">
+                    <div class="form-group">
+                        <label for="mes">Selecciona el mes:</label>
+                        <select id="mes" class="dropdown">
+                            <option value="1">Enero</option>
+                            <option value="2">Febrero</option>
+                            <option value="3">Marzo</option>
+                            <option value="4">Abril</option>
+                            <option value="5">Mayo</option>
+                            <option value="6">Junio</option>
+                            <option value="7">Julio</option>
+                            <option value="8">Agosto</option>
+                            <option value="9">Septiembre</option>
+                            <option value="10">Octubre</option>
+                            <option value="11">Noviembre</option>
+                            <option value="12">Diciembre</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="anio">Selecciona el año:</label>
+                        <select id="anio" class="dropdown">
+                            <option value="2023">2022</option>
+                            <option value="2024">2023</option>
+                            <option value="2025">2024</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn">Buscar</button>
+                </form>
+
+                <div id="resultado-historial" class="resultado-historial">
+                    <!-- Aquí se mostrarán los resultados del historial -->
+                </div>
+            </div>
+        </div>
     </div>
-
-
-    <script src="js/sidebar.js"></script>
-    <script src="js/reportes.js"></script>
+        <script src="js/user.js"></script>
+        <script src="js/sidebar.js"></script>
 </body>
 </html>
