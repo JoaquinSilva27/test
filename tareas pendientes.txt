@@ -2,21 +2,15 @@
 
 1) código de la base de datos:
     reportes (pelao): (informe de ingresos desde x fecha hasta y fecha, informes de proyectos: activos/terminados y deudas por canal)
-    gestores: (detalles, historial, tablas intermedias prácticamente, calcular la cuota en base al factor)
 
 
-2) Start UML modificar el prefijo a usuario se le añadió atributo (rol varchar2 (10)) //hecho por checho
-
-
-3) opciones en admin:
-    operaciones crud (falta integrarlo a la bd)
+2) opciones en admin:
     ver reportes  (falta integrarlo a la bd)
     gestores (falta hacer la interfaz y integrarlo a la bd)
 
-
-4) opciones en user: (falta todo xd)
+3) opciones en user: (CONECTAR TODO XD)
     Historial de pagos
     datos del usuario
-    perfil (canal asociado, directiva, comuna, región, etc)
+    perfil 
 
-5) PPT
+4) PPT
