@@ -2181,7 +2181,7 @@ Este gestor muestra la lista de celadores asignados a cada canal, lo cual es út
 -calcular valor cuota en base al factor
 */
 --detalle_historial_cambios
-CREATE OR REPLACE SEQUENCE SEQ_HISTORIAL_CAMBIOS
+CREATE SEQUENCE SEQ_HISTORIAL_CAMBIOS
     START WITH 1
     INCREMENT BY 1
     MINVALUE 1
@@ -2235,7 +2235,7 @@ END;
 / 
 
 -- historial pagos
-CREATE OR REPLACE SEQUENCE SEQ_HISTORIAL_PAGOS
+CREATE SEQUENCE SEQ_HISTORIAL_PAGOS
     START WITH 1
     INCREMENT BY 1
     MINVALUE 1
@@ -2254,9 +2254,9 @@ BEGIN
         SELECT SEQ_HISTORIAL_PAGOS.NEXTVAL INTO v_cod_historial_pago FROM DUAL;
 
         IF :NEW.DEUDA = 0 THEN
-            v_detalle_pago := 'Se pagó la totalidad de la deuda de $' || :OLD.DEUDA || 'con exito.';
+            v_detalle_pago := 'Se pagó la totalidad de la deuda de $' || :OLD.DEUDA || ' con exito.';
         ELSE
-            v_detalle_pago := 'Se realizó un abono por $'|| (:NEW.DEUDA - :OLD.DEUDA) || '. Deuda restante ' || :NEW.DEUDA || '.';
+            v_detalle_pago := 'Se realizó un abono por $'|| (:OLD.DEUDA - :NEW.DEUDA) || '. Deuda restante ' || :NEW.DEUDA || '.';
         END IF;
 
         -- Insertar un registro en SA_JS_JO_NR_HISTORIAL_PAGOS
@@ -2276,11 +2276,11 @@ EXCEPTION
         RAISE_APPLICATION_ERROR(-20003, 'Error al registrar el pago en el historial.');
 END;
 /
--- acciones predio  = factor canal * numero hectareas listo
--- deuda =  precio por accion * acciones del predio listo
+-- acciones predio  = factor canal * numero hectareas listo 100*5 = 500
+-- deuda =  precio por accion * acciones del predio listo 500*5000 = 2500000
 -- trigger que se encargue de calcular el atributo deuda de usuario en base factor_canal y hectareas_predio
 CREATE OR REPLACE TRIGGER trg_calcular_acciones_predio
-AFTER INSERT OR UPDATE OF HECTAREAS_PREDIO ON SA_JS_JO_NR_PREDIOS
+BEFORE INSERT OR UPDATE OF HECTAREAS_PREDIO ON SA_JS_JO_NR_PREDIOS
 FOR EACH ROW
 DECLARE
     v_acciones_total NUMBER := 0; -- Variable para acumular las acciones
@@ -2304,6 +2304,7 @@ EXCEPTION
         RAISE_APPLICATION_ERROR(-20009, 'Error al calcular las acciones del predio.');
 END;
 /
+
 
 -- 
 CREATE OR REPLACE TRIGGER trg_calcular_deuda_usuarios
@@ -2344,8 +2345,45 @@ EXCEPTION
         RAISE_APPLICATION_ERROR(-20012, 'Error al calcular el total de la cuota.');
 END;
 /
+-- procedimiento de pago
+CREATE OR REPLACE PROCEDURE PAGAR(
+    p_rut_usuario IN SA_JS_JO_NR_USUARIOS.RUT_USUARIO%TYPE,
+    p_cantidad_pago IN NUMBER
+)
+IS
+    v_deuda_actual NUMBER; -- Variable para almacenar la deuda actual del usuario
+BEGIN
+    -- Validar que el monto del pago no sea negativo
+    IF p_cantidad_pago < 0 THEN
+        RAISE_APPLICATION_ERROR(-20023, 'Por favor ingrese una cantidad positiva de dinero.');
+    END IF;
 
--- 
+    -- Obtener la deuda actual del usuario
+    SELECT DEUDA
+    INTO v_deuda_actual
+    FROM SA_JS_JO_NR_USUARIOS
+    WHERE RUT_USUARIO = p_rut_usuario;
+
+    -- Validar que la cantidad a pagar no sea mayor a la deuda actual
+    IF p_cantidad_pago > v_deuda_actual THEN
+        RAISE_APPLICATION_ERROR(-20020, 'Solo puede pagar como maximo la totalidad de su deuda, intente denuevo por favor.');
+    ELSE
+        -- Actualizar la deuda del usuario
+        UPDATE SA_JS_JO_NR_USUARIOS
+        SET DEUDA = DEUDA - p_cantidad_pago
+        WHERE RUT_USUARIO = p_rut_usuario;
+
+        -- Confirmar el éxito
+        DBMS_OUTPUT.PUT_LINE('Pago exitoso.');
+    END IF;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20021, 'Error: No se encontró el usuario con el RUT especificado.');
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20022, 'Error inesperado al disminuir la deuda.');
+END;
+/
+
 
 --REPORTES
 --1. Reporte de Usuarios y Cuotas Pendientes
