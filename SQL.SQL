@@ -2133,7 +2133,7 @@ BEGIN
         v_dias_vencidos := SYSDATE - v_fecha_vencimiento;
     END IF;
     -- Calcular el total con interés (0.05% por día de atraso) (cambiar)
-    v_total_con_interes := v_total_cuota + (v_total_cuota * 0.0005 * v_dias_vencidos);
+    v_total_con_interes := v_total_cuota + (v_total_cuota * 0.00053 * v_dias_vencidos);
     RETURN v_total_con_interes;
 END;
 
@@ -2278,6 +2278,7 @@ EXCEPTION
 END;
 /
 -- acciones predio  = factor canal * numero hectareas
+-- deuda =  precio por accion * acciones del predio 
 -- trigger que se encargue de calcular el atributo deuda de usuario en base factor_canal y hectareas_predio
 CREATE OR REPLACE TRIGGER trg_calcular_deuda_usuario
 BEFORE INSERT ON SA_JS_JO_NR_USUARIOS
@@ -2314,14 +2315,14 @@ END;
 
 -- triger que se encartgue de aumentar la deuda de un usuario si la cuota vencio
 CREATE OR REPLACE TRIGGER trg_actualizar_deuda_por_vencimiento
-AFTER UPDATE OF FECHA_VENCIMIENTO_CUOTA ON SA_JS_JO_NR_CUOTAS
+AFTER UPDATE OF FECHA_VENCIMIENTO_CUOTA ON SA_JS_JO_NR_CUOTAS-- ver bien que gatilla al trigger --llamada a funcion al iniciar secion en pagina web
 FOR EACH ROW
 BEGIN
     -- Verificar si la fecha de vencimiento ya pasó
     IF :NEW.FECHA_VENCIMIENTO_CUOTA < SYSDATE THEN
         -- Actualizar la deuda del usuario asociado
         UPDATE SA_JS_JO_NR_USUARIOS
-        SET DEUDA = DEUDA*(1.15)
+        SET DEUDA = DEUDA*(1.15)-- interes diario 
         WHERE COD_CUOTA = :NEW.COD_CUOTA;
     END IF;
 EXCEPTION
