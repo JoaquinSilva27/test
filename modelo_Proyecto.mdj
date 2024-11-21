@@ -24305,22 +24305,6 @@
 										},
 										{
 											"_type": "ERDColumnView",
-											"_id": "AAAAAAGTLSBdRh0NTEo=",
-											"_parent": {
-												"$ref": "AAAAAAGTLSBdRh0OuZQ="
-											},
-											"model": {
-												"$ref": "AAAAAAGTLSBdSR4Wha8="
-											},
-											"font": "Arial;13;0",
-											"parentStyle": true,
-											"left": 357,
-											"top": 507,
-											"width": 235.30615234375,
-											"height": 13
-										},
-										{
-											"_type": "ERDColumnView",
 											"_id": "AAAAAAGTRvz26+j5TSo=",
 											"_parent": {
 												"$ref": "AAAAAAGTLSBdRh0OuZQ="
@@ -24331,7 +24315,7 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 357,
-											"top": 522,
+											"top": 507,
 											"width": 235.30615234375,
 											"height": 13
 										}
@@ -24341,7 +24325,7 @@
 									"left": 352,
 									"top": 367,
 									"width": 245.30615234375,
-									"height": 173
+									"height": 158
 								}
 							],
 							"font": "Arial;13;0",
@@ -24349,7 +24333,7 @@
 							"left": 352,
 							"top": 344,
 							"width": 245.30615234375,
-							"height": 196,
+							"height": 181,
 							"nameLabel": {
 								"$ref": "AAAAAAGTLSBdRh0E/38="
 							},
@@ -24729,6 +24713,22 @@
 											"top": 552,
 											"width": 193.392578125,
 											"height": 13
+										},
+										{
+											"_type": "ERDColumnView",
+											"_id": "AAAAAAGTUQRIXp5xsaI=",
+											"_parent": {
+												"$ref": "AAAAAAGTLSBdRx0laCQ="
+											},
+											"model": {
+												"$ref": "AAAAAAGTUQRIT55udAI="
+											},
+											"font": "Arial;13;0",
+											"parentStyle": true,
+											"left": 669,
+											"top": 456,
+											"width": 193.392578125,
+											"height": 13
 										}
 									],
 									"font": "Arial;13;0",
@@ -24736,7 +24736,7 @@
 									"left": 664,
 									"top": 391,
 									"width": 203.392578125,
-									"height": 68
+									"height": 83
 								}
 							],
 							"font": "Arial;13;0",
@@ -24744,7 +24744,7 @@
 							"left": 664,
 							"top": 368,
 							"width": 203.392578125,
-							"height": 91,
+							"height": 106,
 							"nameLabel": {
 								"$ref": "AAAAAAGTLSBdRx0fAy4="
 							},
@@ -27400,8 +27400,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 654,
-									"top": 449,
+									"left": 625,
+									"top": 413,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -27419,7 +27419,7 @@
 									"font": "Arial;13;0",
 									"parentStyle": false,
 									"left": 638,
-									"top": 408,
+									"top": 472,
 									"height": 13,
 									"alpha": 0.5235987755982988,
 									"distance": 30,
@@ -27437,7 +27437,7 @@
 									"font": "Arial;13;0",
 									"parentStyle": false,
 									"left": 622,
-									"top": 520,
+									"top": 384,
 									"height": 13,
 									"alpha": -0.5235987755982988,
 									"distance": 30,
@@ -27455,7 +27455,7 @@
 								"$ref": "AAAAAAGTLSBdRx0mXYs="
 							},
 							"lineStyle": 2,
-							"points": "664:400;640:400;640:512;597:512",
+							"points": "664:464;640:464;640:376;597:376",
 							"nameLabel": {
 								"$ref": "AAAAAAGTLSBdSB2yoas="
 							},
@@ -29150,17 +29150,6 @@
 						},
 						{
 							"_type": "ERDColumn",
-							"_id": "AAAAAAGTLSBdSR4Wha8=",
-							"_parent": {
-								"$ref": "AAAAAAGTLSBdSR4XZ8U="
-							},
-							"name": "cod_predio",
-							"type": "number",
-							"length": 0,
-							"foreignKey": true
-						},
-						{
-							"_type": "ERDColumn",
 							"_id": "AAAAAAGTRvz24uj2Nw4=",
 							"_parent": {
 								"$ref": "AAAAAAGTLSBdSR4XZ8U="
@@ -29600,6 +29589,17 @@
 								"$ref": "AAAAAAGTLSBdSR5D8BY="
 							},
 							"name": "cod_canal",
+							"type": "number",
+							"length": 0,
+							"foreignKey": true
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AAAAAAGTUQRIT55udAI=",
+							"_parent": {
+								"$ref": "AAAAAAGTLSBdSR5D8BY="
+							},
+							"name": "rut",
 							"type": "number",
 							"length": 0,
 							"foreignKey": true
