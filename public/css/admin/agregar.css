@@ -126,4 +126,6 @@
     scrollbar-width: thin; /* Tamaño de la barra de desplazamiento */
     scrollbar-color: #004643 #fffffe; /* Color del pulgar y del track */
     border-radius: 20px; /* Redondeado */
+    max-height: 400px;
 }
+

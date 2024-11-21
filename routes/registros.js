@@ -71,7 +71,7 @@ router.get('/columns/:table', async (req, res) => {
         const columns = result.rows.map((row, index) => ({
             name: row.COLUMN_NAME,
             type: row.DATA_TYPE.includes('NUMBER') ? 'number' : 'text',
-            isPrimaryKey: index === 0 && row.COLUMN_NAME !== 'RUT', // La primera fila es PK, excepto si es RUT
+            isPrimaryKey: index === 0 && row.COLUMN_NAME !== 'RUT_USUARIO', // La primera fila es PK, excepto si es RUT
         }));
 
         console.log(`Columnas de la tabla ${table}:`, columns);
