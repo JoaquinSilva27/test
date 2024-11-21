@@ -12,6 +12,8 @@ buttons.forEach(button => {
     });
 });
 
+let currentAction = null; // Variable global para guardar la acción seleccionada
+
 async function fetchEntities() {
   try {
       const response = await fetch('/entities/getEntities'); // Llama al endpoint del backend
@@ -36,12 +38,12 @@ function populateEntitySelect(entities) {
   ).join('');
 
   formContainer.innerHTML = `
-      <h3>Seleccione la entidad</h3>
+      <h3>Seleccione la tabla</h3>
       <select id="entitySelect">
           <option value="" disabled selected>Seleccione una entidad</option>
           ${options}
       </select>
-      <button class="btn-guardar" onclick="selectAction()">Siguiente</button>
+      <button class="btn-guardar" onclick="proceedWithAction()">Siguiente</button>
   `;
 }
 
@@ -70,24 +72,49 @@ function showMsj() {
   document.getElementById('reporte-detalle-container').style.display = 'none';
 }
 
+function setAction(action) {
+  currentAction = action; // Guarda la acción seleccionada
+  console.log(`Acción seleccionada: ${action}`);
+
+  // Cambia el título según la acción seleccionada
+  const titleElement = document.querySelector('#form-container h3');
+  if (titleElement) {
+      titleElement.textContent = `${action} entidad`;
+  }
+
+  // Cambia visualmente el botón seleccionado
+  const buttons = document.querySelectorAll('#admin-options .btn');
+  buttons.forEach(btn => btn.classList.remove('selected'));
+  const clickedButton = Array.from(buttons).find(btn => btn.textContent === action);
+  if (clickedButton) {
+      clickedButton.classList.add('selected');
+  }
+}
+
+
 // Manejar la acción seleccionada por el usuario
-function selectAction() {
+function proceedWithAction() {
   const selectedEntity = document.getElementById('entitySelect').value;
 
-  if (!selectedEntity) {
-      alert('Por favor, seleccione una entidad antes de continuar.');
+  if (!currentAction) {
+      alert('Por favor, seleccione una acción antes de continuar.');
       return;
   }
 
-  const action = document.querySelector('#admin-options .btn.selected').textContent.trim();
+  if (!selectedEntity) {
+    alert('Por favor, selecciona una entidad antes de continuar.');
+    return;
+  }
 
-  if (action === "Agregar") {
+  console.log(`Procediendo con la acción: ${currentAction} sobre la entidad: ${selectedEntity}`);
+
+  if (currentAction  === "Agregar") {
       mostrarFormularioAgregar(selectedEntity); // Llamará a la función en agregar.js
-  } else if (action === "Consultar") {
+  } else if (currentAction  === "Consultar") {
       mostrarFormularioConsulta(selectedEntity); // Llamará a la función en consultar.js
-  } else if (action === "Modificar") {
+  } else if (currentAction  === "Modificar") {
       prepararFormularioModificar(selectedEntity); // Llamará a la función en modificar.js
-  } else if (action === "Eliminar") {
+  } else if (currentAction  === "Eliminar") {
       prepararFormularioEliminar(selectedEntity); // Llamará a la función en eliminar.js
   }
 }

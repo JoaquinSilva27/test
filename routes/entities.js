@@ -11,7 +11,7 @@ router.get('/getEntities', async (req, res) => {
         console.log('Datos obtenidos:', result.rows);
 
         // Extraer correctamente los nombres de las tablas
-        const entities = result.rows.map(row => row.TABLE_NAME);
+        const entities = result.rows.map(row => row.TABLE_NAME.replace('SA_JS_JO_NR_', ''));
 
         res.status(200).json(entities); // Devolver la lista de nombres de tablas
     } catch (err) {

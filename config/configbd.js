@@ -26,6 +26,71 @@ async function Open(sql, binds = {}, autoCommit = false) {
     }
 }
 
+// Función para ejecutar un procedimiento almacenado sin cursores
+async function OpenProcedure(procedure, binds, autoCommit = false) {
+    let connection;
+    try {
+        connection = await oracledb.getConnection(cns);
+
+        // Genera dinámicamente los placeholders para los parámetros
+        const placeholders = Object.keys(binds).map(key => `:${key}`).join(', ');
+        const sql = `BEGIN ${procedure}(${placeholders}); END;`;
+
+        console.log('SQL generado:', sql); // Depuración
+        console.log('Valores de binds:', binds); // Depuración
+
+        const result = await connection.execute(sql, binds, { autoCommit });
+        return result;
+    } catch (err) {
+        console.error('Error en OpenProcedure:', err);
+        throw err;
+    } finally {
+        if (connection) {
+            await connection.close();
+        }
+    }
+}
+
+async function OpenCursorProcedure(procedure, binds) {
+    let cnn;
+    try {
+        cnn = await oracledb.getConnection(cns);
+
+        const sql = `BEGIN ${procedure}(:P_PK, :P_CURSOR); END;`;
+
+        // Agregar el cursor como un parámetro de salida (BIND_OUT)
+        const options = {
+            ...binds,
+            P_CURSOR: { type: oracledb.CURSOR, dir: oracledb.BIND_OUT }, // Configuración para P_CURSOR
+        };
+
+        console.log('SQL generado:', sql);
+        console.log('Binds utilizados:', options);
+
+        // Ejecutar el procedimiento almacenado
+        const result = await cnn.execute(sql, options);
+
+        // Leer los datos del cursor
+        const cursor = result.outBinds.P_CURSOR;
+        const rows = [];
+        let row;
+
+        while ((row = await cursor.getRow())) {
+            console.log('Fila obtenida del cursor:', row);
+            rows.push(row); // Agregar cada fila a la lista de resultados
+        }
+
+        await cursor.close(); // Asegúrate de cerrar el cursor
+        return rows; // Devuelve las filas obtenidas
+    } catch (err) {
+        console.error('Error en OpenCursorProcedure:', err);
+        throw err;
+    } finally {
+        if (cnn) await cnn.close();
+    }
+}
+
+
 // Prueba de conexión
 async function testConnection() {
     let connection;
@@ -41,5 +106,7 @@ async function testConnection() {
 
 module.exports = {
     Open,
-    testConnection
+    testConnection,
+    OpenProcedure,
+    OpenCursorProcedure
 };

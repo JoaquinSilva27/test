@@ -7,7 +7,7 @@
     max-width: 600px;
     margin: 5rem auto;
     text-align: center;
-    min-height: 200px; /* Altura mínima para al menos 2 campos */
+    min-height: 300px; /* Altura mínima para al menos 2 campos */
     max-height: 70vh; /* Altura máxima para limitar el tamaño */
     overflow: hidden; /* Habilita el desplazamiento */
 }
@@ -32,7 +32,7 @@
     overflow-y: auto; /* Habilitamos el desplazamiento vertical */
     max-height: calc(70vh - 125px); /* Ajustamos la altura para el contenido desplazable */
     padding-right: 20px;
-    margin-top: -10px;
+    margin-top: -5px;
     margin-left: 60px;
     margin-right: 10px; /* Mueve el scroll hacia el borde */
 }

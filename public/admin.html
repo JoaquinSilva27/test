@@ -86,10 +86,10 @@
         </div>
         <div id="admin-options">
             <h3>¿Qué acción deseas realizar?</h3>
-            <button class="btn" onclick="selectAction('Agregar')">Agregar</button>
-            <button class="btn" onclick="selectAction('Consultar')">Consultar</button>
-            <button class="btn" onclick="selectAction('Modificar')">Modificar</button>
-            <button class="btn" onclick="selectAction('Eliminar')">Eliminar</button>
+            <button class="btn" onclick="setAction('Agregar')">Agregar</button>
+            <button class="btn" onclick="setAction('Consultar')">Consultar</button>
+            <button class="btn" onclick="setAction('Modificar')">Modificar</button>
+            <button class="btn" onclick="setAction('Eliminar')">Eliminar</button>
         </div>
       <div id="form-container"></div>
     </div>
@@ -119,7 +119,7 @@
       <div id="consultar-container" style="position: relative;">
         <div class="consultar-busqueda">
           <h3>Consultar</h3>
-          <input type="text" id="consulta-input" placeholder="RUT, Nombre o Clave Primaria" required>
+          <input type="text" id="consulta-input" placeholder="RUT, Nombre o Clave Primaria" autocomplete="off" required>
           <ul id="sugerencias-consulta" class="sugerencias-consultas"></ul>
           <button class="btn-consultar" onclick="consultarEntidad()">Consultar</button>
       </div>

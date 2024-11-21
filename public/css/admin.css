@@ -211,7 +211,7 @@ header {
 }
 
 /* Estilo general para el Select Box */
-#tableSelect {
+#entitySelect {
     width: 100%;
     padding: 12px;
     margin-bottom: 20px;
@@ -233,12 +233,12 @@ header {
     box-sizing: border-box;
 }
 
-#tableSelect:focus {
+#entitySelect:focus {
     border-color: #f9bc60; /* Cambia el color del borde al enfocarse */
 }
 
 /* Estilo para las Opciones del Select */
-#tableSelect option {
+#entitySelect option {
     padding: 10px;
     color: #333;
     background-color: #fff;
