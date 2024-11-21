@@ -1,150 +1,180 @@
 function configurarBusquedaModificar() {
-  const modificarInput = document.getElementById("modificar-input");
-  const sugerenciasContainer = document.getElementById("sugerencias-modificar");
+    const modificarInput = document.getElementById("modificar-input");
+    const sugerenciasContainer = document.getElementById("sugerencias-modificar");
 
-  // Escucha el evento de entrada en el campo de búsqueda
-  modificarInput.addEventListener("input", () => {
-      const query = modificarInput.value.trim();
-      const selectedTable = document.getElementById("tableSelect").value;
+    // Elimina cualquier listener previo para evitar duplicados
+    modificarInput.removeEventListener("input", modificarInput._modificarListener);
 
-      // Limpia las sugerencias anteriores
-      sugerenciasContainer.innerHTML = "";
+    // Define el nuevo listener
+    const modificarListener = async () => {
+        const query = modificarInput.value.trim();
+        const selectedTable = document.getElementById("entitySelect").value;
 
-      if (query.length > 0) {
-          // Busca sugerencias basadas en el input
-          const resultados = buscarSugerencias(selectedTable, query);
+        if (query.length > 0) {
+            try {
+                const resultados = await buscarSugerenciasModificar(query, selectedTable);
+                mostrarSugerenciasModificar(resultados, sugerenciasContainer, modificarInput);
+            } catch (error) {
+                console.error("Error al buscar sugerencias:", error);
+            }
+        } else {
+            sugerenciasContainer.innerHTML = ""; // Limpia las sugerencias si el input está vacío
+        }
+    };
 
-          // Muestra los resultados en la lista de sugerencias
-          resultados.forEach((resultado) => {
-              const li = document.createElement("li");
-              li.textContent = `${resultado.nombre} (${resultado.rut})`;
-
-              // Al hacer clic en un resultado, completa el input
-              li.addEventListener("click", () => {
-                  modificarInput.value = resultado.rut; // Llena el campo con el valor seleccionado
-                  sugerenciasContainer.innerHTML = ""; // Limpia las sugerencias
-              });
-
-              sugerenciasContainer.appendChild(li);
-          });
-      }
-  });
-
-  // Limpia las sugerencias si el input pierde el foco
-  modificarInput.addEventListener("blur", () => {
-      setTimeout(() => (sugerenciasContainer.innerHTML = ""), 200); // Breve delay para permitir clics
-  });
+    // Asocia el listener al input y guárdalo para poder eliminarlo después
+    modificarInput._modificarListener = modificarListener;
+    modificarInput.addEventListener("input", modificarListener);
 }
 
-function buscarSugerencias(table, query) {
-  const registrosMock = {
-      clientes: [
-          { rut: "12345678-9", nombre: "Juan Pérez" },
-          { rut: "98765432-1", nombre: "María Gómez" },
-          { rut: "12398765-4", nombre: "Pedro González" },
-      ],
-      terrenos: [
-          { rut: "Terreno-001", nombre: "Terreno Norte" },
-          { rut: "Terreno-002", nombre: "Terreno Este" },
-      ],
-      pagos: [
-          { rut: "Pago-001", nombre: "Pago Enero" },
-          { rut: "Pago-002", nombre: "Pago Febrero" },
-      ],
-  };
+async function buscarSugerenciasModificar(query, table) {
+    try {
+        const url = `http://localhost:3000/api/${table}/suggestions?query=${query}`;
+        console.log("Llamando al endpoint para sugerencias:", url);
 
-  const registros = registrosMock[table] || [];
-  return registros.filter(
-      (registro) =>
-          registro.rut.toLowerCase().includes(query.toLowerCase()) ||
-          registro.nombre.toLowerCase().includes(query.toLowerCase())
-  );
+        const response = await fetch(url);
+        if (!response.ok) {
+            console.error(`Error al buscar sugerencias: ${response.statusText}`);
+            return [];
+        }
+
+        const resultados = await response.json();
+        console.log("Sugerencias obtenidas:", resultados);
+        return resultados; // Devuelve las sugerencias
+    } catch (error) {
+        console.error("Error al buscar sugerencias:", error);
+        return [];
+    }
 }
 
-function buscarParaModificar() {
-  const modificarInput = document.getElementById("modificar-input").value.trim();
-  const selectedTable = document.getElementById("tableSelect").value;
+function mostrarSugerenciasModificar(resultados, contenedor, input) {
+    contenedor.innerHTML = ""; // Limpia el contenedor de sugerencias anteriores
 
-  // Validar que el input no esté vacío
-  if (!modificarInput) {
-      alert("Por favor, ingrese un criterio válido o seleccione una opción de la lista.");
-      return;
-  }
-
-  // Verificar si el valor coincide con un registro válido
-  const resultados = buscarSugerencias(selectedTable, modificarInput);
-
-  if (resultados.length === 0) {
-      alert("No se encontró ningún registro con el criterio proporcionado.");
-      return;
-  }
-
-  // Si hay coincidencia, cargar el formulario con los datos seleccionados
-  const registroSeleccionado = resultados[0]; // Considerando que el usuario ya seleccionó un valor válido
-  mostrarFormularioModificar(selectedTable, registroSeleccionado); // Muestra el formulario con datos
+    resultados.forEach((resultado) => {
+        const item = document.createElement("li");
+        item.textContent = `${resultado.nombre} (${resultado.pk})`; // Muestra el nombre formateado
+        item.addEventListener("click", () => {
+            input.value = resultado.pk; // Llena el campo con la PK seleccionada
+            contenedor.innerHTML = ""; // Limpia las sugerencias
+        });
+        contenedor.appendChild(item);
+    });
 }
 
-function mostrarFormularioModificar(selectedTable, registroSeleccionado) {
-  const camposResultado = document.querySelector(".campos-modificar");
-  camposResultado.innerHTML = "";
+async function buscarParaModificar() {
+    const modificarInput = document.getElementById("modificar-input").value.trim();
+    const selectedTable = document.getElementById("entitySelect").value;
 
-  // Obtén los campos de la tabla seleccionada
-  const fields = tableSchemas[selectedTable] || [];
+    if (!modificarInput) {
+        alert("Por favor, selecciona o ingresa un valor válido.");
+        return;
+    }
 
-  // Genera campos editables con los datos del registro seleccionado
-  fields.forEach((field) => {
-      const campo = document.createElement("div");
-      campo.className = "campo";
+    try {
+        // Llama al endpoint para obtener los datos del registro por su PK
+        const url = `http://localhost:3000/api/${selectedTable}/data/${modificarInput}`;
+        console.log("Llamando al endpoint para obtener datos:", url);
 
-      const label = document.createElement("label");
-      label.textContent = field.placeholder;
+        const response = await fetch(url);
+        if (!response.ok) {
+            const error = await response.json();
+            alert(error.error || "No se encontraron datos para el criterio proporcionado.");
+            return;
+        }
 
-      const input = document.createElement("input");
-      input.type = field.type;
-      input.name = field.name;
-      input.value = registroSeleccionado[field.name] || ""; // Valor del registro
-      input.required = true;
+        const registroSeleccionado = await response.json();
+        if (!registroSeleccionado || Object.keys(registroSeleccionado).length === 0) {
+            alert("No se encontraron datos para la clave proporcionada.");
+            return;
+        }
 
-      campo.appendChild(label);
-      campo.appendChild(input);
-      camposResultado.appendChild(campo);
-  });
-
-  // Aplicar diseño de 2 columnas con scroll
-  camposResultado.style.display = "grid";
-  camposResultado.style.gridTemplateColumns = "repeat(2, 1fr)";
-  camposResultado.style.gap = "15px";
-
-  // Mostrar la sección de modificar
-  ocultarOtrasSecciones();
-  document.getElementById("modificar-section").style.display = "block";
+        mostrarFormularioModificar(selectedTable, registroSeleccionado);
+    } catch (error) {
+        console.error("Error al buscar registro para modificar:", error);
+        alert("Ocurrió un error al buscar el registro.");
+    }
 }
 
-function guardarModificaciones() {
-  // Recolectar los valores de los campos editados
-  const campos = document.querySelectorAll(".campos-modificar input");
-  const updatedData = {};
+function mostrarFormularioModificar(selectedTable, registro) {
+    const camposResultado = document.querySelector(".campos-modificar");
+    camposResultado.innerHTML = "";
 
-  campos.forEach((campo) => {
-      updatedData[campo.name] = campo.value;
-  });
+    registro.data.forEach(({ columnName, value, editable }) => {
+        const campo = document.createElement("div");
+        campo.className = "campo";
 
-  // Simulación de actualización (aquí podrías hacer una solicitud al servidor)
-  alert(`Datos actualizados:\n${JSON.stringify(updatedData, null, 2)}`);
+        const label = document.createElement("label");
+        label.textContent = columnName; // Nombre de la columna
 
-  // Redirigir al contenedor principal CRUD después de guardar
-  document.getElementById("modificar-section").style.display = "none";
-  document.getElementById("admin-registros-container").style.display = "block";
+        const input = document.createElement("input");
+        input.type = "text";
+        input.name = columnName;
+        input.value = value !== null ? value : ""; // Maneja valores nulos
+        input.required = true;
+
+        if (!editable) {
+            input.disabled = true; // La PK no es editable
+        }
+
+        campo.appendChild(label);
+        campo.appendChild(input);
+        camposResultado.appendChild(campo);
+    });
+
+    ocultarOtrasSecciones();
+    document.getElementById("modificar-section").style.display = "block";
+}
+
+async function guardarModificaciones() {
+    const campos = document.querySelectorAll(".campos-modificar input");
+    const updatedData = {};
+    let pk = null; // Inicializa la clave primaria
+
+    // Recolectar los valores de los campos editados
+    campos.forEach((campo) => {
+        if (campo.name.toLowerCase().includes("pk") || campo.disabled) {
+            pk = campo.value; // Detecta la PK como un campo deshabilitado
+        } else {
+            updatedData[campo.name] = campo.value;
+        }
+    });
+
+    if (!pk) {
+        alert("No se puede actualizar el registro sin la clave primaria.");
+        return;
+    }
+
+    const selectedTable = document.getElementById("entitySelect").value;
+
+    try {
+        const response = await fetch(`http://localhost:3000/api/${selectedTable}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ pk, ...updatedData }),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            alert(result.message || "Registro actualizado con éxito.");
+            document.getElementById("modificar-section").style.display = "none";
+            document.getElementById("admin-registros-container").style.display = "block";
+        } else {
+            alert(result.error || "Error al actualizar el registro.");
+        }
+    } catch (error) {
+        console.error("Error al guardar modificaciones:", error);
+        alert("Ocurrió un error al guardar las modificaciones.");
+    }
 }
 
 function ocultarOtrasSecciones() {
-  document.getElementById("admin-registros-container").style.display = "none";
-  document.getElementById("consultar-section").style.display = "none";
-  document.getElementById("modificar-section").style.display = "none";
-  document.getElementById("eliminar-section").style.display = "none";
-  document.getElementById("reportes-section").style.display = "none";
-  document.getElementById("contenedor").style.display = "none";
-  document.getElementById('reporte-detalle-container').style.display = 'none';
+    document.getElementById("admin-registros-container").style.display = "none";
+    document.getElementById("consultar-section").style.display = "none";
+    document.getElementById("modificar-section").style.display = "none";
+    document.getElementById("eliminar-section").style.display = "none";
+    document.getElementById("reportes-section").style.display = "none";
+    document.getElementById("contenedor").style.display = "none";
+    document.getElementById("reporte-detalle-container").style.display = "none";
 }
 
 // Configurar búsqueda reactiva al cargar el script
