@@ -115,7 +115,7 @@ function proceedWithAction() {
   } else if (currentAction  === "Modificar") {
       prepararFormularioModificar(selectedEntity); // Llamará a la función en modificar.js
   } else if (currentAction  === "Eliminar") {
-      prepararFormularioEliminar(selectedEntity); // Llamará a la función en eliminar.js
+      mostrarFormularioEliminar(selectedEntity); // Llamará a la función en eliminar.js
   }
 }
 

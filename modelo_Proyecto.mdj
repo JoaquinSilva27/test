@@ -25091,6 +25091,22 @@
 										},
 										{
 											"_type": "ERDColumnView",
+											"_id": "AAAAAAGTULceoIx/1oM=",
+											"_parent": {
+												"$ref": "AAAAAAGTLSBdRx06EVs="
+											},
+											"model": {
+												"$ref": "AAAAAAGTULcejox87Ek="
+											},
+											"font": "Arial;13;0",
+											"parentStyle": true,
+											"left": 365,
+											"top": 912,
+											"width": 241.80615234375,
+											"height": 13
+										},
+										{
+											"_type": "ERDColumnView",
 											"_id": "AAAAAAGTLSBdRx05DiI=",
 											"_parent": {
 												"$ref": "AAAAAAGTLSBdRx06EVs="
@@ -25101,7 +25117,7 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 365,
-											"top": 912,
+											"top": 927,
 											"width": 241.80615234375,
 											"height": 13
 										}
@@ -25111,7 +25127,7 @@
 									"left": 360,
 									"top": 847,
 									"width": 251.80615234375,
-									"height": 83
+									"height": 98
 								}
 							],
 							"font": "Arial;13;0",
@@ -25119,7 +25135,7 @@
 							"left": 360,
 							"top": 824,
 							"width": 251.80615234375,
-							"height": 106,
+							"height": 121,
 							"nameLabel": {
 								"$ref": "AAAAAAGTLSBdRx00tDY="
 							},
@@ -29823,6 +29839,16 @@
 							},
 							"name": "fecha_pago",
 							"type": "date",
+							"length": 0
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AAAAAAGTULcejox87Ek=",
+							"_parent": {
+								"$ref": "AAAAAAGTLSBdSh5czeo="
+							},
+							"name": "pago",
+							"type": "number",
 							"length": 0
 						},
 						{

@@ -84,20 +84,26 @@ function configurarBusquedaConsulta(selectedTable) {
     const consultaInput = document.getElementById('consulta-input');
     const sugerenciasConsulta = document.getElementById('sugerencias-consulta');
 
-    consultaInput.addEventListener('input', async () => {
+    // Elimina cualquier listener previo para evitar duplicados
+    consultaInput.removeEventListener('input', consultaInput._consultaListener);
+
+    const consultaListener = async () => {
         const query = consultaInput.value.trim();
         if (query.length > 0) {
             // Llama al endpoint de sugerencias
-            const resultados = await buscarConsulta(query, selectedTable);
+            const resultados = await buscarSugerenciasConsulta(query, selectedTable);
             mostrarSugerenciasConsulta(resultados, sugerenciasConsulta, consultaInput);
         } else {
             sugerenciasConsulta.innerHTML = ''; // Limpia las sugerencias si el input está vacío
         }
-    });
+    };
+    // Asocia el listener al input y guárdalo para poder eliminarlo después
+    consultaInput._consultaListener = consultaListener;
+    consultaInput.addEventListener('input', consultaListener);
 }
 
 // Simula una función que busca en la base de datos
-async function buscarConsulta(query, table) {
+async function buscarSugerenciasConsulta(query, table) {
     try {
         const url = `http://localhost:3000/api/${table}/suggestions?query=${query}`;
         console.log('Llamando al endpoint:', url);

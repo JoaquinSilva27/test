@@ -46,7 +46,6 @@ CREATE TABLE SA_JS_JO_NR_CUOTAS( --MANTENEDOR LISTO
 );
 
 CREATE TABLE SA_JS_JO_NR_PREDIOS( --MANTENEDOR LISTO
-	COD_CUOTA NUMBER,
 	COD_PREDIO NUMBER, 
 	ROL_PREDIO NUMBER,
 	HECTAREAS_PREDIO NUMBER,
@@ -77,6 +76,7 @@ CREATE TABLE SA_JS_JO_NR_HISTORIAL_PAGOS(
 	NOMBRE_PAGADOR VARCHAR2(100),
 	DETALLE_PAGO VARCHAR2(200),
 	FECHA_PAGO DATE,
+    PAGO NUMBER,
 	COD_PREDIO NUMBER,
 	CONSTRAINT PK_SA_JS_JO_NR_HISTORIAL_PAGOS PRIMARY KEY(COD_HISTORIAL_PAGO),
 	CONSTRAINT FK_SA_JS_JO_NR_HISTORIAL_PAGOS_PREDIOS FOREIGN KEY(COD_PREDIO) REFERENCES SA_JS_JO_NR_PREDIOS(COD_PREDIO)
@@ -436,15 +436,18 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE LEER_REGIONES(
+    P_PK IN NUMBER,
     P_CURSOR OUT SYS_REFCURSOR
 ) IS
 BEGIN
-    OPEN P_CURSOR FOR 
-        SELECT COD_REGION, NOMBRE_REGION FROM SA_JS_JO_NR_REGIONES;
+    OPEN P_CURSOR FOR
+        SELECT *
+        FROM SA_JS_JO_NR_REGIONES
+        WHERE COD_REGION = P_PK;
 END LEER_REGIONES;
 /
 
-CREATE OR REPLACE PROCEDURE ACTUALIZAR_REGION(
+CREATE OR REPLACE PROCEDURE ACTUALIZAR_REGIONES(
     P_COD_REGION NUMBER,
     P_NOMBRE_REGION VARCHAR2
 ) 
@@ -472,7 +475,7 @@ EXCEPTION
 END;
 /
 
-CREATE OR REPLACE PROCEDURE ELIMINAR_REGION(
+CREATE OR REPLACE PROCEDURE ELIMINAR_REGIONES(
     P_COD_REGION NUMBER
 ) 
 IS
@@ -523,11 +526,14 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE LEER_DIRECCIONES(
+    P_PK IN NUMBER,
     P_CURSOR OUT SYS_REFCURSOR
 ) IS
 BEGIN
-    OPEN P_CURSOR FOR 
-        SELECT COD_CALLEN, CALLE_DIRECCION, NUMERO_DIRECCION FROM SA_JS_JO_NR_DIRECCIONES;
+    OPEN P_CURSOR FOR
+        SELECT *
+        FROM SA_JS_JO_NR_DIRECCIONES
+        WHERE COD_CALLEN = P_PK;
 END LEER_DIRECCIONES;
 /
 
@@ -612,11 +618,14 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE LEER_COMUNAS(
+    P_PK IN NUMBER,
     P_CURSOR OUT SYS_REFCURSOR
 ) IS
 BEGIN
-    OPEN P_CURSOR FOR 
-        SELECT COD_COMUNA, NOMBRE_COMUNA, COD_REGION, COD_CALLEN FROM SA_JS_JO_NR_COMUNAS;
+    OPEN P_CURSOR FOR
+        SELECT *
+        FROM SA_JS_JO_NR_COMUNAS
+        WHERE COD_COMUNA = P_PK;
 END LEER_COMUNAS;
 /
 
@@ -706,11 +715,14 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE LEER_TIPO_CUOTAS(
+    P_PK IN NUMBER,
     P_CURSOR OUT SYS_REFCURSOR
 ) IS
 BEGIN
-    OPEN P_CURSOR FOR 
-        SELECT COD_TIPO_CUOTA, TIPO_CUOTA, MONTO_CUOTA FROM SA_JS_JO_NR_TIPO_CUOTAS;
+    OPEN P_CURSOR FOR
+        SELECT *
+        FROM SA_JS_JO_NR_TIPO_CUOTAS
+        WHERE COD_TIPO_CUOTA = P_PK;
 END LEER_TIPO_CUOTAS;
 /
 
@@ -797,11 +809,14 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE LEER_SERVICIOS(
+    P_PK IN NUMBER,
     P_CURSOR OUT SYS_REFCURSOR
 ) IS
 BEGIN
-    OPEN P_CURSOR FOR 
-        SELECT COD_SERVICIO, NOMBRE_SERVICIO FROM SA_JS_JO_NR_SERVICIOS;
+    OPEN P_CURSOR FOR
+        SELECT *
+        FROM SA_JS_JO_NR_SERVICIOS
+        WHERE COD_SERVICIO = P_PK;
 END LEER_SERVICIOS;
 /
 
@@ -889,12 +904,14 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE LEER_CUOTAS(
+    P_PK IN NUMBER,
     P_CURSOR OUT SYS_REFCURSOR
 ) IS
 BEGIN
-    OPEN P_CURSOR FOR 
-        SELECT COD_CUOTA, COD_TIPO_CUOTA, TOTAL_CUOTA, FECHA_VENCIMIENTO_CUOTA, COD_SERVICIO 
-        FROM SA_JS_JO_NR_CUOTAS;
+    OPEN P_CURSOR FOR
+        SELECT *
+        FROM SA_JS_JO_NR_CUOTAS
+        WHERE COD_CUOTA = P_PK;
 END LEER_CUOTAS;
 /
 
@@ -987,11 +1004,14 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE LEER_PREDIOS(
+    P_PK IN NUMBER,
     P_CURSOR OUT SYS_REFCURSOR
 ) IS
 BEGIN
-    OPEN P_CURSOR FOR 
-        SELECT COD_PREDIO, ROL_PREDIO, HECTAREAS_PREDIO, ACCIONES_PREDIO FROM SA_JS_JO_NR_PREDIOS;
+    OPEN P_CURSOR FOR
+        SELECT *
+        FROM SA_JS_JO_NR_PREDIOS
+        WHERE COD_PREDIO = P_PK;
 END LEER_PREDIOS;
 /
 
@@ -1100,13 +1120,14 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE LEER_USUARIOS(
+    P_PK IN NUMBER,
     P_CURSOR OUT SYS_REFCURSOR
 ) IS
 BEGIN
-    OPEN P_CURSOR FOR 
-        SELECT RUT_USUARIO, ROL, NOMBRE_USUARIO, APELLIDO1_USUARIO, APELLIDO2_USUARIO, 
-               COD_REGION, CORREO_USUARIO, TELEFONO_USUARIO, COD_CUOTA, COD_PREDIO, DEUDA
-        FROM SA_JS_JO_NR_USUARIOS;
+    OPEN P_CURSOR FOR
+        SELECT *
+        FROM SA_JS_JO_NR_USUARIOS
+        WHERE RUT_USUARIO = P_PK;
 END LEER_USUARIOS;
 /
 
@@ -1216,11 +1237,14 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE LEER_SUBZONAS(
+    P_PK IN NUMBER,
     P_CURSOR OUT SYS_REFCURSOR
 ) IS
 BEGIN
-    OPEN P_CURSOR FOR 
-        SELECT COD_SUBZONA, NOMBRE_SUBZONA FROM SA_JS_JO_NR_SUBZONAS;
+    OPEN P_CURSOR FOR
+        SELECT *
+        FROM SA_JS_JO_NR_SUBZONAS
+        WHERE COD_SUBZONA = P_PK;
 END LEER_SUBZONAS;
 /
 
@@ -1313,11 +1337,14 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE LEER_ZONAS(
+    P_PK IN NUMBER,
     P_CURSOR OUT SYS_REFCURSOR
 ) IS
 BEGIN
-    OPEN P_CURSOR FOR 
-        SELECT COD_ZONA, NOMBRE_ZONA, COD_SUBZONA, COD_COMUNA FROM SA_JS_JO_NR_ZONAS;
+    OPEN P_CURSOR FOR
+        SELECT *
+        FROM SA_JS_JO_NR_ZONAS
+        WHERE COD_ZONA = P_PK;
 END LEER_ZONAS;
 /
 
@@ -1413,11 +1440,14 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE LEER_SECTORES(
+    P_PK IN NUMBER,
     P_CURSOR OUT SYS_REFCURSOR
 ) IS
 BEGIN
-    OPEN P_CURSOR FOR 
-        SELECT COD_SECTOR, NOMBRE_SECTOR, COD_ZONA FROM SA_JS_JO_NR_SECTORES;
+    OPEN P_CURSOR FOR
+        SELECT *
+        FROM SA_JS_JO_NR_SECTORES
+        WHERE COD_SECTOR = P_PK;
 END LEER_SECTORES;
 /
 
@@ -1512,11 +1542,14 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE LEER_CANALES(
+    P_PK IN NUMBER,
     P_CURSOR OUT SYS_REFCURSOR
 ) IS
 BEGIN
-    OPEN P_CURSOR FOR 
-        SELECT COD_CANAL, NOMBRE_CANAL, FACTOR_CANAL, COD_SECTOR FROM SA_JS_JO_NR_CANALES;
+    OPEN P_CURSOR FOR
+        SELECT *
+        FROM SA_JS_JO_NR_CANALES
+        WHERE COD_CANAL = P_PK;
 END LEER_CANALES;
 /
 
@@ -1613,11 +1646,14 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE LEER_DIRECTIVAS(
+    P_PK IN NUMBER,
     P_CURSOR OUT SYS_REFCURSOR
 ) IS
 BEGIN
-    OPEN P_CURSOR FOR 
-        SELECT COD_DIRECTIVA, NOMBRE_DIRECTIVA, COD_CANAL FROM SA_JS_JO_NR_DIRECTIVAS;
+    OPEN P_CURSOR FOR
+        SELECT *
+        FROM SA_JS_JO_NR_DIRECTIVAS
+        WHERE COD_DIRECTIVA = P_PK;
 END LEER_DIRECTIVAS;
 /
 
@@ -1714,12 +1750,14 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE LEER_PRESIDENTES(
+    P_PK IN NUMBER,
     P_CURSOR OUT SYS_REFCURSOR
 ) IS
 BEGIN
-    OPEN P_CURSOR FOR 
-        SELECT COD_PRESIDENTE, NOMBRE_PRESIDENTE, APELLIDO1_PRESIDENTE, APELLIDO2_PRESIDENTE, COD_DIRECTIVA 
-        FROM SA_JS_JO_NR_PRESIDENTES;
+    OPEN P_CURSOR FOR
+        SELECT *
+        FROM SA_JS_JO_NR_PRESIDENTES
+        WHERE COD_PRESIDENTE = P_PK;
 END LEER_PRESIDENTES;
 /
 
@@ -1827,13 +1865,14 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE LEER_PROYECTOS(
+    P_PK IN NUMBER,
     P_CURSOR OUT SYS_REFCURSOR
 ) IS
 BEGIN
-    OPEN P_CURSOR FOR 
-        SELECT COD_PROYECTO, NOMBRE_PROYECTO, DESCRIPCION_PROYECTO, 
-               FECHA_INICIO_PROYECTO, FECHA_FIN_PROYECTO, ESTADO_PROYECTO, COD_CANAL 
-        FROM SA_JS_JO_NR_PROYECTOS;
+    OPEN P_CURSOR FOR
+        SELECT *
+        FROM SA_JS_JO_NR_PROYECTOS
+        WHERE COD_PROYECTO = P_PK;
 END LEER_PROYECTOS;
 /
 
@@ -1936,11 +1975,14 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE LEER_COMPUERTAS(
+    P_PK IN NUMBER,
     P_CURSOR OUT SYS_REFCURSOR
 ) IS
 BEGIN
-    OPEN P_CURSOR FOR 
-        SELECT COD_COMPUERTA, KILOMETRAJE_COMPUERTA, DESCRIPCION_COMPUERTA, COD_CANAL FROM SA_JS_JO_NR_COMPUERTAS;
+    OPEN P_CURSOR FOR
+        SELECT *
+        FROM SA_JS_JO_NR_COMPUERTAS
+        WHERE COD_COMPUERTA = P_PK;
 END LEER_COMPUERTAS;
 /
 
@@ -2038,12 +2080,14 @@ END;
 /
 
 CREATE OR REPLACE PROCEDURE LEER_CELADORES(
+    P_PK IN NUMBER,
     P_CURSOR OUT SYS_REFCURSOR
 ) IS
 BEGIN
-    OPEN P_CURSOR FOR 
-        SELECT COD_CELADOR, NOMBRE_CELADOR, APELLIDO1_CELADOR, APELLIDO2_CELADOR, COD_CANAL 
-        FROM SA_JS_JO_NR_CELADORES;
+    OPEN P_CURSOR FOR
+        SELECT *
+        FROM SA_JS_JO_NR_CELADORES
+        WHERE COD_CELADOR = P_PK;
 END LEER_CELADORES;
 /
 
@@ -2182,7 +2226,7 @@ Este gestor muestra la lista de celadores asignados a cada canal, lo cual es út
 -calcular valor cuota en base al factor
 */
 --detalle_historial_cambios
-CREATE OR REPLACE SEQUENCE SEQ_HISTORIAL_CAMBIOS
+CREATE SEQUENCE SEQ_HISTORIAL_CAMBIOS
     START WITH 1
     INCREMENT BY 1
     MINVALUE 1
@@ -2236,7 +2280,7 @@ END;
 / 
 
 -- historial pagos
-CREATE OR REPLACE SEQUENCE SEQ_HISTORIAL_PAGOS
+CREATE SEQUENCE SEQ_HISTORIAL_PAGOS
     START WITH 1
     INCREMENT BY 1
     MINVALUE 1
@@ -2255,20 +2299,21 @@ BEGIN
         SELECT SEQ_HISTORIAL_PAGOS.NEXTVAL INTO v_cod_historial_pago FROM DUAL;
 
         IF :NEW.DEUDA = 0 THEN
-            v_detalle_pago := 'Se pagó la totalidad de la deuda de $' || :OLD.DEUDA || 'con exito.';
+            v_detalle_pago := 'Se pagó la totalidad de la deuda de $' || :OLD.DEUDA || ' con exito.';
         ELSE
-            v_detalle_pago := 'Se realizó un abono por $'|| (:NEW.DEUDA - :OLD.DEUDA) || '. Deuda restante ' || :NEW.DEUDA || '.';
+            v_detalle_pago := 'Se realizó un abono por $'|| (:OLD.DEUDA - :NEW.DEUDA) || '. Deuda restante ' || :NEW.DEUDA || '.';
         END IF;
 
         -- Insertar un registro en SA_JS_JO_NR_HISTORIAL_PAGOS
         INSERT INTO SA_JS_JO_NR_HISTORIAL_PAGOS (
-            COD_HISTORIAL_PAGO, NOMBRE_PAGADOR, DETALLE_PAGO, FECHA_PAGO, COD_PREDIO
+            COD_HISTORIAL_PAGO, NOMBRE_PAGADOR, DETALLE_PAGO, FECHA_PAGO, PAGO, COD_PREDIO
         )
         VALUES (
             v_cod_historial_pago,
             :NEW.NOMBRE_USUARIO || ' ' || :NEW.APELLIDO1_USUARIO || ' ' || :NEW.APELLIDO2_USUARIO,
             v_detalle_pago,
             SYSDATE,
+            (:OLD.DEUDA - :NEW.DEUDA),
             :OLD.COD_PREDIO
         );
     END IF;
@@ -2277,62 +2322,114 @@ EXCEPTION
         RAISE_APPLICATION_ERROR(-20003, 'Error al registrar el pago en el historial.');
 END;
 /
--- acciones predio  = factor canal * numero hectareas
--- deuda =  precio por accion * acciones del predio 
+-- acciones predio  = factor canal * numero hectareas listo 100*5 = 500
+-- deuda =  precio por accion * acciones del predio listo 500*5000 = 2500000
 -- trigger que se encargue de calcular el atributo deuda de usuario en base factor_canal y hectareas_predio
-CREATE OR REPLACE TRIGGER trg_calcular_deuda_usuario
-BEFORE INSERT ON SA_JS_JO_NR_USUARIOS
+CREATE OR REPLACE TRIGGER trg_calcular_acciones_predio
+BEFORE INSERT OR UPDATE OF HECTAREAS_PREDIO ON SA_JS_JO_NR_PREDIOS
 FOR EACH ROW
 DECLARE
-    v_factor_canal NUMBER;
-    v_hectareas_predio NUMBER;
-    v_cod_canal NUMBER;
+    v_acciones_total NUMBER := 0; -- Variable para acumular las acciones
 BEGIN
-    -- Obtener el COD_CANAL asociado al COD_PREDIO del usuario
-    SELECT min(COD_CANAL) INTO v_cod_canal
-    FROM SA_JS_JO_NR_DETALLE_PREDIO_CANAL
-    WHERE COD_PREDIO = :NEW.COD_PREDIO;
+    -- Recorrer los canales asociados al predio y calcular las acciones totales
+    FOR canal_rec IN (
+        SELECT C.FACTOR_CANAL
+        FROM SA_JS_JO_NR_CANALES C
+        JOIN SA_JS_JO_NR_DETALLE_PREDIO_CANALES DPC
+        ON C.COD_CANAL = DPC.COD_CANAL
+        WHERE DPC.COD_PREDIO = :NEW.COD_PREDIO
+    ) LOOP
+        -- Sumar las contribuciones de cada canal al total de acciones
+        v_acciones_total := v_acciones_total + (canal_rec.FACTOR_CANAL * :NEW.HECTAREAS_PREDIO);
+    END LOOP;
 
-    -- Obtener el FACTOR_CANAL del canal asociado
-    SELECT max(FACTOR_CANAL) INTO v_factor_canal
-    FROM SA_JS_JO_NR_CANALES
-    WHERE COD_CANAL = v_cod_canal;
-
-    -- Obtener las HECTAREAS_PREDIO del predio asociado
-    SELECT HECTAREAS_PREDIO INTO v_hectareas_predio
-    FROM SA_JS_JO_NR_PREDIOS
-    WHERE COD_PREDIO = :NEW.COD_PREDIO;
-
-    -- Calcular la deuda y asignarla al usuario
-    :NEW.DEUDA := v_factor_canal * v_hectareas_predio;
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RAISE_APPLICATION_ERROR(-20004, 'Error al calcular la deuda: no se encontró información relacionada con el predio o canal.');
-    WHEN OTHERS THEN
-        RAISE_APPLICATION_ERROR(-20005, 'Ocurrió un error al calcular la deuda del usuario.');
-END;
-/
-
--- triger que se encartgue de aumentar la deuda de un usuario si la cuota vencio
-CREATE OR REPLACE TRIGGER trg_actualizar_deuda_por_vencimiento
-AFTER UPDATE OF FECHA_VENCIMIENTO_CUOTA ON SA_JS_JO_NR_CUOTAS-- ver bien que gatilla al trigger --llamada a funcion al iniciar secion en pagina web
-FOR EACH ROW
-BEGIN
-    -- Verificar si la fecha de vencimiento ya pasó
-    IF :NEW.FECHA_VENCIMIENTO_CUOTA < SYSDATE THEN
-        -- Actualizar la deuda del usuario asociado
-        UPDATE SA_JS_JO_NR_USUARIOS
-        SET DEUDA = DEUDA*(1.15)-- interes diario 
-        WHERE COD_CUOTA = :NEW.COD_CUOTA;
-    END IF;
+    -- Actualizar el atributo ACCIONES_PREDIO con el total calculado
+    :NEW.ACCIONES_PREDIO := v_acciones_total;
 EXCEPTION
     WHEN OTHERS THEN
-        RAISE_APPLICATION_ERROR(-20006, 'Error al incrementar la deuda por vencimiento de cuota.');
+        RAISE_APPLICATION_ERROR(-20009, 'Error al calcular las acciones del predio.');
 END;
 /
 
 
 -- 
+CREATE OR REPLACE TRIGGER trg_calcular_deuda_usuarios
+AFTER INSERT OR UPDATE OF ACCIONES_PREDIO ON SA_JS_JO_NR_PREDIOS
+FOR EACH ROW
+BEGIN
+    -- Actualizar la deuda del usuario asociado al predio
+    UPDATE SA_JS_JO_NR_USUARIOS U
+    SET DEUDA = :NEW.ACCIONES_PREDIO * (
+        SELECT TOTAL_CUOTA
+        FROM SA_JS_JO_NR_CUOTAS C
+        WHERE C.COD_CUOTA = U.COD_CUOTA
+    )
+    WHERE U.COD_PREDIO = :NEW.COD_PREDIO;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20010, 'Error: No se encontró la cuota asociada al predio.');
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20011, 'Ocurrió un error al calcular la deuda del usuario.');
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_calcular_total_cuota
+AFTER INSERT OR UPDATE OF MONTO_CUOTA ON SA_JS_JO_NR_TIPO_CUOTA
+FOR EACH ROW
+BEGIN
+    -- Actualizar el total de las cuotas asociadas al tipo de cuota modificado
+    UPDATE SA_JS_JO_NR_CUOTAS
+    SET TOTAL_CUOTA = :NEW.MONTO_CUOTA * 
+                      CASE 
+                          WHEN :NEW.TIPO_CUOTA = 'Ordinaria' THEN 1
+                          WHEN :NEW.TIPO_CUOTA = 'Extra Ordinaria' THEN 1.5
+                          ELSE 1 -- Por defecto, si el tipo no coincide
+                      END
+    WHERE COD_TIPO_CUOTA = :NEW.COD_TIPO_CUOTA;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20012, 'Error al calcular el total de la cuota.');
+END;
+/
+-- procedimiento de pago
+CREATE OR REPLACE PROCEDURE PAGAR(
+    p_rut_usuario IN SA_JS_JO_NR_USUARIOS.RUT_USUARIO%TYPE,
+    p_cantidad_pago IN NUMBER
+)
+IS
+    v_deuda_actual NUMBER; -- Variable para almacenar la deuda actual del usuario
+BEGIN
+    -- Validar que el monto del pago no sea negativo
+    IF p_cantidad_pago < 0 THEN
+        RAISE_APPLICATION_ERROR(-20023, 'Por favor ingrese una cantidad positiva de dinero.');
+    END IF;
+
+    -- Obtener la deuda actual del usuario
+    SELECT DEUDA
+    INTO v_deuda_actual
+    FROM SA_JS_JO_NR_USUARIOS
+    WHERE RUT_USUARIO = p_rut_usuario;
+
+    -- Validar que la cantidad a pagar no sea mayor a la deuda actual
+    IF p_cantidad_pago > v_deuda_actual THEN
+        RAISE_APPLICATION_ERROR(-20020, 'Solo puede pagar como maximo la totalidad de su deuda, intente denuevo por favor.');
+    ELSE
+        -- Actualizar la deuda del usuario
+        UPDATE SA_JS_JO_NR_USUARIOS
+        SET DEUDA = DEUDA - p_cantidad_pago
+        WHERE RUT_USUARIO = p_rut_usuario;
+
+        -- Confirmar el éxito
+        DBMS_OUTPUT.PUT_LINE('Pago exitoso.');
+    END IF;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20021, 'Error: No se encontró el usuario con el RUT especificado.');
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20022, 'Error inesperado al disminuir la deuda.');
+END;
+/
+
 
 --REPORTES
 --1. Reporte de Usuarios y Cuotas Pendientes
