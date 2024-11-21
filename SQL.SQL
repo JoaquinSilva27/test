@@ -2277,60 +2277,74 @@ EXCEPTION
         RAISE_APPLICATION_ERROR(-20003, 'Error al registrar el pago en el historial.');
 END;
 /
--- acciones predio  = factor canal * numero hectareas
--- deuda =  precio por accion * acciones del predio 
+-- acciones predio  = factor canal * numero hectareas listo
+-- deuda =  precio por accion * acciones del predio listo
 -- trigger que se encargue de calcular el atributo deuda de usuario en base factor_canal y hectareas_predio
-CREATE OR REPLACE TRIGGER trg_calcular_deuda_usuario
-BEFORE INSERT ON SA_JS_JO_NR_USUARIOS
+CREATE OR REPLACE TRIGGER trg_calcular_acciones_predio
+AFTER INSERT OR UPDATE OF HECTAREAS_PREDIO ON SA_JS_JO_NR_PREDIOS
 FOR EACH ROW
 DECLARE
-    v_factor_canal NUMBER;
-    v_hectareas_predio NUMBER;
-    v_cod_canal NUMBER;
+    v_acciones_total NUMBER := 0; -- Variable para acumular las acciones
 BEGIN
-    -- Obtener el COD_CANAL asociado al COD_PREDIO del usuario
-    SELECT min(COD_CANAL) INTO v_cod_canal
-    FROM SA_JS_JO_NR_DETALLE_PREDIO_CANAL
-    WHERE COD_PREDIO = :NEW.COD_PREDIO;
+    -- Recorrer los canales asociados al predio y calcular las acciones totales
+    FOR canal_rec IN (
+        SELECT C.FACTOR_CANAL
+        FROM SA_JS_JO_NR_CANALES C
+        JOIN SA_JS_JO_NR_DETALLE_PREDIO_CANALES DPC
+        ON C.COD_CANAL = DPC.COD_CANAL
+        WHERE DPC.COD_PREDIO = :NEW.COD_PREDIO
+    ) LOOP
+        -- Sumar las contribuciones de cada canal al total de acciones
+        v_acciones_total := v_acciones_total + (canal_rec.FACTOR_CANAL * :NEW.HECTAREAS_PREDIO);
+    END LOOP;
 
-    -- Obtener el FACTOR_CANAL del canal asociado
-    SELECT max(FACTOR_CANAL) INTO v_factor_canal
-    FROM SA_JS_JO_NR_CANALES
-    WHERE COD_CANAL = v_cod_canal;
-
-    -- Obtener las HECTAREAS_PREDIO del predio asociado
-    SELECT HECTAREAS_PREDIO INTO v_hectareas_predio
-    FROM SA_JS_JO_NR_PREDIOS
-    WHERE COD_PREDIO = :NEW.COD_PREDIO;
-
-    -- Calcular la deuda y asignarla al usuario
-    :NEW.DEUDA := v_factor_canal * v_hectareas_predio;
+    -- Actualizar el atributo ACCIONES_PREDIO con el total calculado
+    :NEW.ACCIONES_PREDIO := v_acciones_total;
 EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RAISE_APPLICATION_ERROR(-20004, 'Error al calcular la deuda: no se encontró información relacionada con el predio o canal.');
     WHEN OTHERS THEN
-        RAISE_APPLICATION_ERROR(-20005, 'Ocurrió un error al calcular la deuda del usuario.');
+        RAISE_APPLICATION_ERROR(-20009, 'Error al calcular las acciones del predio.');
 END;
 /
 
--- triger que se encartgue de aumentar la deuda de un usuario si la cuota vencio
-CREATE OR REPLACE TRIGGER trg_actualizar_deuda_por_vencimiento
-AFTER UPDATE OF FECHA_VENCIMIENTO_CUOTA ON SA_JS_JO_NR_CUOTAS-- ver bien que gatilla al trigger --llamada a funcion al iniciar secion en pagina web
+-- 
+CREATE OR REPLACE TRIGGER trg_calcular_deuda_usuarios
+AFTER INSERT OR UPDATE OF ACCIONES_PREDIO ON SA_JS_JO_NR_PREDIOS
 FOR EACH ROW
 BEGIN
-    -- Verificar si la fecha de vencimiento ya pasó
-    IF :NEW.FECHA_VENCIMIENTO_CUOTA < SYSDATE THEN
-        -- Actualizar la deuda del usuario asociado
-        UPDATE SA_JS_JO_NR_USUARIOS
-        SET DEUDA = DEUDA*(1.15)-- interes diario 
-        WHERE COD_CUOTA = :NEW.COD_CUOTA;
-    END IF;
+    -- Actualizar la deuda del usuario asociado al predio
+    UPDATE SA_JS_JO_NR_USUARIOS U
+    SET DEUDA = :NEW.ACCIONES_PREDIO * (
+        SELECT TOTAL_CUOTA
+        FROM SA_JS_JO_NR_CUOTAS C
+        WHERE C.COD_CUOTA = U.COD_CUOTA
+    )
+    WHERE U.COD_PREDIO = :NEW.COD_PREDIO;
 EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20010, 'Error: No se encontró la cuota asociada al predio.');
     WHEN OTHERS THEN
-        RAISE_APPLICATION_ERROR(-20006, 'Error al incrementar la deuda por vencimiento de cuota.');
+        RAISE_APPLICATION_ERROR(-20011, 'Ocurrió un error al calcular la deuda del usuario.');
 END;
 /
 
+CREATE OR REPLACE TRIGGER trg_calcular_total_cuota
+AFTER INSERT OR UPDATE OF MONTO_CUOTA ON SA_JS_JO_NR_TIPO_CUOTA
+FOR EACH ROW
+BEGIN
+    -- Actualizar el total de las cuotas asociadas al tipo de cuota modificado
+    UPDATE SA_JS_JO_NR_CUOTAS
+    SET TOTAL_CUOTA = :NEW.MONTO_CUOTA * 
+                      CASE 
+                          WHEN :NEW.TIPO_CUOTA = 'Ordinaria' THEN 1
+                          WHEN :NEW.TIPO_CUOTA = 'Extra Ordinaria' THEN 1.5
+                          ELSE 1 -- Por defecto, si el tipo no coincide
+                      END
+    WHERE COD_TIPO_CUOTA = :NEW.COD_TIPO_CUOTA;
+EXCEPTION
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20012, 'Error al calcular el total de la cuota.');
+END;
+/
 
 -- 
 
