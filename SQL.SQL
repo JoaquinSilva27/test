@@ -2277,7 +2277,7 @@ EXCEPTION
         RAISE_APPLICATION_ERROR(-20003, 'Error al registrar el pago en el historial.');
 END;
 /
-
+-- acciones predio  = factor canal * numero hectareas
 -- trigger que se encargue de calcular el atributo deuda de usuario en base factor_canal y hectareas_predio
 CREATE OR REPLACE TRIGGER trg_calcular_deuda_usuario
 BEFORE INSERT ON SA_JS_JO_NR_USUARIOS
