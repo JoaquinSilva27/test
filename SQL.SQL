@@ -2488,24 +2488,78 @@ END;
 
 
 --REPORTES
---1. Reporte de Usuarios y Cuotas Pendientes
---Este reporte muestra a los usuarios que tienen cuotas pendientes, mostrando la cuota y fecha de vencimiento y interes acumulado.
-CREATE OR REPLACE VIEW SA_JS_JO_NR_CUOTAS_PENDIENTES AS
-SELECT U.rut_usuario AS ID_USUARIO, U.nombre_usuario AS NOMBRE, C.cod_cuota AS COD_CUOTA, C.total_cuota AS MONTO_CUOTA, C.fecha_vencimiento_cuota AS FECHA_VENCIMIENTO, ROUND((C.total_cuota * 0.02 * (SYSDATE - C.fecha_vencimiento_cuota)), 2) AS INTERES_ACUMULADO
-FROM SA_JS_JO_NR_Usuarios U
-JOIN SA_JS_JO_NR_Cuotas C ON U.cod_cuota = C.cod_cuota
-WHERE C.fecha_vencimiento_cuota < SYSDATE;
+--1. Total de deuda por canal
+CREATE OR REPLACE PROCEDURE INFORME_DEUDA_CANAL (
+    P_RESULTADO OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN P_RESULTADO FOR
+    SELECT
+        C.NOMBRE_CANAL,
+        SUM(U.DEUDA) AS TOTAL_DEUDA
+    FROM
+        SA_JS_JO_NR_USUARIOS U
+        INNER JOIN SA_JS_JO_NR_PREDIOS P ON U.RUT_USUARIO = P.RUT_USUARIO
+        INNER JOIN SA_JS_JO_NR_DETALLE_PREDIO_CANALES DPC ON P.COD_PREDIO = DPC.COD_PREDIO
+        INNER JOIN SA_JS_JO_NR_CANALES C ON DPC.COD_CANAL = C.COD_CANAL
+    GROUP BY
+        C.NOMBRE_CANAL;
+END;
+/
 
---2. Reporte de Proyectos por Estado
---Este reporte muestra el estado de cada proyecto en la base de datos, organizado por estado.
-CREATE OR REPLACE VIEW SA_JS_JO_NR_PROYECTOS_ESTADO AS
-SELECT P.estado_proyecto AS ESTADO, P.cod_proyecto AS ID_PROYECTO, P.nombre_proyecto AS NOMBRE_PROYECTO, P.fecha_inicio_proyecto AS FECHA_INICIO, P.fecha_fin_proyecto AS FECHA_ESTIMADA_FIN
-FROM SA_JS_JO_NR_Proyectos P
-ORDER BY P.estado_proyecto;
+--2. Proyectos activos y terminados
+CREATE OR REPLACE PROCEDURE INFORME_PROYECTOS (
+    P_ACTIVOS OUT SYS_REFCURSOR,
+    P_TERMINADOS OUT SYS_REFCURSOR
+) AS
+BEGIN
+    -- Proyectos activos
+    OPEN P_ACTIVOS FOR
+    SELECT
+        COD_PROYECTO,
+        NOMBRE_PROYECTO,
+        DESCRIPCION_PROYECTO,
+        FECHA_INICIO_PROYECTO,
+        FECHA_FIN_PROYECTO,
+        ESTADO_PROYECTO
+    FROM
+        SA_JS_JO_NR_PROYECTOS
+    WHERE
+        UPPER(ESTADO_PROYECTO) = 'ACTIVO';
 
---3. Reporte de Historial de Pagos
---Este reporte muestra todos los pagos realizados para un periodo específico. Se puede adaptar para usar un parámetro de fechas para limitar el periodo.
-CREATE OR REPLACE VIEW SA_JS_JO_NR_HISTORIAL_PAGOS AS
-SELECT H.cod_historial_pago AS ID_PAGO, U.nombre_usuario AS USUARIO, H.detalle_pago AS MONTO, H.fecha_pago AS FECHA_PAGO
-FROM SA_JS_JO_NR_Historial_Pagos H
-JOIN SA_JS_JO_NR_Usuarios U ON H.cod_predio = U.cod_cuota;
+    -- Proyectos terminados
+    OPEN P_TERMINADOS FOR
+    SELECT
+        COD_PROYECTO,
+        NOMBRE_PROYECTO,
+        DESCRIPCION_PROYECTO,
+        FECHA_INICIO_PROYECTO,
+        FECHA_FIN_PROYECTO,
+        ESTADO_PROYECTO
+    FROM
+        SA_JS_JO_NR_PROYECTOS
+    WHERE
+        UPPER(ESTADO_PROYECTO) = 'TERMINADO';
+END;
+/
+
+--3. Informe de ingresos desde X fecha hasta Y fecha
+CREATE OR REPLACE PROCEDURE INFORME_INGRESOS_FECHA (
+    P_FECHA_INICIO IN DATE,
+    P_FECHA_FIN IN DATE,
+    P_RESULTADO OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN P_RESULTADO FOR
+    SELECT
+        FECHA_PAGO,
+        NOMBRE_PAGADOR,
+        DETALLE_PAGO,
+        PAGO,
+        COD_PREDIO
+    FROM
+        SA_JS_JO_NR_HISTORIAL_PAGOS
+    WHERE
+        FECHA_PAGO BETWEEN P_FECHA_INICIO AND P_FECHA_FIN;
+END;
+/

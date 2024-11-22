@@ -54,7 +54,7 @@ function configurarBusquedaEliminar(selectedTable) {
 
 async function buscarSugerenciasEliminar(query, table) {
     try {
-        const url = `http://localhost:3000/api/${table}/suggestions?query=${query}`;
+        const url = `http://localhost:3000/api/tables/${table}/suggestions?query=${query}`;
         console.log("Llamando al endpoint para sugerencias de eliminar:", url);
 
         const response = await fetch(url);
@@ -99,7 +99,7 @@ async function confirmarEliminar() {
 
     if (confirmar) {
         try {
-            const url = `http://localhost:3000/api/${selectedTable}/${eliminarInput}`;
+            const url = `http://localhost:3000/api/tables/${selectedTable}/${eliminarInput}`;
             console.log("Llamando al endpoint para eliminar:", url);
 
             const response = await fetch(url, { method: 'DELETE' });

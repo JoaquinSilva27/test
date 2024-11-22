@@ -29,7 +29,7 @@ function configurarBusquedaModificar() {
 
 async function buscarSugerenciasModificar(query, table) {
     try {
-        const url = `http://localhost:3000/api/${table}/suggestions?query=${query}`;
+        const url = `http://localhost:3000/api/tables/${table}/suggestions?query=${query}`;
         console.log("Llamando al endpoint para sugerencias:", url);
 
         const response = await fetch(url);
@@ -72,7 +72,7 @@ async function buscarParaModificar() {
 
     try {
         // Llama al endpoint para obtener los datos del registro por su PK
-        const url = `http://localhost:3000/api/${selectedTable}/data/${modificarInput}`;
+        const url = `http://localhost:3000/api/tables/${selectedTable}/data/${modificarInput}`;
         console.log("Llamando al endpoint para obtener datos:", url);
 
         const response = await fetch(url);
@@ -147,7 +147,7 @@ async function guardarModificaciones() {
     const selectedTable = document.getElementById("entitySelect").value;
 
     try {
-        const response = await fetch(`http://localhost:3000/api/${selectedTable}`, {
+        const response = await fetch(`http://localhost:3000/api/tables/${selectedTable}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ pk, ...updatedData }),
