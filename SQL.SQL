@@ -45,17 +45,6 @@ CREATE TABLE SA_JS_JO_NR_CUOTAS( --MANTENEDOR LISTO
 	CONSTRAINT FK_SA_JS_JO_NR_CUOTAS_SERVICIOS FOREIGN KEY(COD_SERVICIO) REFERENCES SA_JS_JO_NR_SERVICIOS(COD_SERVICIO)
 );
 
-CREATE TABLE SA_JS_JO_NR_PREDIOS( --MANTENEDOR LISTO
-	COD_PREDIO NUMBER, 
-	ROL_PREDIO NUMBER,
-	HECTAREAS_PREDIO NUMBER,
-	ACCIONES_PREDIO NUMBER,
-    RUT NUMBER,
-	CONSTRAINT PK_SA_JS_JO_NR_PREDIOS PRIMARY KEY(COD_PREDIO)
-    CONSTRAINT FK_SA_JS_JO_NR_PREDIOS_USUARIOS FOREIGN KEY(RUT) REFERENCES SA_JS_JO_NR_USUARIOS(RUT)
-
-);
-
 CREATE TABLE SA_JS_JO_NR_USUARIOS( --MANTENEDOR LISTO
 	RUT_USUARIO NUMBER,
 	NOMBRE_USUARIO VARCHAR2(100),
@@ -72,6 +61,16 @@ CREATE TABLE SA_JS_JO_NR_USUARIOS( --MANTENEDOR LISTO
 	CONSTRAINT FK_SA_JS_JO_NR_USUARIOS_REGIONES FOREIGN KEY(COD_REGION) REFERENCES SA_JS_JO_NR_REGIONES(COD_REGION),
 	CONSTRAINT FK_SA_JS_JO_NR_USUARIOS_CUOTAS FOREIGN KEY(COD_CUOTA) REFERENCES SA_JS_JO_NR_CUOTAS(COD_CUOTA)
 	--CONSTRAINT FK_SA_JS_JO_NR_USUARIOS_PREDIOS FOREIGN KEY(COD_PREDIO) REFERENCES SA_JS_JO_NR_PREDIOS(COD_PREDIO)
+);
+
+CREATE TABLE SA_JS_JO_NR_PREDIOS( --MANTENEDOR LISTO
+	COD_PREDIO NUMBER, 
+	ROL_PREDIO NUMBER,
+	HECTAREAS_PREDIO NUMBER,
+	ACCIONES_PREDIO NUMBER,
+    RUT_USUARIO NUMBER,
+	CONSTRAINT PK_SA_JS_JO_NR_PREDIOS PRIMARY KEY(COD_PREDIO),
+    CONSTRAINT FK_SA_JS_JO_NR_PREDIOS_USUARIOS FOREIGN KEY(RUT_USUARIO) REFERENCES SA_JS_JO_NR_USUARIOS(RUT_USUARIO)
 );
 
 CREATE TABLE SA_JS_JO_NR_HISTORIAL_PAGOS(
@@ -984,7 +983,8 @@ END;
 CREATE OR REPLACE PROCEDURE AGREGAR_PREDIOS(
     P_ROL_PREDIO NUMBER,
     P_HECTAREAS_PREDIO NUMBER,
-    P_ACCIONES_PREDIO NUMBER
+    P_ACCIONES_PREDIO NUMBER,
+    P_RUT_USUARIO NUMBER
 ) 
 IS
     PK NUMBER := 0;
@@ -993,8 +993,8 @@ BEGIN
     FROM SA_JS_JO_NR_PREDIOS;
 
 	LOCK TABLE SA_JS_JO_NR_PREDIOS IN ROW EXCLUSIVE MODE;
-    INSERT INTO SA_JS_JO_NR_PREDIOS (COD_PREDIO, ROL_PREDIO, HECTAREAS_PREDIO, ACCIONES_PREDIO)
-    VALUES (PK, P_ROL_PREDIO, P_HECTAREAS_PREDIO, P_ACCIONES_PREDIO);
+    INSERT INTO SA_JS_JO_NR_PREDIOS (COD_PREDIO, ROL_PREDIO, HECTAREAS_PREDIO, ACCIONES_PREDIO, RUT_USUARIO)
+    VALUES (PK, P_ROL_PREDIO, P_HECTAREAS_PREDIO, P_ACCIONES_PREDIO, P_RUT_USUARIO);
     COMMIT;
 EXCEPTION
     WHEN PROGRAM_ERROR THEN
@@ -1022,7 +1022,8 @@ CREATE OR REPLACE PROCEDURE ACTUALIZAR_PREDIOS(
     P_COD_PREDIO NUMBER,
     P_ROL_PREDIO NUMBER,
     P_HECTAREAS_PREDIO NUMBER,
-    P_ACCIONES_PREDIO NUMBER
+    P_ACCIONES_PREDIO NUMBER,
+    P_RUT_USUARIO NUMBER
 ) 
 IS
     CONTADOR NUMBER := 0;
@@ -1040,7 +1041,8 @@ BEGIN
         UPDATE SA_JS_JO_NR_PREDIOS
         SET ROL_PREDIO = P_ROL_PREDIO,
             HECTAREAS_PREDIO = P_HECTAREAS_PREDIO,
-            ACCIONES_PREDIO = P_ACCIONES_PREDIO
+            ACCIONES_PREDIO = P_ACCIONES_PREDIO,
+            RUT_USUARIO = P_RUT_USUARIO
         WHERE COD_PREDIO = P_COD_PREDIO;
         COMMIT;
     END IF;
@@ -1089,7 +1091,6 @@ CREATE OR REPLACE PROCEDURE AGREGAR_USUARIOS(
     P_CORREO_USUARIO VARCHAR2,
     P_TELEFONO_USUARIO NUMBER,
     P_COD_CUOTA NUMBER,
-    P_COD_PREDIO NUMBER,
     P_DEUDA NUMBER
 ) 
 IS
@@ -1104,12 +1105,12 @@ BEGIN
     -- Inserción del registro
     INSERT INTO SA_JS_JO_NR_USUARIOS (
         RUT_USUARIO, NOMBRE_USUARIO, ROL, APELLIDO1_USUARIO, APELLIDO2_USUARIO,
-        COD_REGION, CORREO_USUARIO, TELEFONO_USUARIO, COD_CUOTA, COD_PREDIO, DEUDA
+        COD_REGION, CORREO_USUARIO, TELEFONO_USUARIO, COD_CUOTA, DEUDA
     )
     VALUES (
         P_RUT_USUARIO, P_ROL, P_NOMBRE_USUARIO, P_APELLIDO1_USUARIO, 
         P_APELLIDO2_USUARIO, P_COD_REGION, P_CORREO_USUARIO, P_TELEFONO_USUARIO, 
-        P_COD_CUOTA, P_COD_PREDIO, P_DEUDA
+        P_COD_CUOTA, P_DEUDA
     );
     COMMIT;
 EXCEPTION
@@ -1144,7 +1145,6 @@ CREATE OR REPLACE PROCEDURE ACTUALIZAR_USUARIOS(
     P_CORREO_USUARIO VARCHAR2,
     P_TELEFONO_USUARIO NUMBER,
     P_COD_CUOTA NUMBER,
-    P_COD_PREDIO NUMBER,
     P_DEUDA NUMBER
 ) 
 IS
@@ -1171,7 +1171,6 @@ BEGIN
             CORREO_USUARIO = P_CORREO_USUARIO,
             TELEFONO_USUARIO = P_TELEFONO_USUARIO,
             COD_CUOTA = P_COD_CUOTA,
-            COD_PREDIO = P_COD_PREDIO,
             DEUDA = P_DEUDA
         WHERE RUT_USUARIO = P_RUT_USUARIO;
         COMMIT;
@@ -2242,16 +2241,15 @@ AFTER UPDATE ON SA_JS_JO_NR_PREDIOS
 FOR EACH ROW
 DECLARE
     v_cod_historial_cambio NUMBER;
-    v_rut_usuario NUMBER;
 BEGIN
     -- Generar el próximo valor de la secuencia
     SELECT SEQ_HISTORIAL_CAMBIOS.NEXTVAL INTO v_cod_historial_cambio FROM DUAL;
 
-    -- Obtener el RUT del usuario asociado al predio
+    -- Validar si el RUT_USUARIO existe en la tabla SA_JS_JO_NR_USUARIOS
     BEGIN
-        SELECT RUT_USUARIO INTO v_rut_usuario
+        SELECT 1 INTO v_cod_historial_cambio
         FROM SA_JS_JO_NR_USUARIOS
-        WHERE COD_PREDIO = :OLD.COD_PREDIO;
+        WHERE RUT_USUARIO = :OLD.RUT_USUARIO;
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
             RAISE_APPLICATION_ERROR(-20001, 'No se encontró un usuario asociado al predio.');
@@ -2273,14 +2271,15 @@ BEGIN
         RUT_USUARIO, COD_HISTORIAL_CAMBIO
     )
     VALUES (
-        v_rut_usuario,
+        :OLD.RUT_USUARIO,
         v_cod_historial_cambio
     );
 EXCEPTION
     WHEN OTHERS THEN
-        RAISE;
+        RAISE_APPLICATION_ERROR(-20002, 'Error al registrar los cambios en el historial.');
 END;
-/ 
+/
+
 
 -- historial pagos
 CREATE SEQUENCE SEQ_HISTORIAL_PAGOS
@@ -2299,32 +2298,48 @@ DECLARE
     v_detalle_pago VARCHAR2(200); -- Variable para el mensaje del detalle
 BEGIN
     IF :OLD.DEUDA > :NEW.DEUDA THEN
+        -- Obtener el próximo valor de la secuencia
         SELECT SEQ_HISTORIAL_PAGOS.NEXTVAL INTO v_cod_historial_pago FROM DUAL;
 
+        -- Crear el mensaje del detalle del pago
         IF :NEW.DEUDA = 0 THEN
-            v_detalle_pago := 'Se pagó la totalidad de la deuda de $' || :OLD.DEUDA || ' con exito.';
+            v_detalle_pago := 'Se pagó la totalidad de la deuda de $' || :OLD.DEUDA || ' con éxito.';
         ELSE
-            v_detalle_pago := 'Se realizó un abono por $'|| (:OLD.DEUDA - :NEW.DEUDA) || '. Deuda restante ' || :NEW.DEUDA || '.';
+            v_detalle_pago := 'Se realizó un abono por $' || (:OLD.DEUDA - :NEW.DEUDA) || '. Deuda restante: $' || :NEW.DEUDA || '.';
         END IF;
 
-        -- Insertar un registro en SA_JS_JO_NR_HISTORIAL_PAGOS
-        INSERT INTO SA_JS_JO_NR_HISTORIAL_PAGOS (
-            COD_HISTORIAL_PAGO, NOMBRE_PAGADOR, DETALLE_PAGO, FECHA_PAGO, PAGO, COD_PREDIO
-        )
-        VALUES (
-            v_cod_historial_pago,
-            :NEW.NOMBRE_USUARIO || ' ' || :NEW.APELLIDO1_USUARIO || ' ' || :NEW.APELLIDO2_USUARIO,
-            v_detalle_pago,
-            SYSDATE,
-            (:OLD.DEUDA - :NEW.DEUDA),
-            :OLD.COD_PREDIO
-        );
+        -- Obtener el COD_PREDIO asociado al usuario
+        DECLARE
+            v_cod_predio NUMBER;
+        BEGIN
+            SELECT COD_PREDIO
+            INTO v_cod_predio
+            FROM SA_JS_JO_NR_PREDIOS
+            WHERE RUT_USUARIO = :OLD.RUT_USUARIO;
+
+            -- Insertar un registro en SA_JS_JO_NR_HISTORIAL_PAGOS
+            INSERT INTO SA_JS_JO_NR_HISTORIAL_PAGOS (
+                COD_HISTORIAL_PAGO, NOMBRE_PAGADOR, DETALLE_PAGO, FECHA_PAGO, PAGO, COD_PREDIO
+            )
+            VALUES (
+                v_cod_historial_pago,
+                :NEW.NOMBRE_USUARIO || ' ' || :NEW.APELLIDO1_USUARIO || ' ' || :NEW.APELLIDO2_USUARIO,
+                v_detalle_pago,
+                SYSDATE,
+                (:OLD.DEUDA - :NEW.DEUDA),
+                v_cod_predio
+            );
+        EXCEPTION
+            WHEN NO_DATA_FOUND THEN
+                RAISE_APPLICATION_ERROR(-20004, 'Error: No se encontró un predio asociado al usuario.');
+        END;
     END IF;
 EXCEPTION
     WHEN OTHERS THEN
         RAISE_APPLICATION_ERROR(-20003, 'Error al registrar el pago en el historial.');
 END;
 /
+
 -- acciones predio  = factor canal * numero hectareas listo 100*5 = 500
 -- deuda =  precio por accion * acciones del predio listo 500*5000 = 2500000
 -- trigger que se encargue de calcular el atributo deuda de usuario en base factor_canal y hectareas_predio
@@ -2355,29 +2370,32 @@ END;
 /
 
 
+
 -- 
 CREATE OR REPLACE TRIGGER trg_calcular_deuda_usuarios
 AFTER INSERT OR UPDATE OF ACCIONES_PREDIO ON SA_JS_JO_NR_PREDIOS
 FOR EACH ROW
 BEGIN
-    -- Actualizar la deuda del usuario asociado al predio
+    -- Validar que exista un usuario asociado al predio
     UPDATE SA_JS_JO_NR_USUARIOS U
     SET DEUDA = :NEW.ACCIONES_PREDIO * (
         SELECT TOTAL_CUOTA
         FROM SA_JS_JO_NR_CUOTAS C
         WHERE C.COD_CUOTA = U.COD_CUOTA
     )
-    WHERE U.COD_PREDIO = :NEW.COD_PREDIO;
+    WHERE U.RUT_USUARIO = :NEW.RUT_USUARIO;
+
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
-        RAISE_APPLICATION_ERROR(-20010, 'Error: No se encontró la cuota asociada al predio.');
+        RAISE_APPLICATION_ERROR(-20010, 'Error: No se encontró la cuota asociada al usuario.');
     WHEN OTHERS THEN
         RAISE_APPLICATION_ERROR(-20011, 'Ocurrió un error al calcular la deuda del usuario.');
 END;
 /
 
+
 CREATE OR REPLACE TRIGGER trg_calcular_total_cuota
-AFTER INSERT OR UPDATE OF MONTO_CUOTA ON SA_JS_JO_NR_TIPO_CUOTA
+AFTER INSERT OR UPDATE OF MONTO_CUOTA ON SA_JS_JO_NR_TIPO_CUOTAS
 FOR EACH ROW
 BEGIN
     -- Actualizar el total de las cuotas asociadas al tipo de cuota modificado
@@ -2389,11 +2407,46 @@ BEGIN
                           ELSE 1 -- Por defecto, si el tipo no coincide
                       END
     WHERE COD_TIPO_CUOTA = :NEW.COD_TIPO_CUOTA;
+
 EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20013, 'Error: No se encontraron cuotas asociadas al tipo de cuota.');
     WHEN OTHERS THEN
         RAISE_APPLICATION_ERROR(-20012, 'Error al calcular el total de la cuota.');
 END;
 /
+CREATE OR REPLACE TRIGGER trg_calcular_total_cuota_cuotas
+BEFORE INSERT OR UPDATE ON SA_JS_JO_NR_CUOTAS
+FOR EACH ROW
+DECLARE
+    v_monto_cuota NUMBER;
+    v_tipo_cuota VARCHAR2(50);
+BEGIN
+    -- Obtener el MONTO_CUOTA y el TIPO_CUOTA asociados al COD_TIPO_CUOTA de la cuota
+    SELECT T.MONTO_CUOTA, T.TIPO_CUOTA
+    INTO v_monto_cuota, v_tipo_cuota
+    FROM SA_JS_JO_NR_TIPO_CUOTAS T
+    WHERE T.COD_TIPO_CUOTA = :NEW.COD_TIPO_CUOTA;
+
+    -- Calcular y actualizar el TOTAL_CUOTA
+    UPDATE SA_JS_JO_NR_CUOTAS
+    SET TOTAL_CUOTA = v_monto_cuota * 
+                      CASE 
+                          WHEN v_tipo_cuota = 'Ordinaria' THEN 1
+                          WHEN v_tipo_cuota = 'Extra Ordinaria' THEN 1.5
+                          ELSE 1 -- Por defecto, si el tipo no coincide
+                      END
+    WHERE COD_CUOTA = :NEW.COD_CUOTA;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20014, 'Error: No se encontró el tipo de cuota asociado.');
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20015, 'Error al calcular el total de la cuota después de modificar cuotas.');
+END;
+/
+
+
 -- procedimiento de pago
 CREATE OR REPLACE PROCEDURE PAGAR(
     p_rut_usuario IN SA_JS_JO_NR_USUARIOS.RUT_USUARIO%TYPE,

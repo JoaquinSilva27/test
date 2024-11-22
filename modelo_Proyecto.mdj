@@ -29599,7 +29599,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGTLSBdSR5D8BY="
 							},
-							"name": "rut",
+							"name": "rut_usuario",
 							"type": "number",
 							"length": 0,
 							"foreignKey": true
