@@ -63,6 +63,13 @@ CREATE TABLE SA_JS_JO_NR_USUARIOS( --MANTENEDOR LISTO
 	--CONSTRAINT FK_SA_JS_JO_NR_USUARIOS_PREDIOS FOREIGN KEY(COD_PREDIO) REFERENCES SA_JS_JO_NR_PREDIOS(COD_PREDIO)
 );
 
+CREATE TABLE SA_JS_JO_NR_CUENTAS (
+    RUT_CUENTA VARCHAR2(12),
+    ROL_CUENTA VARCHAR2(20),
+    CONTRASEÑA_CUENTA VARCHAR2(20)
+);
+
+
 CREATE TABLE SA_JS_JO_NR_PREDIOS( --MANTENEDOR LISTO
 	COD_PREDIO NUMBER, 
 	ROL_PREDIO NUMBER,
@@ -366,7 +373,31 @@ BEGIN
 END;
 /
 
--- Triggers (2 por ahora)
+-- Triggers
+--función: genera contraseña para luego agregar la información a la tabla cuentas
+CREATE OR REPLACE TRIGGER SA_JS_JO_NR_TRG_CREAR_CUENTA
+AFTER INSERT ON SA_JS_JO_NR_USUARIOS
+FOR EACH ROW
+DECLARE
+    CONTRASENA_GENERADA VARCHAR2(20);
+BEGIN
+    -- Generar la contraseña con los primeros 4 dígitos del RUT del usuario
+    CONTRASENA_GENERADA := SUBSTR(:NEW.RUT_USUARIO, 1, 4);
+    
+    -- Insertar en la tabla cuentas los datos correspondientes
+    INSERT INTO SA_JS_JO_NR_CUENTAS (
+        RUT_CUENTA,
+        ROL_CUENTA,
+        CONTRASEÑA_CUENTA
+    ) VALUES (
+        :NEW.RUT_USUARIO,
+        :NEW.ROL,
+        CONTRASENA_GENERADA
+    );
+END;
+/
+
+
 
 -- función: verifica que existan los codigos de region y de calle asociados a la comuna que se inserte o actualice en las tablas de regiones y direcciones
 CREATE OR REPLACE TRIGGER SA_JS_JO_NR_trg_verifica_integridad_comunas
@@ -2191,8 +2222,8 @@ FROM SA_JS_JO_NR_CUOTAS
 WHERE COD_CUOTA = 101;  -- Reemplaza 101 con el código de la cuota que deseas consultar
 
 
--- fUNCION PARA VERIFICAR DISPONIBILIDAD DEL PROYECTO 
-CREATE OR REPLACE FUNCTION verificar_disponibilidad_proyecto(
+-- fUNCION PARA VERIFICAR DISPONIBILIDAD DEL PROYECTO (No sé quien la hizo pero como me daba error la cambié)
+/*CREATE OR REPLACE FUNCTION verificar_disponibilidad_proyecto(
     p_cod_proyecto NUMBER
 ) RETURN BOOLEAN IS
     v_disponible BOOLEAN := TRUE;
@@ -2209,6 +2240,30 @@ BEGIN
     END IF;
     RETURN v_disponible;
     verificar_disponibilidad_proyecto;
+END;
+*/
+CREATE OR REPLACE FUNCTION verificar_disponibilidad_proyecto(
+    p_cod_proyecto NUMBER
+) RETURN BOOLEAN IS
+    v_disponible BOOLEAN := TRUE;
+    v_estado VARCHAR2(20);
+BEGIN
+    -- Verificar si el proyecto está activo
+    BEGIN
+        SELECT ESTADO_PROYECTO INTO v_estado
+        FROM SA_JS_JO_NR_PROYECTOS  -- Asegúrate de que la columna 'ESTADO_PROYECTO' existe en esta tabla
+        WHERE COD_PROYECTO = p_cod_proyecto;
+    EXCEPTION
+        WHEN NO_DATA_FOUND THEN
+            -- Si no se encuentra el proyecto, devolvemos falso
+            RETURN FALSE;
+    END;
+
+    IF v_estado != 'Activo' THEN
+        v_disponible := FALSE;
+    END IF;
+
+    RETURN v_disponible;
 END;
 
 /* GESTORES
@@ -2505,7 +2560,7 @@ ORDER BY P.estado_proyecto;
 
 --3. Reporte de Historial de Pagos
 --Este reporte muestra todos los pagos realizados para un periodo específico. Se puede adaptar para usar un parámetro de fechas para limitar el periodo.
-CREATE OR REPLACE VIEW SA_JS_JO_NR_HISTORIAL_PAGOS AS
+CREATE OR REPLACE VIEW SA_JS_JO_NR_HISTORIAL_PAGOS_REP AS
 SELECT H.cod_historial_pago AS ID_PAGO, U.nombre_usuario AS USUARIO, H.detalle_pago AS MONTO, H.fecha_pago AS FECHA_PAGO
 FROM SA_JS_JO_NR_Historial_Pagos H
 JOIN SA_JS_JO_NR_Usuarios U ON H.cod_predio = U.cod_cuota;

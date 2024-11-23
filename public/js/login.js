@@ -28,17 +28,19 @@ document.getElementById('loginForm').addEventListener('submit', async (event) =>
         });
 
         const data = await response.json();
+        console.log("Respuesta completa del servidor:", data);
         
         // Simular un retraso de 2 segundos para que se vea la animación
         await new Promise(resolve => setTimeout(resolve, 4000));
 
         if (data.success) {
-            if (data.rol === "admin") {
+            const rol = data.data?.rol; // Acceso al rol correcto
+            if (rol === "admin") {
                 window.location.href = "/admin.html";
-            } else if (data.rol === "user") {
+            } else if (rol === "user") {
                 window.location.href = "/user.html";
             } else {
-                alert("Rol desconocido.");
+                alert(`Rol desconocido: ${rol}`);
             }
         } else {
             alert(data.message);

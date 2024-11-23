@@ -23,7 +23,7 @@ function showpe() {
 }
 
 function mostrarMantenimiento() {
-    alert("Por qué presionas esta opcion imbécil. Si es de bonito noma pa hacerlo mas realista XD.");
+    alert("Lo sentimos, esta opción está en mantenimiento.");
 }
 
 function showmd() {
@@ -36,7 +36,7 @@ function showhdp() {
     document.getElementById('historial-pagos-contenedor').style.display = 'block';
 }
 
-//relacionado al historial de pagos
+//------------------relacionado al historial de pagos------------------------
 function mostrarHistorial(event) {
     event.preventDefault();
 

@@ -15,6 +15,10 @@ const adminRoutes = require("./routes/admin");
 const entitiesRoutes = require('./routes/entities'); // Nueva ruta para las entidades
 const registrosRoutes = require('./routes/registros');
 
+//del user
+const historialRoutes = require("./routes/user/historial");
+
+
 // Crear la aplicación Express
 const app = express();
 
@@ -72,6 +76,9 @@ app.use("/admin", adminRoutes); // Administración
 app.use('/api', crudRoutes); // Rutas para CRUD (Registros)
 app.use('/entities', entitiesRoutes); // Asegúrate de que esta línea esté en app.js
 app.use('/api', registrosRoutes);
+
+//del user
+app.use("/api", historialRoutes);
 
 
 // Ruta por defecto para la página de inicio
