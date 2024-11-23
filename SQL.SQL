@@ -2325,38 +2325,60 @@ CREATE OR REPLACE TRIGGER trg_historial_cambios
 AFTER UPDATE ON SA_JS_JO_NR_PREDIOS
 FOR EACH ROW
 DECLARE
-    v_cod_historial_cambio NUMBER; -- Variable para almacenar el valor de la secuencia
+    v_cod_historial_cambio NUMBER;
 BEGIN
     -- Obtener el siguiente valor de la secuencia
     SELECT SEQ_HISTORIAL_CAMBIOS.NEXTVAL INTO v_cod_historial_cambio FROM DUAL;
 
-    -- Insertar en la tabla SA_JS_JO_NR_HISTORIAL_CAMBIOS
-    INSERT INTO SA_JS_JO_NR_HISTORIAL_CAMBIOS (
-        COD_HISTORIAL_CAMBIO,
-        DETALLE_CAMBIO,
-        FECHA_CAMBIO,
-        COD_PREDIO
-    ) VALUES (
-        v_cod_historial_cambio,
-        'Modificación realizada: '
-        || 'ROL_PREDIO: ' || :OLD.ROL_PREDIO || ' -> ' || :NEW.ROL_PREDIO || ', '
-        || 'HECTAREAS_PREDIO: ' || :OLD.HECTAREAS_PREDIO || ' -> ' || :NEW.HECTAREAS_PREDIO || ', '
-        || 'ACCIONES_PREDIO: ' || :OLD.ACCIONES_PREDIO || ' -> ' || :NEW.ACCIONES_PREDIO,
-        SYSDATE,
-        :NEW.COD_PREDIO
-    );
+    -- Determinar el detalle del cambio
+    IF :OLD.ROL_PREDIO = :NEW.ROL_PREDIO AND
+       :OLD.HECTAREAS_PREDIO = :NEW.HECTAREAS_PREDIO AND
+       :OLD.ACCIONES_PREDIO = :NEW.ACCIONES_PREDIO THEN
+        -- No hubo cambios significativos en los parámetros del predio
+        INSERT INTO SA_JS_JO_NR_HISTORIAL_CAMBIOS (
+            COD_HISTORIAL_CAMBIO, DETALLE_CAMBIO, FECHA_CAMBIO, COD_PREDIO
+        ) VALUES (
+            v_cod_historial_cambio, 'Vinculación con un canal', SYSDATE, :NEW.COD_PREDIO
+        );
+    ELSE
+        -- Hubo cambios en los parámetros del predio, registrar los cambios
+        INSERT INTO SA_JS_JO_NR_HISTORIAL_CAMBIOS (
+            COD_HISTORIAL_CAMBIO, DETALLE_CAMBIO, FECHA_CAMBIO, COD_PREDIO
+        ) VALUES (
+            v_cod_historial_cambio,
+            'Cambio en predio: ROL_PREDIO (' || :OLD.ROL_PREDIO || ' -> ' || :NEW.ROL_PREDIO || '), ' ||
+            'HECTAREAS_PREDIO (' || :OLD.HECTAREAS_PREDIO || ' -> ' || :NEW.HECTAREAS_PREDIO || '), ' ||
+            'ACCIONES_PREDIO (' || :OLD.ACCIONES_PREDIO || ' -> ' || :NEW.ACCIONES_PREDIO || ')',
+            SYSDATE, :NEW.COD_PREDIO
+        );
+    END IF;
 
-    -- Insertar en la tabla SA_JS_JO_NR_DETALLE_HISTORIAL_USUARIOS
+    -- Registrar en detalle_historial_usuarios
     INSERT INTO SA_JS_JO_NR_DETALLE_HISTORIAL_USUARIOS (
-        RUT_USUARIO,
-        COD_HISTORIAL_CAMBIO
+        RUT_USUARIO, COD_HISTORIAL_CAMBIO
     ) VALUES (
-        :NEW.RUT_USUARIO,
-        v_cod_historial_cambio
+        :NEW.RUT_USUARIO, v_cod_historial_cambio
     );
 END;
-/
 
+CREATE OR REPLACE TRIGGER trg_canales_predios-- AUN NO FUNCIONA, sigue sin funcionar
+AFTER INSERT OR UPDATE ON SA_JS_JO_NR_DETALLE_PREDIO_CANALES
+FOR EACH ROW
+DECLARE
+    V_ROL_PREDIO NUMBER;
+    V_HECTAREAS NUMBER;
+    V_ACCIONES_PREDIO NUMBER;
+    V_RUT_USUARIO NUMBER;
+BEGIN
+    SELECT ROL_PREDIO, HECTAREAS_PREDIO, ACCIONES_PREDIO, RUT_USUARIO
+    INTO V_ROL_PREDIO, V_HECTAREAS, V_ACCIONES_PREDIO, V_RUT_USUARIO
+    FROM SA_JS_JO_NR_PREDIOS
+    WHERE COD_PREDIO = :NEW.COD_PREDIO;
+
+  -- Actualizar la tabla SA_JS_JO_NR_PREDIOS con los mismos datos de la fila anterior
+    ACTUALIZAR_PREDIOS(:NEW.COD_PREDIO,V_ROL_PREDIO, V_HECTAREAS, V_ACCIONES_PREDIO, V_RUT_USUARIO);
+END;
+/
 
 
 --calcuar acciones predio bien
