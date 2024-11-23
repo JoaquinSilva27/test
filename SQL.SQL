@@ -2361,6 +2361,17 @@ BEGIN
     );
 END;
 
+CREATE OR REPLACE TRIGGER trg_canales_predios-- AUN NO FUNCIONA
+AFTER INSERT OR UPDATE ON SA_JS_JO_NR_DETALLE_PREDIO_CANALES
+FOR EACH ROW
+BEGIN
+  -- Actualizar la tabla SA_JS_JO_NR_PREDIOS con los mismos datos de la fila anterior
+  UPDATE SA_JS_JO_NR_PREDIOS
+  SET
+    COD_PREDIO = :NEW.COD_PREDIO
+  WHERE COD_PREDIO = :NEW.COD_PREDIO;
+END;
+/
 
 
 --calcuar acciones predio bien
