@@ -9,7 +9,7 @@ async function mostrarFormularioAgregar(selectedTable) {
 
     try {
         console.log(`Obteniendo campos para la tabla: ${selectedTable}`);
-        const response = await fetch(`http://localhost:3000/api/columns/${selectedTable}`);
+        const response = await fetch(`http://localhost:3000/api/tables/columns/${selectedTable}`);
         if (!response.ok) {
             throw new Error('Error al obtener los campos de la tabla.');
         }
@@ -29,6 +29,11 @@ async function mostrarFormularioAgregar(selectedTable) {
                 input.name = field.name;
                 input.required = true;
 
+                // Agregar placeholder y validaciones específicas para campos de tipo date
+                if (field.type === 'date') {
+                    input.placeholder = 'dd-mm-aaaa'; // Placeholder con formato de fecha
+                    input.pattern = '\\d{4}-\\d{2}-\\d{2}'; // Patrón de validación para fechas
+                }
                 const label = document.createElement('label');
                 label.textContent = field.name;
 
@@ -72,7 +77,7 @@ async function agregarEntidad() {
     console.log('Datos recolectados:', formData); // Verifica qué datos estás enviando
 
     try {
-        const response = await fetch(`http://localhost:3000/api/${SelectedTable1}`, {
+        const response = await fetch(`http://localhost:3000/api/tables/${SelectedTable1}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData) // Convierte los datos a JSON

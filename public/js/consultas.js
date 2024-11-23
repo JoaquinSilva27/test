@@ -10,7 +10,7 @@ async function consultarEntidad() {
 
     try {
         // Llama al endpoint del procedimiento almacenado con la PK seleccionada
-        const response = await fetch(`http://localhost:3000/api/${selectedTable}/${consultaInput}`);
+        const response = await fetch(`http://localhost:3000/api/tables/${selectedTable}/${consultaInput}`);
         if (!response.ok) {
             const error = await response.json();
             alert(error.error || 'No se encontraron registros.');
@@ -105,7 +105,7 @@ function configurarBusquedaConsulta(selectedTable) {
 // Simula una función que busca en la base de datos
 async function buscarSugerenciasConsulta(query, table) {
     try {
-        const url = `http://localhost:3000/api/${table}/suggestions?query=${query}`;
+        const url = `http://localhost:3000/api/tables/${table}/suggestions?query=${query}`;
         console.log('Llamando al endpoint:', url);
 
         const response = await fetch(url);

@@ -54,3 +54,21 @@ END;
 BEGIN
 	PAGAR(1,750000);
 END;
+
+---
+
+begin
+    agregar_predios(9,10,100000,10);
+end;
+
+begin
+    agregar_canales('canal 1',10,1);
+    agregar_canales('canal 2',20,1);
+end;
+
+insert into sa_js_jo_nr_detalle_predio_canales(cod_predio,cod_canal) values(10,2);
+insert into sa_js_jo_nr_detalle_predio_canales(cod_predio,cod_canal) values(10,3);
+
+begin
+    actualizar_predios(10,9,10,100000,10);
+end;

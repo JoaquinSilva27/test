@@ -3,27 +3,7 @@ function mostrarOpcionesReporte() {
     const opcionesReporte = document.getElementById("opciones-reporte");
     opcionesReporte.innerHTML = ""; // Limpia las opciones anteriores
 
-    if (reporteSeleccionado === "regantes-por-canal") {
-        opcionesReporte.innerHTML = `
-        <div class="campo-dinamico" style="position: relative;">
-            <label for="canal">Nombre del Canal:</label>
-            <input type="text" id="canal" placeholder="Ingrese el canal">
-            <ul id="sugerencias-canal" class="sugerencias"></ul>
-        </div>
-        `;
-        const canales = ["Norte alto", "Norte bajo", "Nopal", "Nopal si", "Nutral", "Navi Alto"];
-        configurarAutocompletado("canal", "sugerencias-canal", canales);
-    } else if (reporteSeleccionado === "regantes-y-predios") {
-        opcionesReporte.innerHTML = `
-        <div class="campo-dinamico" style="position: relative;">
-            <label for="regante">Nombre del Regante:</label>
-            <input type="text" id="regante" placeholder="Ingrese el regante">
-            <ul id="sugerencias-regante" class="sugerencias"></ul>
-        </div>
-        `;
-        const regantes = ["Gabriel Bascuñán", "Guillermo Pérez", "Gonzalo López"];
-        configurarAutocompletado("regante", "sugerencias-regante", regantes);
-    } else if (reporteSeleccionado === "ingresos-por-fecha") {
+    if (reporteSeleccionado === "ingresos-por-fecha") {
         opcionesReporte.innerHTML = `
         <div class="campo-dinamico">
             <label for="fecha-inicio">Fecha Inicio:</label>
@@ -37,86 +17,125 @@ function mostrarOpcionesReporte() {
     }
 }
 
-function generarReporte() {
-const reporteSeleccionado = document.getElementById("reporte-select").value;
+async function generarReporte() {
+    const reporteSeleccionado = document.getElementById("reporte-select").value;
 
-if (!reporteSeleccionado) {
-    alert("Por favor, seleccione un tipo de reporte.");
-    return;
-}
-
-// Muestra el contenedor del reporte generado
-document.getElementById("reportes-section").style.display = "none";
-document.getElementById("reporte-detalle-container").style.display = "block";
-
-const tituloReporte = document.getElementById("reporte-titulo");
-tituloReporte.textContent = `Reporte: ${reporteSeleccionado}`;
-
-const contenidoReporte = document.getElementById("reporte-detalle-contenido");
-contenidoReporte.innerHTML = ""; // Limpia el contenido previo
-
-// Genera contenido dinámico de ejemplo
-for (let i = 1; i <= 10; i++) {
-    const reporteItem = document.createElement("div");
-    reporteItem.className = "reporte-item";
-    reporteItem.textContent = `${reporteSeleccionado} - Registro ${i}`;
-    contenidoReporte.appendChild(reporteItem);
-}
-}
-
-function volverASeleccion() {
-// Regresa al contenedor de selección
-document.getElementById("reportes-section").style.display = "block";
-document.getElementById("reporte-detalle-container").style.display = "none";
-}
-
-function configurarAutocompletado(inputId, sugerenciasId, datos) {
-    const inputElemento = document.getElementById(inputId);
-    const sugerenciasContainer = document.getElementById(sugerenciasId);
-
-    if (!inputElemento || !sugerenciasContainer) {
-        console.error(`Los elementos con IDs ${inputId} y/o ${sugerenciasId} no existen en el DOM.`);
+    if (!reporteSeleccionado) {
+        alert("Por favor, seleccione un tipo de reporte.");
         return;
     }
 
-    // Escucha el evento de entrada en el campo de búsqueda
-    inputElemento.addEventListener("input", (e) => {
-        const valorBusqueda = e.target.value.toLowerCase();
+    try {
+        console.log(`Generando reporte para: ${reporteSeleccionado}`);
+        let response;
 
-        // Limpia las sugerencias anteriores
-        sugerenciasContainer.innerHTML = "";
-
-        if (valorBusqueda) {
-            // Filtra los datos que coincidan con la búsqueda
-            const resultados = datos.filter((item) =>
-                item.toLowerCase().startsWith(valorBusqueda)
-            );
-
-            // Agrega los resultados como elementos de la lista
-            resultados.forEach((item) => {
-                const li = document.createElement("li");
-                li.textContent = item;
-
-                // Al hacer clic en un resultado, completa el input
-                li.addEventListener("click", () => {
-                    inputElemento.value = item;
-                    sugerenciasContainer.innerHTML = ""; // Limpia las sugerencias
-                });
-
-                sugerenciasContainer.appendChild(li);
-            });
+        if (reporteSeleccionado === "deudas-por-canal") {
+            console.log("Enviando solicitud al endpoint deudas-por-canal...");
+            response = await fetch("/api/reportes/deuda-canal");
+        } else {
+            alert("Esta opción aún no está implementada.");
+            return;
         }
-    });
 
-    // Limpia las sugerencias si el input pierde el foco
-    inputElemento.addEventListener("blur", () => {
-        setTimeout(() => (sugerenciasContainer.innerHTML = ""), 200); // Breve delay para permitir clics
-    });
+        console.log("Respuesta recibida:", response);
+
+        if (!response || !response.ok) {
+            throw new Error(`Error en el servidor: ${response?.statusText || "Sin respuesta"}`);
+        }
+
+        const data = await response.json();
+        console.log("Datos del reporte recibidos:", data);
+        mostrarResultadosReporte(reporteSeleccionado, data);
+    } catch (error) {
+        console.error("Error al generar el reporte:", error);
+        alert("Ocurrió un error al generar el reporte. Por favor, intente nuevamente.");
+    }
 }
 
+function mostrarResultadosReporte(reporteSeleccionado, data) {
+    console.log("Datos recibidos en mostrarResultadosReporte:", data); // Verifica los datos
 
-document.getElementById('reporte-select').addEventListener('change', () => {
-if (document.getElementById('reporte-select').value === 'regantes-y-predios') {
-    configurarBusquedaRegante();
+    const tituloReporte = document.getElementById("reporte-titulo");
+    const contenidoReporte = document.getElementById("reporte-detalle-contenido");
+
+    document.getElementById("reportes-section").style.display = "none";
+    document.getElementById("reporte-detalle-container").style.display = "block";
+    console.log("reporte seleccionado: ",reporteSeleccionado);
+    if (reporteSeleccionado === "deudas-por-canal") {
+        tituloReporte.textContent = "Informe de Deuda por Canal";
+
+        // Validar si data es un array y no está vacío
+        if (!Array.isArray(data)) {
+            console.error("Error: el dato recibido no es un array. Tipo recibido:", typeof data);
+            contenidoReporte.innerHTML = "<p>Error: los datos no son válidos (no es un array).</p>";
+            return;
+        }
+        if (data.length === 0) {
+            console.warn("Advertencia: el array está vacío.");
+            contenidoReporte.innerHTML = "<p>No se encontraron datos para mostrar.</p>";
+            return;
+        }
+
+        console.log("Comenzando a procesar los elementos del array...");
+
+        // Crear la tabla
+        const tabla = document.createElement("table");
+        tabla.className = "tabla-reporte";
+
+        // Crear el encabezado de la tabla
+        const thead = document.createElement("thead");
+        thead.innerHTML = `
+            <tr>
+                <th>Nombre del Canal</th>
+                <th>Total Deuda</th>
+            </tr>
+        `;
+        tabla.appendChild(thead);
+
+        // Crear el cuerpo de la tabla
+        const tbody = document.createElement("tbody");
+        let totalDeuda = 0;
+
+        data.forEach((item, index) => {
+            console.log(`Procesando item ${index}:`, item); // Log para depurar cada elemento
+
+            if (!item || !item.NOMBRE_CANAL || typeof item.TOTAL_DEUDA !== "number") {
+                console.error(`Error en el elemento ${index}:`, item);
+                return; // Saltar a la siguiente iteración si el item no es válido
+            }
+
+            const fila = document.createElement("tr");
+            fila.innerHTML = `
+                <td>${item.NOMBRE_CANAL}</td>
+                <td>$${item.TOTAL_DEUDA.toLocaleString("es-CL")}</td>
+            `;
+            tbody.appendChild(fila);
+            totalDeuda += item.TOTAL_DEUDA; // Sumar la deuda total
+        });
+
+        console.log("Total de deuda calculado:", totalDeuda);
+
+        tabla.appendChild(tbody);
+
+        // Crear el pie de tabla para mostrar el total
+        const tfoot = document.createElement("tfoot");
+        tfoot.innerHTML = `
+            <tr>
+                <td>Total</td>
+                <td>$${totalDeuda.toLocaleString("es-CL")}</td>
+            </tr>
+        `;
+        tabla.appendChild(tfoot);
+
+        // Limpiar contenido previo y agregar la tabla
+        contenidoReporte.innerHTML = "";
+        contenidoReporte.appendChild(tabla);
+    }
 }
-});
+
+function volverASeleccion() {
+    document.getElementById("reportes-section").style.display = "block";
+    document.getElementById("reporte-detalle-container").style.display = "none";
+    const contenidoReporte = document.getElementById("reporte-detalle-contenido");
+    contenidoReporte.innerHTML = ""; // Limpia el contenido previo
+}

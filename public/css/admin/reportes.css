@@ -74,23 +74,24 @@
   
   /* Contenedor dinámico del reporte */
   #reporte-detalle-container {
-    padding: 40px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    max-width: 1000px; /* Más espacio */
-    margin: 100px auto;
-    position: relative;
-    min-height: 600px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    background-color: #edf7f6;
+    border-radius: 12px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
+    width: 80%; /* Más ancho */
+    min-width: 600px;
+    margin: 50px auto; /* Centrar */
   }
   
   /* Cabecera del reporte dinámico */
+  /* Ajustar el contenedor del título */
   .reporte-detalle-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center; /* Centrar el contenido horizontalmente */
     margin-bottom: 20px;
+    gap: 15px; /* Margen entre el símbolo y el título */
+    position: relative;
   }
   
   /* Botón de volver */
@@ -101,20 +102,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0; /* Elimina el relleno adicional */
-    
+    position: absolute; /* Posicionarlo a la izquierda del contenedor */
+    left: 0;
   }
   
   .btn-volver svg {
     width: 36px;
     height: 36px;
-    fill: #333; /* Cambia el color del ícono */
+    fill: #333;
     transition: fill 0.3s ease, transform 0.2s ease;
   }
-  
   .btn-volver:hover svg {
-    fill: #f9bc60; /* Cambia el color al pasar el cursor */
-    transform: scale(1.1); /* Aumenta ligeramente el tamaño */
+    fill: #f9bc60;
+    transform: scale(1.1);
   }
   
   /* Contenido del reporte generado */
@@ -160,6 +160,8 @@
     width: 100%; /* Ocupa todo el ancho disponible */
     background-color: #ffffff;
   }
+
+ 
   
   .campo-dinamico input:focus {
     border-color: #f9bc60; /* Cambia el color del borde al enfocarse */
@@ -219,3 +221,116 @@
     background-color: #f9bc60;
     color: #004643;
   }
+  
+  #opciones-reporte .input-wrapper input[type="date"] {
+    width: 100%; /* Ocupa todo el ancho */
+    height: 100%; /* Coincide con la altura del contenedor */
+    padding: 0 10px; /* Espaciado interno */
+    font-size: 1rem; /* Tamaño del texto */
+    border: none; /* Sin bordes adicionales */
+    outline: none; /* Sin borde de enfoque */
+    background-color: transparent; /* Fondo transparente */
+    color: #001e1d; /* Color del texto */
+    cursor: pointer; /* Hace clickeable todo el input */
+}
+
+#opciones-reporte .input-wrapper {
+  position: relative;
+  width: 70%; /* Asegura que ocupe todo el ancho del contenedor */
+  height: 50px; /* Establece una altura consistente */
+  display: flex;
+  align-items: center;
+  border: 2px solid #004643; /* Borde externo */
+  border-radius: 8px; /* Bordes redondeados */
+  overflow: hidden;
+  cursor: pointer; /* Hace que toda el área sea clickeable */
+}
+
+#opciones-reporte .input-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 10px; /* Alineado al borde derecho */
+  width: 100%; /* Tamaño del ícono */
+  height: 100%; /* Coincide con la altura del contenedor */
+  cursor: pointer; /* Permite interacción */
+  z-index: 2;
+  background: transparent; /* Fondo transparente */
+}
+
+/* Estilo general para la tabla */
+/* General de la tabla */
+.tabla-reporte {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 16px;
+  text-align: left;
+  color: #001e1d;
+  background-color: #ffffff; /* Blanco puro */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Encabezado de la tabla */
+.tabla-reporte thead {
+  background-color: #004643;
+  color: #ffffff; /* Blanco */
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center; /* Centra el texto en el encabezado */
+}
+
+/* Filas del cuerpo */
+.tabla-reporte tbody tr {
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.3s ease;
+}
+
+/* Resaltar fila al pasar el cursor */
+.tabla-reporte tbody tr:hover {
+  background-color: #e6f7f5; /* Suave color de fondo */
+}
+
+/* Celdas del cuerpo */
+.tabla-reporte tbody td {
+  padding: 12px;
+  text-align: center; /* Centra el contenido */
+  font-size: 16px; /* Ajusta el tamaño de texto */
+}
+
+/* Pie de tabla */
+.tabla-reporte tfoot {
+  background-color: #f9bc60;
+  font-weight: bold;
+  text-align: center; /* Centra el contenido del pie */
+}
+
+.tabla-reporte tfoot td {
+  padding: 12px;
+  font-size: 16px; /* Ajusta el tamaño de texto */
+}
+
+/* Centrado del contenedor del reporte */
+#reporte-detalle-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #edf7f6;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  width: auto;
+  max-width: 800px;
+  margin-top: 10%;
+  min-height: auto; /* Elimina la altura mínima */
+}
+
+/* Título del reporte */
+#reporte-titulo {
+  font-size: 28px;
+  font-weight: bold;
+  color: #004643;
+  text-align: center;
+  flex: 1; /* Asegura que ocupe espacio para mantener centrado */
+  margin-top: 10px;
+}

@@ -86,9 +86,9 @@ CREATE TABLE SA_JS_JO_NR_HISTORIAL_PAGOS(
 	DETALLE_PAGO VARCHAR2(200),
 	FECHA_PAGO DATE,
     PAGO NUMBER,
-	COD_PREDIO NUMBER,
+	RUT_USUARIO NUMBER,
 	CONSTRAINT PK_SA_JS_JO_NR_HISTORIAL_PAGOS PRIMARY KEY(COD_HISTORIAL_PAGO),
-	CONSTRAINT FK_SA_JS_JO_NR_HISTORIAL_PAGOS_PREDIOS FOREIGN KEY(COD_PREDIO) REFERENCES SA_JS_JO_NR_PREDIOS(COD_PREDIO)
+	CONSTRAINT FK_SA_JS_JO_NR_HISTORIAL_PAGOS_USUARIOS FOREIGN KEY(RUT_USUARIO) REFERENCES SA_JS_JO_NR_USUARIOS(RUT_USUARIO)
 );
 
 CREATE TABLE SA_JS_JO_NR_HISTORIAL_CAMBIOS(
@@ -2282,7 +2282,37 @@ Este gestor muestra la lista de celadores asignados a cada canal, lo cual es út
 -automatizacion para las tablas detalle_historial_usuario, historial_cambios, historial_pagos, detalle_servicio_canal y detalle_predio_canal
 -calcular valor cuota en base al factor
 */
---detalle_historial_cambios
+--calcular total cuota
+
+CREATE OR REPLACE TRIGGER trg_modificar_total_cuota -- BIEN
+before INSERT OR UPDATE ON SA_JS_JO_NR_CUOTAS
+FOR EACH ROW
+DECLARE
+    v_monto_cuota NUMBER;
+    v_tipo_cuota VARCHAR2(20);
+    v_total_cuota NUMBER;
+BEGIN
+    -- Obtener el tipo_cuota y monto_cuota de la tabla SA_JS_JO_NR_TIPO_CUOTAS
+    SELECT MONTO_CUOTA, TIPO_CUOTA
+    INTO v_monto_cuota, v_tipo_cuota
+    FROM SA_JS_JO_NR_TIPO_CUOTAS
+    WHERE COD_TIPO_CUOTA = :NEW.COD_TIPO_CUOTA;
+
+    -- Calcular el valor del total_cuota basado en el tipo_cuota
+    IF v_tipo_cuota = 'Ordinaria' THEN
+        v_total_cuota := v_monto_cuota * 1;
+    ELSIF v_tipo_cuota = 'Extra Ordinaria' THEN
+        v_total_cuota := v_monto_cuota * 1.5;
+    ELSE
+        -- Manejo de otros casos si aplica, asignar valor predeterminado
+        v_total_cuota := 0;
+    END IF;
+
+    :NEW.TOTAL_CUOTA := v_total_cuota;
+END trg_modificar_total_cuota;
+/
+
+--historial cambios predio bien
 CREATE SEQUENCE SEQ_HISTORIAL_CAMBIOS
     START WITH 1
     INCREMENT BY 1
@@ -2295,48 +2325,109 @@ CREATE OR REPLACE TRIGGER trg_historial_cambios
 AFTER UPDATE ON SA_JS_JO_NR_PREDIOS
 FOR EACH ROW
 DECLARE
-    v_cod_historial_cambio NUMBER;
+    v_cod_historial_cambio NUMBER; -- Variable para almacenar el valor de la secuencia
 BEGIN
-    -- Generar el próximo valor de la secuencia
+    -- Obtener el siguiente valor de la secuencia
     SELECT SEQ_HISTORIAL_CAMBIOS.NEXTVAL INTO v_cod_historial_cambio FROM DUAL;
 
-    -- Validar si el RUT_USUARIO existe en la tabla SA_JS_JO_NR_USUARIOS
-    BEGIN
-        SELECT 1 INTO v_cod_historial_cambio
-        FROM SA_JS_JO_NR_USUARIOS
-        WHERE RUT_USUARIO = :OLD.RUT_USUARIO;
-    EXCEPTION
-        WHEN NO_DATA_FOUND THEN
-            RAISE_APPLICATION_ERROR(-20001, 'No se encontró un usuario asociado al predio.');
-    END;
-
-    -- Insertar un nuevo registro en la tabla Historial_Cambios
+    -- Insertar en la tabla SA_JS_JO_NR_HISTORIAL_CAMBIOS
     INSERT INTO SA_JS_JO_NR_HISTORIAL_CAMBIOS (
-        COD_HISTORIAL_CAMBIO, COD_PREDIO, DETALLE_CAMBIO, FECHA_CAMBIO
-    )
-    VALUES (
+        COD_HISTORIAL_CAMBIO,
+        DETALLE_CAMBIO,
+        FECHA_CAMBIO,
+        COD_PREDIO
+    ) VALUES (
         v_cod_historial_cambio,
-        :OLD.COD_PREDIO,
-        'Modificación en el predio: ' || :OLD.COD_PREDIO,
-        SYSDATE
+        'Modificación realizada: '
+        || 'ROL_PREDIO: ' || :OLD.ROL_PREDIO || ' -> ' || :NEW.ROL_PREDIO || ', '
+        || 'HECTAREAS_PREDIO: ' || :OLD.HECTAREAS_PREDIO || ' -> ' || :NEW.HECTAREAS_PREDIO || ', '
+        || 'ACCIONES_PREDIO: ' || :OLD.ACCIONES_PREDIO || ' -> ' || :NEW.ACCIONES_PREDIO,
+        SYSDATE,
+        :NEW.COD_PREDIO
     );
 
-    -- Insertar un registro en la tabla Detalle_Historial_Usuarios
+    -- Insertar en la tabla SA_JS_JO_NR_DETALLE_HISTORIAL_USUARIOS
     INSERT INTO SA_JS_JO_NR_DETALLE_HISTORIAL_USUARIOS (
-        RUT_USUARIO, COD_HISTORIAL_CAMBIO
-    )
-    VALUES (
-        :OLD.RUT_USUARIO,
+        RUT_USUARIO,
+        COD_HISTORIAL_CAMBIO
+    ) VALUES (
+        :NEW.RUT_USUARIO,
         v_cod_historial_cambio
     );
-EXCEPTION
-    WHEN OTHERS THEN
-        RAISE_APPLICATION_ERROR(-20002, 'Error al registrar los cambios en el historial.');
 END;
 /
 
 
--- historial pagos
+
+--calcuar acciones predio bien
+CREATE OR REPLACE TRIGGER trg_actualizar_acciones_predio
+before INSERT OR UPDATE OF HECTAREAS_PREDIO
+ON SA_JS_JO_NR_PREDIOS
+FOR EACH ROW
+DECLARE
+    v_total_acciones NUMBER := 0;
+BEGIN
+    -- Si el predio tiene canales asociados
+    FOR canal IN (
+        SELECT C.FACTOR_CANAL
+        FROM SA_JS_JO_NR_DETALLE_PREDIO_CANALES DPC
+        JOIN SA_JS_JO_NR_CANALES C ON DPC.COD_CANAL = C.COD_CANAL
+        WHERE DPC.COD_PREDIO = :NEW.COD_PREDIO
+    ) LOOP
+        -- Sumar el producto del factor_canal por hectareas_predio al total de acciones
+        v_total_acciones := v_total_acciones + (canal.FACTOR_CANAL * :NEW.HECTAREAS_PREDIO);
+    END LOOP;
+
+    -- Si no hay canales asociados, el total de acciones será 0 automáticamente
+    :NEW.ACCIONES_PREDIO := v_total_acciones;
+END;
+/
+
+
+--calcular deuda usuario
+
+CREATE OR REPLACE TRIGGER trg_calcular_deuda_usuarios-- BIEN
+AFTER INSERT OR UPDATE OF ACCIONES_PREDIO
+ON SA_JS_JO_NR_PREDIOS
+FOR EACH ROW
+BEGIN
+    -- Declaramos variables para almacenar los valores necesarios
+    DECLARE
+        v_total_cuota NUMBER;
+        v_rut_usuario NUMBER;
+        v_acciones_predio NUMBER;
+        v_deuda NUMBER;
+    BEGIN
+        -- Obtenemos el RUT del usuario asociado al predio
+        v_rut_usuario := :NEW.RUT_USUARIO;
+        
+        -- Validamos que el RUT exista para evitar errores
+        IF v_rut_usuario IS NOT NULL THEN
+            -- Obtenemos el total de la cuota asociada al usuario (a través de la tabla CUOTAS)
+            SELECT TOTAL_CUOTA
+            INTO v_total_cuota
+            FROM SA_JS_JO_NR_CUOTAS
+            WHERE COD_CUOTA = (SELECT COD_CUOTA
+                              FROM SA_JS_JO_NR_USUARIOS
+                              WHERE RUT_USUARIO = v_rut_usuario);
+            
+            -- Obtenemos las acciones del predio (usamos el valor de la nueva fila)
+            v_acciones_predio := :NEW.ACCIONES_PREDIO;
+            
+            -- Calculamos la deuda multiplicando TOTAL_CUOTA por ACCIONES_PREDIO
+            v_deuda := v_total_cuota * v_acciones_predio;
+            
+            -- Actualizamos el atributo DEUDA en la tabla USUARIOS
+            UPDATE SA_JS_JO_NR_USUARIOS
+            SET DEUDA = DEUDA + v_deuda
+            WHERE RUT_USUARIO = v_rut_usuario;
+        END IF;
+    END;
+END;
+/
+
+
+--historial de pagos
 CREATE SEQUENCE SEQ_HISTORIAL_PAGOS
     START WITH 1
     INCREMENT BY 1
@@ -2345,162 +2436,51 @@ CREATE SEQUENCE SEQ_HISTORIAL_PAGOS
     CACHE 50
     NOCYCLE;
 
-CREATE OR REPLACE TRIGGER trg_actualizar_historial_pagos
-AFTER UPDATE OF DEUDA ON SA_JS_JO_NR_USUARIOS
+CREATE OR REPLACE TRIGGER trg_registrar_pago
+AFTER UPDATE OF DEUDA
+ON SA_JS_JO_NR_USUARIOS
 FOR EACH ROW
+WHEN (OLD.DEUDA > NEW.DEUDA)  -- Se activa solo si la deuda se reduce
 DECLARE
-    v_cod_historial_pago NUMBER; -- Variable para almacenar el valor de la secuencia
-    v_detalle_pago VARCHAR2(200); -- Variable para el mensaje del detalle
+    v_cod_historial_pago NUMBER;  -- Variable para almacenar el siguiente valor de la secuencia
+    v_nombre_pagador VARCHAR2(150);  -- Variable para almacenar el nombre completo del pagador
+    v_detalle_pago VARCHAR2(255);  -- Variable para almacenar el mensaje del detalle del pago
+    v_pago NUMBER;  -- Cantidad en que se redujo la deuda
 BEGIN
-    IF :OLD.DEUDA > :NEW.DEUDA THEN
-        -- Obtener el próximo valor de la secuencia
-        SELECT SEQ_HISTORIAL_PAGOS.NEXTVAL INTO v_cod_historial_pago FROM DUAL;
+    -- Obtener el siguiente valor de la secuencia SEQ_HISTORIAL_PAGOS
+    SELECT SEQ_HISTORIAL_PAGOS.NEXTVAL INTO v_cod_historial_pago FROM DUAL;
 
-        -- Crear el mensaje del detalle del pago
-        IF :NEW.DEUDA = 0 THEN
-            v_detalle_pago := 'Se pagó la totalidad de la deuda de $' || :OLD.DEUDA || ' con éxito.';
-        ELSE
-            v_detalle_pago := 'Se realizó un abono por $' || (:OLD.DEUDA - :NEW.DEUDA) || '. Deuda restante: $' || :NEW.DEUDA || '.';
-        END IF;
+    -- Construir el nombre completo del pagador
+    v_nombre_pagador := :NEW.NOMBRE_USUARIO || ' ' || :NEW.APELLIDO1_USUARIO || ' ' || :NEW.APELLIDO2_USUARIO;
 
-        -- Obtener el COD_PREDIO asociado al usuario
-        DECLARE
-            v_cod_predio NUMBER;
-        BEGIN
-            SELECT COD_PREDIO
-            INTO v_cod_predio
-            FROM SA_JS_JO_NR_PREDIOS
-            WHERE RUT_USUARIO = :OLD.RUT_USUARIO;
+    -- Calcular la cantidad pagada
+    v_pago := :OLD.DEUDA - :NEW.DEUDA;
 
-            -- Insertar un registro en SA_JS_JO_NR_HISTORIAL_PAGOS
-            INSERT INTO SA_JS_JO_NR_HISTORIAL_PAGOS (
-                COD_HISTORIAL_PAGO, NOMBRE_PAGADOR, DETALLE_PAGO, FECHA_PAGO, PAGO, COD_PREDIO
-            )
-            VALUES (
-                v_cod_historial_pago,
-                :NEW.NOMBRE_USUARIO || ' ' || :NEW.APELLIDO1_USUARIO || ' ' || :NEW.APELLIDO2_USUARIO,
-                v_detalle_pago,
-                SYSDATE,
-                (:OLD.DEUDA - :NEW.DEUDA),
-                v_cod_predio
-            );
-        EXCEPTION
-            WHEN NO_DATA_FOUND THEN
-                RAISE_APPLICATION_ERROR(-20004, 'Error: No se encontró un predio asociado al usuario.');
-        END;
+    -- Determinar el detalle del pago
+    IF :NEW.DEUDA = 0 THEN
+        v_detalle_pago := 'Se ha pagado la totalidad de la deuda exitosamente';
+    ELSE
+        v_detalle_pago := 'Se ha abonado la cantidad de ' || v_pago || ' exitosamente. La deuda pendiente es de ' || :NEW.DEUDA || '.';
     END IF;
-EXCEPTION
-    WHEN OTHERS THEN
-        RAISE_APPLICATION_ERROR(-20003, 'Error al registrar el pago en el historial.');
+
+    -- Insertar el registro en la tabla SA_JS_JO_NR_HISTORIAL_PAGOS
+    INSERT INTO SA_JS_JO_NR_HISTORIAL_PAGOS (
+        COD_HISTORIAL_PAGO,
+        NOMBRE_PAGADOR,
+        DETALLE_PAGO,
+        FECHA_PAGO,
+        PAGO,
+        RUT_USUARIO
+    ) VALUES (
+        v_cod_historial_pago,
+        v_nombre_pagador,
+        v_detalle_pago,
+        SYSDATE,
+        v_pago,
+        :NEW.RUT_USUARIO
+    );
 END;
 /
-
--- acciones predio  = factor canal * numero hectareas listo 100*5 = 500
--- deuda =  precio por accion * acciones del predio listo 500*5000 = 2500000
--- trigger que se encargue de calcular el atributo deuda de usuario en base factor_canal y hectareas_predio
-CREATE OR REPLACE TRIGGER trg_calcular_acciones_predio
-BEFORE INSERT OR UPDATE OF HECTAREAS_PREDIO ON SA_JS_JO_NR_PREDIOS
-FOR EACH ROW
-DECLARE
-    v_acciones_total NUMBER := 0; -- Variable para acumular las acciones
-BEGIN
-    -- Recorrer los canales asociados al predio y calcular las acciones totales
-    FOR canal_rec IN (
-        SELECT C.FACTOR_CANAL
-        FROM SA_JS_JO_NR_CANALES C
-        JOIN SA_JS_JO_NR_DETALLE_PREDIO_CANALES DPC
-        ON C.COD_CANAL = DPC.COD_CANAL
-        WHERE DPC.COD_PREDIO = :NEW.COD_PREDIO
-    ) LOOP
-        -- Sumar las contribuciones de cada canal al total de acciones
-        v_acciones_total := v_acciones_total + (canal_rec.FACTOR_CANAL * :NEW.HECTAREAS_PREDIO);
-    END LOOP;
-
-    -- Actualizar el atributo ACCIONES_PREDIO con el total calculado
-    :NEW.ACCIONES_PREDIO := v_acciones_total;
-EXCEPTION
-    WHEN OTHERS THEN
-        RAISE_APPLICATION_ERROR(-20009, 'Error al calcular las acciones del predio.');
-END;
-/
-
-
-
--- 
-CREATE OR REPLACE TRIGGER trg_calcular_deuda_usuarios
-AFTER INSERT OR UPDATE OF ACCIONES_PREDIO ON SA_JS_JO_NR_PREDIOS
-FOR EACH ROW
-BEGIN
-    -- Validar que exista un usuario asociado al predio
-    UPDATE SA_JS_JO_NR_USUARIOS U
-    SET DEUDA = :NEW.ACCIONES_PREDIO * (
-        SELECT TOTAL_CUOTA
-        FROM SA_JS_JO_NR_CUOTAS C
-        WHERE C.COD_CUOTA = U.COD_CUOTA
-    )
-    WHERE U.RUT_USUARIO = :NEW.RUT_USUARIO;
-
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RAISE_APPLICATION_ERROR(-20010, 'Error: No se encontró la cuota asociada al usuario.');
-    WHEN OTHERS THEN
-        RAISE_APPLICATION_ERROR(-20011, 'Ocurrió un error al calcular la deuda del usuario.');
-END;
-/
-
-
-CREATE OR REPLACE TRIGGER trg_calcular_total_cuota
-AFTER INSERT OR UPDATE OF MONTO_CUOTA ON SA_JS_JO_NR_TIPO_CUOTAS
-FOR EACH ROW
-BEGIN
-    -- Actualizar el total de las cuotas asociadas al tipo de cuota modificado
-    UPDATE SA_JS_JO_NR_CUOTAS
-    SET TOTAL_CUOTA = :NEW.MONTO_CUOTA * 
-                      CASE 
-                          WHEN :NEW.TIPO_CUOTA = 'Ordinaria' THEN 1
-                          WHEN :NEW.TIPO_CUOTA = 'Extra Ordinaria' THEN 1.5
-                          ELSE 1 -- Por defecto, si el tipo no coincide
-                      END
-    WHERE COD_TIPO_CUOTA = :NEW.COD_TIPO_CUOTA;
-
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RAISE_APPLICATION_ERROR(-20013, 'Error: No se encontraron cuotas asociadas al tipo de cuota.');
-    WHEN OTHERS THEN
-        RAISE_APPLICATION_ERROR(-20012, 'Error al calcular el total de la cuota.');
-END;
-/
-CREATE OR REPLACE TRIGGER trg_calcular_total_cuota_cuotas
-BEFORE INSERT OR UPDATE ON SA_JS_JO_NR_CUOTAS
-FOR EACH ROW
-DECLARE
-    v_monto_cuota NUMBER;
-    v_tipo_cuota VARCHAR2(50);
-BEGIN
-    -- Obtener el MONTO_CUOTA y el TIPO_CUOTA asociados al COD_TIPO_CUOTA de la cuota
-    SELECT T.MONTO_CUOTA, T.TIPO_CUOTA
-    INTO v_monto_cuota, v_tipo_cuota
-    FROM SA_JS_JO_NR_TIPO_CUOTAS T
-    WHERE T.COD_TIPO_CUOTA = :NEW.COD_TIPO_CUOTA;
-
-    -- Calcular y actualizar el TOTAL_CUOTA
-    UPDATE SA_JS_JO_NR_CUOTAS
-    SET TOTAL_CUOTA = v_monto_cuota * 
-                      CASE 
-                          WHEN v_tipo_cuota = 'Ordinaria' THEN 1
-                          WHEN v_tipo_cuota = 'Extra Ordinaria' THEN 1.5
-                          ELSE 1 -- Por defecto, si el tipo no coincide
-                      END
-    WHERE COD_CUOTA = :NEW.COD_CUOTA;
-
-EXCEPTION
-    WHEN NO_DATA_FOUND THEN
-        RAISE_APPLICATION_ERROR(-20014, 'Error: No se encontró el tipo de cuota asociado.');
-    WHEN OTHERS THEN
-        RAISE_APPLICATION_ERROR(-20015, 'Error al calcular el total de la cuota después de modificar cuotas.');
-END;
-/
-
 
 -- procedimiento de pago
 CREATE OR REPLACE PROCEDURE PAGAR(
@@ -2543,24 +2523,78 @@ END;
 
 
 --REPORTES
---1. Reporte de Usuarios y Cuotas Pendientes
---Este reporte muestra a los usuarios que tienen cuotas pendientes, mostrando la cuota y fecha de vencimiento y interes acumulado.
-CREATE OR REPLACE VIEW SA_JS_JO_NR_CUOTAS_PENDIENTES AS
-SELECT U.rut_usuario AS ID_USUARIO, U.nombre_usuario AS NOMBRE, C.cod_cuota AS COD_CUOTA, C.total_cuota AS MONTO_CUOTA, C.fecha_vencimiento_cuota AS FECHA_VENCIMIENTO, ROUND((C.total_cuota * 0.02 * (SYSDATE - C.fecha_vencimiento_cuota)), 2) AS INTERES_ACUMULADO
-FROM SA_JS_JO_NR_Usuarios U
-JOIN SA_JS_JO_NR_Cuotas C ON U.cod_cuota = C.cod_cuota
-WHERE C.fecha_vencimiento_cuota < SYSDATE;
+--1. Total de deuda por canal
+CREATE OR REPLACE PROCEDURE INFORME_DEUDA_CANAL (
+    P_RESULTADO OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN P_RESULTADO FOR
+    SELECT
+        C.NOMBRE_CANAL,
+        SUM(U.DEUDA) AS TOTAL_DEUDA
+    FROM
+        SA_JS_JO_NR_USUARIOS U
+        INNER JOIN SA_JS_JO_NR_PREDIOS P ON U.RUT_USUARIO = P.RUT_USUARIO
+        INNER JOIN SA_JS_JO_NR_DETALLE_PREDIO_CANALES DPC ON P.COD_PREDIO = DPC.COD_PREDIO
+        INNER JOIN SA_JS_JO_NR_CANALES C ON DPC.COD_CANAL = C.COD_CANAL
+    GROUP BY
+        C.NOMBRE_CANAL;
+END;
+/
 
---2. Reporte de Proyectos por Estado
---Este reporte muestra el estado de cada proyecto en la base de datos, organizado por estado.
-CREATE OR REPLACE VIEW SA_JS_JO_NR_PROYECTOS_ESTADO AS
-SELECT P.estado_proyecto AS ESTADO, P.cod_proyecto AS ID_PROYECTO, P.nombre_proyecto AS NOMBRE_PROYECTO, P.fecha_inicio_proyecto AS FECHA_INICIO, P.fecha_fin_proyecto AS FECHA_ESTIMADA_FIN
-FROM SA_JS_JO_NR_Proyectos P
-ORDER BY P.estado_proyecto;
+--2. Proyectos activos y terminados
+CREATE OR REPLACE PROCEDURE INFORME_PROYECTOS (
+    P_ACTIVOS OUT SYS_REFCURSOR,
+    P_TERMINADOS OUT SYS_REFCURSOR
+) AS
+BEGIN
+    -- Proyectos activos
+    OPEN P_ACTIVOS FOR
+    SELECT
+        COD_PROYECTO,
+        NOMBRE_PROYECTO,
+        DESCRIPCION_PROYECTO,
+        FECHA_INICIO_PROYECTO,
+        FECHA_FIN_PROYECTO,
+        ESTADO_PROYECTO
+    FROM
+        SA_JS_JO_NR_PROYECTOS
+    WHERE
+        UPPER(ESTADO_PROYECTO) = 'ACTIVO';
 
---3. Reporte de Historial de Pagos
---Este reporte muestra todos los pagos realizados para un periodo específico. Se puede adaptar para usar un parámetro de fechas para limitar el periodo.
-CREATE OR REPLACE VIEW SA_JS_JO_NR_HISTORIAL_PAGOS_REP AS
-SELECT H.cod_historial_pago AS ID_PAGO, U.nombre_usuario AS USUARIO, H.detalle_pago AS MONTO, H.fecha_pago AS FECHA_PAGO
-FROM SA_JS_JO_NR_Historial_Pagos H
-JOIN SA_JS_JO_NR_Usuarios U ON H.cod_predio = U.cod_cuota;
+    -- Proyectos terminados
+    OPEN P_TERMINADOS FOR
+    SELECT
+        COD_PROYECTO,
+        NOMBRE_PROYECTO,
+        DESCRIPCION_PROYECTO,
+        FECHA_INICIO_PROYECTO,
+        FECHA_FIN_PROYECTO,
+        ESTADO_PROYECTO
+    FROM
+        SA_JS_JO_NR_PROYECTOS
+    WHERE
+        UPPER(ESTADO_PROYECTO) = 'TERMINADO';
+END;
+/
+
+--3. Informe de ingresos desde X fecha hasta Y fecha
+CREATE OR REPLACE PROCEDURE INFORME_INGRESOS_FECHA (
+    P_FECHA_INICIO IN DATE,
+    P_FECHA_FIN IN DATE,
+    P_RESULTADO OUT SYS_REFCURSOR
+) AS
+BEGIN
+    OPEN P_RESULTADO FOR
+    SELECT
+        FECHA_PAGO,
+        NOMBRE_PAGADOR,
+        DETALLE_PAGO,
+        PAGO,
+        COD_PREDIO
+    FROM
+        SA_JS_JO_NR_HISTORIAL_PAGOS
+    WHERE
+        FECHA_PAGO BETWEEN P_FECHA_INICIO AND P_FECHA_FIN;
+END;
+/

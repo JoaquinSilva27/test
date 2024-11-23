@@ -129,3 +129,29 @@
     max-height: 400px;
 }
 
+
+.input-box input[type="date"]:invalid {
+    color: #fffffe; /* Cambia el color del texto si el campo no es válido */
+    opacity: 0;
+}
+
+.input-box input[type="date"] {
+    position: relative;
+    z-index: 1;
+    font-size: 1rem;
+    color: #001e1d; /* Color del texto del input */
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.input-box input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer; /* Asegura que el cursor indique interacción */
+    background: transparent; /* Haz que el fondo del icono sea transparente */
+}

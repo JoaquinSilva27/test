@@ -2,68 +2,70 @@ const { Router } = require('express');
 const router = Router();
 const BD = require('../config/configbd');
 
-// READ: Obtener registros de una tabla específica
-router.get('/:table', async (req, res) => {
-    const { table } = req.params;
-    const sql = `SELECT * FROM ${table}`;
+// Informe de ingresos desde X fecha hasta Y fecha
+router.get('/ingresos', async (req, res) => {
+    const { fechaInicio, fechaFin } = req.query;
+
+    // Validar que las fechas sean proporcionadas
+    if (!fechaInicio || !fechaFin) {
+        return res.status(400).json({ error: 'Debe proporcionar las fechas de inicio y fin.' });
+    }
+
     try {
-        const result = await BD.Open(sql, [], false);
-        const rows = result.rows.map(row => {
-            return row.reduce((acc, value, index) => {
-                acc[result.metaData[index].name.toLowerCase()] = value;
-                return acc;
-            }, {});
-        });
-        res.json(rows);
+        const binds = {
+            P_FECHA_INICIO: new Date(fechaInicio),
+            P_FECHA_FIN: new Date(fechaFin),
+        };
+
+        console.log(`Llamando al procedimiento INFORME_INGRESOS_FECHA con parámetros:`, binds);
+
+        // Llama al procedimiento almacenado
+        const result = await BD.OpenCursorProcedure('INFORME_INGRESOS_FECHA', binds);
+
+        res.status(200).json(result); // Devuelve los resultados al cliente
     } catch (error) {
-        res.status(500).json({ error: "Error al obtener los registros" });
+        console.error('Error al obtener informe de ingresos:', error);
+        res.status(500).json({ error: 'Error al obtener informe de ingresos.' });
     }
 });
 
-// CREATE: Agregar un nuevo registro
-router.post('/:table', async (req, res) => {
-    const { table } = req.params;
-    const data = req.body;
-
-    const columns = Object.keys(data).join(", ");
-    const placeholders = Object.keys(data).map(col => `:${col}`).join(", ");
-    const sql = `INSERT INTO ${table} (${columns}) VALUES (${placeholders})`;
-
+// Informe de proyectos activos y terminados
+router.get('/proyectos', async (req, res) => {
     try {
-        await BD.Open(sql, Object.values(data), true);
-        res.status(201).json({ message: "Registro agregado exitosamente" });
+        console.log('Llamando al procedimiento INFORME_PROYECTOS');
+
+        // Ejecutar el procedimiento almacenado con dos cursores de salida
+        const activos = await BD.OpenCursorProcedure('INFORME_PROYECTOS', {}, 'P_ACTIVOS');
+        const terminados = await BD.OpenCursorProcedure('INFORME_PROYECTOS', {}, 'P_TERMINADOS');
+
+        res.status(200).json({ activos, terminados }); // Devuelve ambos conjuntos de resultados
     } catch (error) {
-        res.status(500).json({ error: "Error al agregar el registro" });
+        console.error('Error al obtener el informe de proyectos:', error);
+        res.status(500).json({ error: 'Error al obtener el informe de proyectos.' });
     }
 });
 
-// UPDATE: Actualizar un registro existente
-router.put('/:table', async (req, res) => {
-    const { table } = req.params;
-    const { id, ...data } = req.body;
-
-    const updates = Object.keys(data).map(col => `${col} = :${col}`).join(", ");
-    const sql = `UPDATE ${table} SET ${updates} WHERE id = :id`;
-
+// Informe de deuda total por canal
+router.get('/deuda-canal', async (req, res) => {
+    console.log(">> Endpoint /deuda-canal invocado"); // Verificar si el endpoint es alcanzado
     try {
-        await BD.Open(sql, [...Object.values(data), id], true);
-        res.json({ message: "Registro actualizado exitosamente" });
+        console.log("Llamando al procedimiento INFORME_DEUDA_CANAL...");
+
+        // Llama al procedimiento y obtiene los datos
+        const result = await BD.OpenSimpleCursorProcedure('INFORME_DEUDA_CANAL', {});
+
+        console.log("Resultado del procedimiento:", result);
+
+        if (!result || result.length === 0) {
+            console.log(">> No se encontraron resultados.");
+            return res.status(404).json({ error: "No se encontraron datos de deuda por canal." });
+        }
+
+        console.log(">> Enviando respuesta exitosa.");
+        res.status(200).json(result);
     } catch (error) {
-        res.status(500).json({ error: "Error al actualizar el registro" });
+        console.error(">> Error en el endpoint /deuda-canal:", error);
+        res.status(500).json({ error: "Error al obtener el informe de deuda por canal." });
     }
 });
-
-// DELETE: Eliminar un registro por su clave primaria
-router.delete('/:table/:id', async (req, res) => {
-    const { table, id } = req.params;
-    const sql = `DELETE FROM ${table} WHERE id = :id`;
-
-    try {
-        await BD.Open(sql, [id], true);
-        res.json({ message: "Registro eliminado exitosamente" });
-    } catch (error) {
-        res.status(500).json({ error: "Error al eliminar el registro" });
-    }
-});
-
 module.exports = router;
