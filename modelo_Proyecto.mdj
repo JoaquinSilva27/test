@@ -24177,22 +24177,6 @@
 										},
 										{
 											"_type": "ERDColumnView",
-											"_id": "AAAAAAGTLSjGrB8e1y4=",
-											"_parent": {
-												"$ref": "AAAAAAGTLSBdRh0OuZQ="
-											},
-											"model": {
-												"$ref": "AAAAAAGTLSjGnB8bjhQ="
-											},
-											"font": "Arial;13;0",
-											"parentStyle": true,
-											"left": 357,
-											"top": 387,
-											"width": 235.30615234375,
-											"height": 13
-										},
-										{
-											"_type": "ERDColumnView",
 											"_id": "AAAAAAGTLSBdRh0GQr0=",
 											"_parent": {
 												"$ref": "AAAAAAGTLSBdRh0OuZQ="
@@ -24203,7 +24187,7 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 357,
-											"top": 402,
+											"top": 387,
 											"width": 235.30615234375,
 											"height": 13
 										},
@@ -24219,7 +24203,7 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 357,
-											"top": 417,
+											"top": 402,
 											"width": 235.30615234375,
 											"height": 13
 										},
@@ -24231,6 +24215,22 @@
 											},
 											"model": {
 												"$ref": "AAAAAAGTLSBdSR4RvZA="
+											},
+											"font": "Arial;13;0",
+											"parentStyle": true,
+											"left": 357,
+											"top": 417,
+											"width": 235.30615234375,
+											"height": 13
+										},
+										{
+											"_type": "ERDColumnView",
+											"_id": "AAAAAAGTLSjGrB8e1y4=",
+											"_parent": {
+												"$ref": "AAAAAAGTLSBdRh0OuZQ="
+											},
+											"model": {
+												"$ref": "AAAAAAGTLSjGnB8bjhQ="
 											},
 											"font": "Arial;13;0",
 											"parentStyle": true,
@@ -29068,16 +29068,6 @@
 						},
 						{
 							"_type": "ERDColumn",
-							"_id": "AAAAAAGTLSjGnB8bjhQ=",
-							"_parent": {
-								"$ref": "AAAAAAGTLSBdSR4XZ8U="
-							},
-							"name": "rol",
-							"type": "varchar2",
-							"length": "10"
-						},
-						{
-							"_type": "ERDColumn",
 							"_id": "AAAAAAGTLSBdSR4PetA=",
 							"_parent": {
 								"$ref": "AAAAAAGTLSBdSR4XZ8U="
@@ -29105,6 +29095,16 @@
 							"name": "apellido2_usuario",
 							"type": "varchar2",
 							"length": "100"
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AAAAAAGTLSjGnB8bjhQ=",
+							"_parent": {
+								"$ref": "AAAAAAGTLSBdSR4XZ8U="
+							},
+							"name": "rol",
+							"type": "varchar2",
+							"length": "10"
 						},
 						{
 							"_type": "ERDColumn",
