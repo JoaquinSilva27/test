@@ -2361,22 +2361,89 @@ BEGIN
     );
 END;
 
-CREATE OR REPLACE TRIGGER trg_canales_predios-- AUN NO FUNCIONA, sigue sin funcionar
-AFTER INSERT OR UPDATE ON SA_JS_JO_NR_DETALLE_PREDIO_CANALES
-FOR EACH ROW
-DECLARE
-    V_ROL_PREDIO NUMBER;
-    V_HECTAREAS NUMBER;
-    V_ACCIONES_PREDIO NUMBER;
-    V_RUT_USUARIO NUMBER;
+-- DETALLE_PREDIO_CANALES
+CREATE OR REPLACE PROCEDURE AGREGAR_DETALLE_PREDIO_CANALES( -- si funciona pdeuso agregar
+    p_cod_predio number,
+    p_cod_canal number
+)
+IS
+    v_hectarea number;
+    v_accione number;
 BEGIN
-    SELECT ROL_PREDIO, HECTAREAS_PREDIO, ACCIONES_PREDIO, RUT_USUARIO
-    INTO V_ROL_PREDIO, V_HECTAREAS, V_ACCIONES_PREDIO, V_RUT_USUARIO
-    FROM SA_JS_JO_NR_PREDIOS
-    WHERE COD_PREDIO = :NEW.COD_PREDIO;
+    select hectareas_predio into v_hectarea 
+    from SA_JS_JO_NR_predios
+    where cod_predio = p_cod_predio;
+    
+    INSERT INTO SA_JS_JO_NR_DETALLE_PREDIO_CANALES(COD_PREDIO,COD_CANAL)
+    VALUES(p_cod_predio, p_cod_canal);
+    
+    update SA_JS_JO_NR_predios 
+    set hectareas_predio = v_hectarea
+    where cod_predio = p_cod_predio;
+    
+    select acciones_predio into v_accione 
+    from SA_JS_JO_NR_predios
+    where cod_predio = p_cod_predio;
+    
+    update SA_JS_JO_NR_predios 
+    set acciones_predio = v_accione
+    where cod_predio = p_cod_predio;
+END;
+/
+--
 
-  -- Actualizar la tabla SA_JS_JO_NR_PREDIOS con los mismos datos de la fila anterior
-    ACTUALIZAR_PREDIOS(:NEW.COD_PREDIO,V_ROL_PREDIO, V_HECTAREAS, V_ACCIONES_PREDIO, V_RUT_USUARIO);
+CREATE OR REPLACE PROCEDURE VINCULAR_PREDIO_CANALES( -- PROCEDIMIENTO va en seccion de gestores de la pagina
+    P_OPCION NUMBER,
+    p_cod_predio number,
+    p_cod_canal number
+)
+IS
+    v_hectarea number;
+    v_accione number;
+BEGIN
+
+    IF P_OPCION = 1 THEN
+        select hectareas_predio into v_hectarea 
+        from SA_JS_JO_NR_predios
+        where cod_predio = p_cod_predio;
+        
+        INSERT INTO SA_JS_JO_NR_DETALLE_PREDIO_CANALES(COD_PREDIO,COD_CANAL)
+        VALUES(p_cod_predio, p_cod_canal);
+        
+        update SA_JS_JO_NR_predios 
+        set hectareas_predio = v_hectarea
+        where cod_predio = p_cod_predio;
+        
+        select acciones_predio into v_accione 
+        from SA_JS_JO_NR_predios
+        where cod_predio = p_cod_predio;
+        
+        update SA_JS_JO_NR_predios 
+        set acciones_predio = v_accione
+        where cod_predio = p_cod_predio;
+
+    ELSIF P_OPCION = 2 THEN
+        select hectareas_predio into v_hectarea 
+        from SA_JS_JO_NR_predios
+        where cod_predio = p_cod_predio;
+
+        DELETE FROM SA_JS_JO_NR_DETALLE_PREDIO_CANALES
+        WHERE (COD_CANAL = P_COD_CANAL) AND (COD_PREDIO = P_COD_PREDIO);
+
+        update SA_JS_JO_NR_predios 
+        set hectareas_predio = v_hectarea
+        where cod_predio = p_cod_predio;
+        
+        select acciones_predio into v_accione 
+        from SA_JS_JO_NR_predios
+        where cod_predio = p_cod_predio;
+        
+        update SA_JS_JO_NR_predios 
+        set acciones_predio = v_accione
+        where cod_predio = p_cod_predio;
+    ELSE 
+        RAISE_APPLICATION_ERROR(-20001, 'PARAMETROS NO VALIDO UTILIZADOS');
+    END IF;
 END;
 /
 
