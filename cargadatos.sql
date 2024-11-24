@@ -54,8 +54,8 @@ begin
 	AGREGAR_CUOTAS(1,0,'01-01-2025',1);
     AGREGAR_CUOTAS(2,0,'01-01-2025',2);
     --
-    AGREGAR_USUARIOS(1,'nicolas','USUARIO','MONTAMINOS','URETRA',1,'LORONSONLAND@GMAIL.COM',1111,1,0);
-    AGREGAR_USUARIOS(2,'nicolas','USUARIO','robles','alargado',1,'sadpapu@GMAIL.COM',666,2,0);
+    AGREGAR_USUARIOS(1,'nicolas','user','MONTAMINOS','URETRA',1,'LORONSONLAND@GMAIL.COM',1111,1,0);
+    AGREGAR_USUARIOS(2,'nicolas','admin','robles','alargado',1,'sadpapu@GMAIL.COM',666,2,0);
     AGREGAR_PREDIOS(5,50,0,1);
     AGREGAR_PREDIOS(6,125,0,2);
     --
