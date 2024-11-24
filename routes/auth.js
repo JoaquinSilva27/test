@@ -24,6 +24,10 @@ router.post("/login", async (req, res) => {
   // Verificar en los datos locales
   const localUser = authenticateUser(rut, password);
   if (localUser) {
+    // Guardar en la sesión
+    req.session.user = { rut: localUser.rut, rol: localUser.rol };
+    console.log("Sesión iniciada:", req.session.user);  // Verifica que la sesión está activa
+
     return res.status(200).json({
       success: true,
       message: "Inicio de sesión exitoso.",
@@ -33,7 +37,6 @@ router.post("/login", async (req, res) => {
       }
     });
   }
-
   try {
     // Consulta a la base de datos
     const query = `
@@ -51,8 +54,9 @@ router.post("/login", async (req, res) => {
 
     // Obtener los datos del usuario
     const user = result.rows[0];
-    const rol = user["ROL_CUENTA"]?.trim().toLowerCase(); // Normalizar rol
-    const storedPassword = user["CONTRASEÑA_CUENTA"]?.trim(); // Limpiar espacios en la contraseña
+    const rol = user["ROL_CUENTA"]?.trim().toLowerCase();
+    const storedPassword = user["CONTRASEÑA_CUENTA"]?.trim();
+
 
     console.log("Rol recuperado:", rol);
     console.log("Contraseña recuperada:", storedPassword);
@@ -64,20 +68,74 @@ router.post("/login", async (req, res) => {
 
     // Validar el rol
     if (rol === "admin" || rol === "user") {
+      // Guardar en la sesión
+      req.session.user = { rut, rol };
+  
       return res.status(200).json({
-        success: true,
-        message: "Inicio de sesión exitoso.",
-        data: { rut, rol }
+          success: true,
+          message: "Inicio de sesión exitoso.",
+          data: { rut, rol }
       });
-    } else {
+  } else {
       return res.status(400).json({ success: false, message: `Rol desconocido: ${rol}` });
-    }
+  }
 
   } catch (error) {
     console.error("Error en inicio de sesión:", error);
     return res.status(500).json({ success: false, message: "Error interno del servidor." });
   }
 });
+
+router.get("/profile/:rut", async (req, res) => {
+  const { rut } = req.params;
+  if (!rut) {
+    return res.status(400).json({ success: false, message: "RUT es obligatorio." });
+  }
+  try {
+    // Consulta SQL para obtener los datos del perfil del usuario
+    const query = `
+      SELECT 
+        U.NOMBRE_USUARIO || ' ' || U.APELLIDO1_USUARIO || ' ' || U.APELLIDO2_USUARIO AS NOMBRE_COMPLETO,
+        COALESCE(C.NOMBRE_CANAL, 'No asociado') AS NOMBRE_CANAL,
+        COALESCE(D.NOMBRE_DIRECTIVA, 'No asociado') AS NOMBRE_DIRECTIVA,
+        CM.NOMBRE_COMUNA,
+        R.NOMBRE_REGION,
+        U.ROL AS ROL,
+        U.CORREO_USUARIO AS CORREO,
+        TO_CHAR(U.TELEFONO_USUARIO) AS TELEFONO
+      FROM 
+        SA_JS_JO_NR_USUARIOS U
+        LEFT JOIN SA_JS_JO_NR_CANALES C ON U.COD_REGION = C.COD_CANAL
+        LEFT JOIN SA_JS_JO_NR_DIRECTIVAS D ON C.COD_CANAL = D.COD_CANAL
+        LEFT JOIN SA_JS_JO_NR_COMUNAS CM ON U.COD_REGION = CM.COD_REGION
+        LEFT JOIN SA_JS_JO_NR_REGIONES R ON CM.COD_REGION = R.COD_REGION
+      WHERE U.RUT_USUARIO = :rut
+    `;
+    const result = await Open(query, { rut });
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: "Usuario no encontrado." });
+    }
+    // Mapeamos los resultados a un objeto
+    const profile = result.rows.map(row => ({
+      nombreCompleto: row["NOMBRE_COMPLETO"],
+      canal: row["NOMBRE_CANAL"],
+      directiva: row["NOMBRE_DIRECTIVA"],
+      comuna: row["NOMBRE_COMUNA"],
+      region: row["NOMBRE_REGION"],
+      rol: row["ROL"],                    // Añadir el rol
+      correo: row["CORREO"],      // Añadir el correo
+      telefono: row["TELEFONO"],  // Añadir el teléfono
+    }))[0]; // Solo obtenemos el primer resultado
+    
+
+    console.log("Perfil del usuario:", profile);
+    res.status(200).json({ success: true, profile });
+  } catch (error) {
+    console.error("Error al obtener el perfil:", error);
+    return res.status(500).json({ success: false, message: "Error interno del servidor." });
+  }
+});
+
 
 // Ruta de logout
 router.post("/logout", (req, res) => {
@@ -106,5 +164,14 @@ router.get("/check-session", (req, res) => {
     res.json({ success: false, message: "La sesión ha expirado." });
   }
 });
+
+router.get("/session", (req, res) => {
+  if (req.session?.user) {
+      res.json({ success: true, user: req.session.user });
+  } else {
+      res.json({ success: false, message: "Sesión no activa" });
+  }
+});
+
 
 module.exports = router;

@@ -297,3 +297,14 @@ label {
     min-height: 600px;
 
 }
+
+#mensaje-error {
+    display: none; /* Oculto por defecto */
+    color: rgb(75, 212, 236); /* Azul claro */
+    background-color: rgba(75, 212, 236, 0.1); /* Fondo claro */
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1em;
+}
