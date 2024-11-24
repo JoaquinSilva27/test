@@ -15,6 +15,19 @@ router.post(`${PREFIX}/:table`, async (req, res) => {
     const procedure = `AGREGAR_${table.toUpperCase()}`;
     const binds = { ...data };
 
+    // Función para convertir formato de fecha
+    const convertirFormatoFecha = (fechaISO) => {
+        const [year, month, day] = fechaISO.split('-');
+        return `${day}-${month}-${year}`;
+    };
+
+    // Iterar sobre los datos para convertir fechas
+    Object.keys(binds).forEach(key => {
+        if (key.toLowerCase().includes('fecha') && /^\d{4}-\d{2}-\d{2}$/.test(binds[key])) {
+            binds[key] = convertirFormatoFecha(binds[key]);
+        }
+    });
+
     console.log(`Llamando al procedimiento ${procedure} con parámetros:`, binds);
 
     try {

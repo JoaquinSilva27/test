@@ -2,7 +2,7 @@
 #eliminar-section {
     display: none; /* Oculta por defecto */
     padding: 20px;
-    background-color: #ffffff; /* Fondo blanco */
+    background: linear-gradient(135deg, #abd1c6, #edf7f6);;
     border-radius: 10px; /* Bordes redondeados */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave */
     margin: 20px auto;
@@ -44,8 +44,8 @@
   .eliminar-busqueda button {
     margin-top: 10px;
     padding: 10px 20px;
-    background-color: #e63946; /* Rojo para destacar peligro */
-    color: #ffffff;
+    background-color: #e16162; /* Rojo para destacar peligro */
+    color: #040404;
     border: none;
     border-radius: 5px;
     font-size: 1em;

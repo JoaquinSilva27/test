@@ -2,7 +2,7 @@
 #modificar-section {
     display: none; /* Se oculta por defecto */
     padding: 20px;
-    background-color: #ffffff;
+    background: linear-gradient(135deg, #abd1c6, #edf7f6);;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     margin: 20px auto;
@@ -60,7 +60,7 @@
   .resultado-modificar {
     margin-top: 20px;
     padding: 20px;
-    background-color: #f9f9f9;
+    background: linear-gradient(135deg, #abd1c6, #edf7f6);;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }

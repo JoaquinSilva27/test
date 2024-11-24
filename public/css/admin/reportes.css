@@ -2,7 +2,7 @@
 /* Contenedor principal de la sección de reportes */
 #reportes-section {
     padding: 20px;
-    background-color: #e8e4e6;
+    background: linear-gradient(135deg, #abd1c6, #edf7f6);;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     margin: 20px auto;
@@ -16,8 +16,9 @@
   #reportes-section h2 {
     font-size: 1.8em;
     font-weight: bold;
-    color: #001e1d;
+    color: #004643;
     margin-bottom: 20px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
   /* Selector del tipo de reporte */
@@ -316,7 +317,7 @@
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  background-color: #edf7f6;
+  background: linear-gradient(135deg, #abd1c6, #edf7f6);;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   width: auto;
@@ -333,4 +334,206 @@
   text-align: center;
   flex: 1; /* Asegura que ocupe espacio para mantener centrado */
   margin-top: 10px;
+}
+
+
+/* Estilo general para la tabla */
+.tabla-reporte-proyectos {
+  width: 100%; /* Asegura que la tabla ocupe todo el ancho disponible */
+  border-collapse: collapse; /* Quita el espacio entre bordes de celdas */
+  margin: 20px 0; /* Espaciado superior e inferior */
+  font-size: 16px; /* Tamaño de texto estándar */
+  font-family: 'Poppins', sans-serif; /* Fuente consistente */
+  text-align: left; /* Alineación del texto */
+  background-color: #f9f9f9; /* Fondo claro para las celdas */
+  border: 1px solid #ddd; /* Bordes suaves */
+}
+
+/* Estilo para el encabezado de la tabla */
+.tabla-reporte-proyectos thead {
+  background-color: #004643; /* Color oscuro para el encabezado */
+  color: #fff; /* Texto blanco para contraste */
+  font-weight: bold; /* Texto en negrita */
+}
+
+.tabla-reporte-proyectos thead th {
+  padding: 12px 15px; /* Espaciado interno para las celdas del encabezado */
+  text-transform: uppercase; /* Encabezados en mayúsculas */
+}
+
+/* Estilo para las filas del cuerpo */
+.tabla-reporte-proyectos tbody tr {
+  border-bottom: 1px solid #ddd; /* Línea divisoria entre filas */
+}
+
+/* Estilo para las celdas */
+.tabla-reporte-proyectos tbody td {
+  padding: 10px 15px; /* Espaciado interno para las celdas */
+  color: #333; /* Color del texto */
+}
+
+/* Estilo para las filas alternadas */
+.tabla-reporte-proyectos tbody tr:nth-child(even) {
+  background-color: #f2f2f2; /* Fondo diferente para filas pares */
+}
+
+/* Estilo para el pie de tabla */
+.tabla-reporte-proyectos tfoot td {
+  font-weight: bold; /* Texto en negrita */
+  padding: 10px 15px; /* Espaciado interno */
+  background-color: #f9bc60; /* Fondo amarillo */
+  color: #001e1d; /* Texto oscuro para contraste */
+}
+
+/* Adaptación para dispositivos pequeños */
+@media screen and (max-width: 768px) {
+  .tabla-reporte-proyectos {
+      font-size: 14px; /* Reduce el tamaño del texto en pantallas pequeñas */
+  }
+
+  .tabla-reporte-proyectos thead th {
+      padding: 10px; /* Ajusta el espaciado del encabezado */
+  }
+
+  .tabla-reporte-proyectos tbody td {
+      padding: 8px; /* Ajusta el espaciado de las celdas */
+  }
+
+  .tabla-reporte-proyectos tfoot td {
+      padding: 8px; /* Ajusta el espaciado del pie de tabla */
+  }
+}
+
+
+.reporte-ingresos {
+  padding: 30px;
+  background: linear-gradient(135deg, #abd1c6, #edf7f6); /* Gradiente más sutil */
+  border-radius: 20px; /* Bordes aún más redondeados */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra para resaltar */
+  max-width: 850px;
+  margin: 50px auto;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Estilo del título solo para ingresos */
+.reporte-ingresos #reporte-titulo {
+  font-size: 28px;
+  color: #004643; /* Tono oscuro del verde */
+  text-align: center;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para destacar el título */
+}
+
+
+
+.reporte-ingresos::after {
+  content: '';
+  position: absolute;
+  bottom: -80px;
+  right: -80px;
+  width: 250px;
+  height: 250px;
+  background: rgba(0, 70, 67, 0.2); /* Otro círculo decorativo */
+  border-radius: 50%;
+  z-index: 0; /* Asegurar que esté detrás */
+}
+
+/* Ajustes para el contenido de la tabla en ingresos */
+.reporte-ingresos .reporte-detalle-contenido {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  z-index: 1; /* Para que esté encima de los decorativos */
+  position: relative;
+}
+
+.reporte-ingresos .tabla-reporte-ingresos {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 16px;
+  text-align: left;
+  background-color: #ffffff; /* Fondo blanco para contraste */
+  border-radius: 12px; /* Bordes redondeados */
+  overflow: hidden; /* Para manejar bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  position: relative;
+  z-index: 1; /* Asegura que esté encima del fondo decorativo */
+}
+
+/* Encabezado de la tabla */
+.reporte-ingresos .tabla-reporte-ingresos thead {
+  background-color: #004643; /* Verde oscuro */
+  color: #ffffff; /* Texto blanco */
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center; /* Centrar texto */
+}
+
+/* Celdas del encabezado */
+.reporte-ingresos .tabla-reporte-ingresos thead th {
+  padding: 15px 20px;
+}
+
+/* Cuerpo de la tabla */
+.reporte-ingresos .tabla-reporte-ingresos tbody tr {
+  border-bottom: 1px solid #abd1c6; /* Línea divisoria entre filas */
+  transition: background-color 0.3s ease;
+}
+
+/* Alternancia de filas */
+.reporte-ingresos .tabla-reporte-ingresos tbody tr:nth-child(even) {
+  background-color: #edf7f6; /* Fondo alternado */
+}
+
+.reporte-ingresos .tabla-reporte-ingresos tbody tr:nth-child(odd) {
+  background-color: #ffffff; /* Fondo alternado */
+}
+
+/* Celdas del cuerpo */
+.reporte-ingresos .tabla-reporte-ingresos tbody td {
+  padding: 12px 20px;
+  text-align: center;
+  font-size: 16px;
+  color: #001e1d; /* Texto oscuro */
+}
+
+/* Resaltar filas al pasar el cursor */
+.reporte-ingresos .tabla-reporte-ingresos tbody tr:hover {
+  background-color: #f9bc60; /* Fondo amarillo claro */
+  color: #001e1d; /* Texto oscuro */
+}
+
+/* Pie de la tabla */
+.reporte-ingresos .tabla-reporte-ingresos tfoot {
+  background-color: #004643; /* Verde oscuro */
+  color: #ffffff; /* Texto blanco */
+  font-weight: bold;
+  text-align: right; /* Alinear texto a la derecha */
+}
+
+.reporte-ingresos .tabla-reporte-ingresos tfoot td {
+  padding: 15px 20px;
+  font-size: 16px;
+}
+
+.tabla-con-scroll {
+  max-height: 400px; /* Altura máxima del contenedor */
+  overflow-y: auto; /* Activa el scroll vertical */
+  overflow-x: hidden; /* Evita el scroll horizontal */
+}
+
+/* Personalización del scroll */
+.tabla-con-scroll::-webkit-scrollbar {
+  width: 8px; /* Ancho del scroll */
+}
+
+.tabla-con-scroll::-webkit-scrollbar-thumb {
+  background-color: #abd1c6; /* Color del scroll */
+  border-radius: 4px; /* Bordes redondeados */
+}
+
+.tabla-con-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #004643; /* Color del scroll al pasar el cursor */
 }

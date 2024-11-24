@@ -1,49 +1,43 @@
 const { Router } = require('express');
 const router = Router();
 const BD = require('../config/configbd');
+const oracledb = require('oracledb');
 
 // Informe de ingresos desde X fecha hasta Y fecha
 router.get('/ingresos', async (req, res) => {
     const { fechaInicio, fechaFin } = req.query;
 
+
+    console.log(`Fechas recibidas en el servidor: inicio=${fechaInicio}, fin=${fechaFin}`);
     // Validar que las fechas sean proporcionadas
     if (!fechaInicio || !fechaFin) {
         return res.status(400).json({ error: 'Debe proporcionar las fechas de inicio y fin.' });
     }
 
+    console.log(`Fechas convertidas: inicio=${convertirFechaDDMMYY(fechaInicio)}, fin=${convertirFechaDDMMYY(fechaFin)}`);
     try {
+        // Formato de fechas para Oracle: DD-MM-YY
         const binds = {
-            P_FECHA_INICIO: new Date(fechaInicio),
-            P_FECHA_FIN: new Date(fechaFin),
+            P_FECHA_INICIO: convertirFechaDDMMYY(fechaInicio),
+            P_FECHA_FIN: convertirFechaDDMMYY(fechaFin),
+            P_CURSOR: { type: oracledb.CURSOR, dir: oracledb.BIND_OUT }, // Bind para el cursor
         };
 
-        console.log(`Llamando al procedimiento INFORME_INGRESOS_FECHA con parámetros:`, binds);
+        const sql = `BEGIN INFORME_INGRESOS_FECHA(:P_FECHA_INICIO, :P_FECHA_FIN, :P_CURSOR); END;`;
 
-        // Llama al procedimiento almacenado
-        const result = await BD.OpenCursorProcedure('INFORME_INGRESOS_FECHA', binds);
+        console.log("Llamando al procedimiento INFORME_INGRESOS_FECHA con binds:", binds);
 
-        res.status(200).json(result); // Devuelve los resultados al cliente
+        // Llamar a la función Open
+        const rows = await BD.Open(sql, binds);
+
+        // Enviar los resultados al cliente
+        res.status(200).json(rows);
     } catch (error) {
-        console.error('Error al obtener informe de ingresos:', error);
+        console.error("Error al obtener informe de ingresos:", error);
         res.status(500).json({ error: 'Error al obtener informe de ingresos.' });
     }
 });
 
-// Informe de proyectos activos y terminados
-router.get('/proyectos', async (req, res) => {
-    try {
-        console.log('Llamando al procedimiento INFORME_PROYECTOS');
-
-        // Ejecutar el procedimiento almacenado con dos cursores de salida
-        const activos = await BD.OpenCursorProcedure('INFORME_PROYECTOS', {}, 'P_ACTIVOS');
-        const terminados = await BD.OpenCursorProcedure('INFORME_PROYECTOS', {}, 'P_TERMINADOS');
-
-        res.status(200).json({ activos, terminados }); // Devuelve ambos conjuntos de resultados
-    } catch (error) {
-        console.error('Error al obtener el informe de proyectos:', error);
-        res.status(500).json({ error: 'Error al obtener el informe de proyectos.' });
-    }
-});
 
 // Informe de deuda total por canal
 router.get('/deuda-canal', async (req, res) => {
@@ -68,4 +62,44 @@ router.get('/deuda-canal', async (req, res) => {
         res.status(500).json({ error: "Error al obtener el informe de deuda por canal." });
     }
 });
+
+
+// Informe de proyectos activos y terminados
+router.get('/proyectos', async (req, res) => {
+    const { estado } = req.query;
+
+    try {
+        console.log('Llamando al procedimiento almacenado INFORME_PROYECTOS...');
+
+        const { activos, terminados } = await BD.OpenDoubleCursorProcedure(
+            'INFORME_PROYECTOS',
+            {},
+            'P_ACTIVOS',
+            'P_TERMINADOS'
+        );
+
+        console.log("Proyectos Activos:", activos);
+        console.log("Proyectos Terminados:", terminados);
+
+        // Filtrar según el estado si se proporciona
+        if (estado === 'activos') {
+            return res.status(200).json({ activos });
+        } else if (estado === 'terminados') {
+            return res.status(200).json({ terminados });
+        }
+
+        res.status(200).json({ activos, terminados });
+    } catch (error) {
+        console.error('Error al obtener el informe de proyectos:', error);
+        res.status(500).json({ error: 'Error al obtener el informe de proyectos.' });
+    }
+});
+
+function convertirFechaDDMMYY(fechaISO) {
+    const [year, month, day] = fechaISO.split("-");
+    return `${day}-${month}-${year.slice(-2)}`; // DD-MM-YY
+}
+
+
+
 module.exports = router;

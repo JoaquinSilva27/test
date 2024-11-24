@@ -51,7 +51,10 @@ async function mostrarFormularioAgregar(selectedTable) {
     }
 }
 
-  
+function convertirFormatoFecha(fechaISO) {
+    const [year, month, day] = fechaISO.split('-');
+    return `${day}-${month}-${year}`;
+}
 
 // Función para enviar los datos de la entidad a la base de datos
 async function agregarEntidad() {
@@ -64,10 +67,20 @@ async function agregarEntidad() {
     const formData = {};
     let hasEmptyFields = false; // Variable para rastrear si hay campos vacíos
     inputs.forEach(input => {
-        formData[input.name] = input.value; // Captura el valor de cada input por su atributo "name"
-        if (!input.value.trim()) { // Si el campo está vacío
+        let value = input.value;
+
+        if (!value.trim()) { // Si el campo está vacío
             hasEmptyFields = true;
         }
+
+        if (input.type === 'date') { 
+            // Convertir formato de fecha si es un campo de tipo 'date'
+            value = convertirFormatoFecha(value);
+        }
+
+        formData[input.name] = input.value; // Captura el valor de cada input por su atributo "name"
+
+
     });
 
     if (hasEmptyFields) {

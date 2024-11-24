@@ -2505,7 +2505,7 @@ END;
 /
 
 -- procedimiento de pago
-CREATE OR REPLACE PROCEDURE PAGAR(
+create or replace NONEDITIONABLE PROCEDURE PAGAR(
     p_rut_usuario IN SA_JS_JO_NR_USUARIOS.RUT_USUARIO%TYPE,
     p_cantidad_pago IN NUMBER
 )
@@ -2525,7 +2525,7 @@ BEGIN
 
     -- Validar que la cantidad a pagar no sea mayor a la deuda actual
     IF p_cantidad_pago > v_deuda_actual THEN
-        RAISE_APPLICATION_ERROR(-20020, 'Solo puede pagar como maximo la totalidad de su deuda, intente denuevo por favor.');
+        RAISE_APPLICATION_ERROR(-20020, 'Solo puede pagar como máximo la totalidad de su deuda, intente de nuevo por favor.');
     ELSE
         -- Actualizar la deuda del usuario
         UPDATE SA_JS_JO_NR_USUARIOS
@@ -2534,6 +2534,7 @@ BEGIN
 
         -- Confirmar el éxito
         DBMS_OUTPUT.PUT_LINE('Pago exitoso.');
+        COMMIT; -- Confirmar los cambios
     END IF;
 EXCEPTION
     WHEN NO_DATA_FOUND THEN
@@ -2613,10 +2614,9 @@ BEGIN
         NOMBRE_PAGADOR,
         DETALLE_PAGO,
         PAGO,
-        COD_PREDIO
+        RUT_USUARIO
     FROM
         SA_JS_JO_NR_HISTORIAL_PAGOS
     WHERE
         FECHA_PAGO BETWEEN P_FECHA_INICIO AND P_FECHA_FIN;
 END;
-/

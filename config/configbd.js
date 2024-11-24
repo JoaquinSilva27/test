@@ -17,6 +17,19 @@ async function Open(sql, binds = {}, autoCommit = false) {
     try {
         cnn = await oracledb.getConnection(cns);
         const result = await cnn.execute(sql, binds, { autoCommit });
+
+        // Si hay un cursor en los binds, procesarlo
+        if (binds.P_CURSOR && binds.P_CURSOR.type === oracledb.CURSOR) {
+            const cursor = result.outBinds.P_CURSOR;
+            const rows = [];
+            let row;
+
+            while ((row = await cursor.getRow())) {
+                rows.push(row);
+            }
+            await cursor.close(); // Asegúrate de cerrar el cursor
+            return rows; // Devuelve las filas del cursor
+        }
         return result;
     } catch (err) {
         console.error(err);
@@ -126,6 +139,76 @@ async function OpenSimpleCursorProcedure(procedure) {
     }
 }
 
+
+async function OpenDoubleCursorProcedure(procedure, binds, cursor1, cursor2) {
+    console.log("Llamando al procedimiento:", procedure);
+    console.log("Binds proporcionados:", binds);
+
+    let cnn;
+    try {
+        cnn = await oracledb.getConnection(cns);
+
+        const sql = `BEGIN ${procedure}(:${cursor1}, :${cursor2}); END;`;
+
+        // Agregar los cursores como parámetros de salida
+        const options = {
+            ...binds,
+            [cursor1]: { type: oracledb.CURSOR, dir: oracledb.BIND_OUT },
+            [cursor2]: { type: oracledb.CURSOR, dir: oracledb.BIND_OUT },
+        };
+
+        console.log("SQL generado:", sql);
+        console.log("Binds utilizados:", options);
+
+        // Ejecutar el procedimiento almacenado
+        const result = await cnn.execute(sql, options);
+
+        const convertirFecha = (fechaISO) => {
+            if (!fechaISO) return null;
+            const fecha = new Date(fechaISO);
+            const day = String(fecha.getDate()).padStart(2, '0');
+            const month = String(fecha.getMonth() + 1).padStart(2, '0');
+            const year = fecha.getFullYear();
+            return `${day}-${month}-${year}`;
+        };
+
+        // Procesar los datos del primer cursor
+        const cursorActivos = result.outBinds[cursor1];
+        const activos = [];
+        let row;
+        while ((row = await cursorActivos.getRow())) {
+            activos.push({
+                ...row,
+                FECHA_INICIO_PROYECTO: convertirFecha(row.FECHA_INICIO_PROYECTO),
+                FECHA_FIN_PROYECTO: convertirFecha(row.FECHA_FIN_PROYECTO),
+            });
+        }
+        await cursorActivos.close();
+
+        // Procesar los datos del segundo cursor
+        const cursorTerminados = result.outBinds[cursor2];
+        const terminados = [];
+        while ((row = await cursorTerminados.getRow())) {
+            terminados.push({
+                ...row,
+                FECHA_INICIO_PROYECTO: convertirFecha(row.FECHA_INICIO_PROYECTO),
+                FECHA_FIN_PROYECTO: convertirFecha(row.FECHA_FIN_PROYECTO),
+            });
+        }
+        await cursorTerminados.close();
+
+        return { activos, terminados }; // Devuelve los dos conjuntos de datos
+    } catch (err) {
+        console.error("Error en OpenDoubleCursorProcedure:", err);
+        throw err;
+    } finally {
+        if (cnn) await cnn.close();
+    }
+}
+
+
+
+
 // Prueba de conexión
 async function testConnection() {
     let connection;
@@ -139,10 +222,14 @@ async function testConnection() {
     }
 }
 
+
+
+
 module.exports = {
     Open,
     testConnection,
     OpenProcedure,
     OpenCursorProcedure,
-    OpenSimpleCursorProcedure
+    OpenSimpleCursorProcedure,
+    OpenDoubleCursorProcedure
 };

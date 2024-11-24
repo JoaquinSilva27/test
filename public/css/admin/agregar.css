@@ -1,5 +1,5 @@
 #second-section {
-    background-color: #ffffff;
+    background: linear-gradient(135deg, #abd1c6, #edf7f6);;
     padding: 1rem;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -13,7 +13,6 @@
 }
 
 .fixed-header {
-    background-color: #ffffff;
     padding: 1rem;
     position: sticky;
     top: 0;
@@ -38,7 +37,6 @@
 }
 
 .fixed-footer {
-    background-color: #ffffff;
     padding: 1rem;
     position: sticky;
     bottom: 0;
