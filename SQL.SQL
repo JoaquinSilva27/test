@@ -2606,7 +2606,7 @@ BEGIN
     GROUP BY
         C.NOMBRE_CANAL;
 END;
-
+/
 --2. Proyectos activos y terminados
 create or replace NONEDITIONABLE PROCEDURE INFORME_PROYECTOS (
     P_ACTIVOS OUT SYS_REFCURSOR,
@@ -2641,7 +2641,7 @@ BEGIN
     WHERE
         UPPER(ESTADO_PROYECTO) = 'TERMINADO';
 END;
-
+/
 --3. Informe de ingresos desde X fecha hasta Y fecha
 create or replace NONEDITIONABLE PROCEDURE INFORME_INGRESOS_FECHA (
     P_FECHA_INICIO IN DATE,
