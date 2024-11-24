@@ -1,16 +1,11 @@
 ------------------------------LISTA DE COSAS QUE QUEDAN POR HACER------------------------------
 
 1) código de la base de datos:
-    reportes (pelao): (informe de ingresos desde x fecha hasta y fecha, informes de proyectos: activos/terminados y deudas por canal)
+    
 
-
-2) opciones en admin:
-    ver reportes  (falta integrarlo a la bd)
-    gestores (falta hacer la interfaz y integrarlo a la bd)
-
-3) opciones en user: (CONECTAR TODO XD)
+2) opciones en user: (CONECTAR TODO XD)
     Historial de pagos
     datos del usuario
     perfil 
 
-4) PPT
+3) PPT
