@@ -1,4 +1,3 @@
-
 async function consultarEntidad() {
     const selectedTable = document.getElementById('entitySelect').value; // Tabla seleccionada
     const consultaInput = document.getElementById('consulta-input').value; // Valor ingresado o seleccionado
@@ -32,6 +31,16 @@ async function consultarEntidad() {
         const camposResultado = document.querySelector('.campos-resultado');
         camposResultado.innerHTML = ''; // Limpia el contenido previo
 
+        // Función para convertir fechas al formato DD-MM-YYYY
+        const convertirFecha = (valor) => {
+            if (typeof valor === 'string' && valor.match(/^\d{4}-\d{2}-\d{2}T/)) {
+                const [fecha] = valor.split('T');
+                const [year, month, day] = fecha.split('-');
+                return `${day}-${month}-${year}`;
+            }
+            return valor;
+        };
+
         // Itera sobre las claves y valores del objeto
         Object.entries(entidad).forEach(([key, value]) => {
             const campo = document.createElement('div');
@@ -42,9 +51,9 @@ async function consultarEntidad() {
 
             const input = document.createElement('input');
             input.type = 'text';
-            input.value = value !== null ? value : ''; // Maneja valores nulos
+            input.value = value !== null ? convertirFecha(value) : ''; // Maneja valores nulos y convierte fechas
             input.disabled = true; // El campo está deshabilitado para edición
-    
+
             campo.appendChild(label);
             campo.appendChild(input);
             camposResultado.appendChild(campo);

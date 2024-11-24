@@ -99,6 +99,16 @@ function mostrarFormularioModificar(selectedTable, registro) {
     const camposResultado = document.querySelector(".campos-modificar");
     camposResultado.innerHTML = "";
 
+    // Función para convertir fechas al formato DD-MM-YYYY
+    const convertirFecha = (valor) => {
+        if (typeof valor === "string" && valor.match(/^\d{4}-\d{2}-\d{2}T/)) {
+            const [fecha] = valor.split("T");
+            const [year, month, day] = fecha.split("-");
+            return `${day}-${month}-${year}`;
+        }
+        return valor;
+    };
+
     registro.data.forEach(({ columnName, value, editable }) => {
         const campo = document.createElement("div");
         campo.className = "campo";
@@ -109,7 +119,9 @@ function mostrarFormularioModificar(selectedTable, registro) {
         const input = document.createElement("input");
         input.type = "text";
         input.name = columnName;
-        input.value = value !== null ? value : ""; // Maneja valores nulos
+
+        // Convierte fechas al formato DD-MM-YYYY antes de asignarlas al input
+        input.value = value !== null ? convertirFecha(value) : ""; 
         input.required = true;
 
         if (!editable) {
@@ -124,7 +136,6 @@ function mostrarFormularioModificar(selectedTable, registro) {
     ocultarOtrasSecciones();
     document.getElementById("modificar-section").style.display = "block";
 }
-
 async function guardarModificaciones() {
     const campos = document.querySelectorAll(".campos-modificar input");
     const updatedData = {};
