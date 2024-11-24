@@ -2361,35 +2361,6 @@ BEGIN
     );
 END;
 
--- DETALLE_PREDIO_CANALES
-CREATE OR REPLACE PROCEDURE AGREGAR_DETALLE_PREDIO_CANALES( -- si funciona pdeuso agregar
-    p_cod_predio number,
-    p_cod_canal number
-)
-IS
-    v_hectarea number;
-    v_accione number;
-BEGIN
-    select hectareas_predio into v_hectarea 
-    from SA_JS_JO_NR_predios
-    where cod_predio = p_cod_predio;
-    
-    INSERT INTO SA_JS_JO_NR_DETALLE_PREDIO_CANALES(COD_PREDIO,COD_CANAL)
-    VALUES(p_cod_predio, p_cod_canal);
-    
-    update SA_JS_JO_NR_predios 
-    set hectareas_predio = v_hectarea
-    where cod_predio = p_cod_predio;
-    
-    select acciones_predio into v_accione 
-    from SA_JS_JO_NR_predios
-    where cod_predio = p_cod_predio;
-    
-    update SA_JS_JO_NR_predios 
-    set acciones_predio = v_accione
-    where cod_predio = p_cod_predio;
-END;
-/
 --
 
 CREATE OR REPLACE PROCEDURE VINCULAR_PREDIO_CANALES( -- PROCEDIMIENTO va en seccion de gestores de la pagina
@@ -2444,6 +2415,11 @@ BEGIN
     ELSE 
         RAISE_APPLICATION_ERROR(-20001, 'PARAMETROS NO VALIDO UTILIZADOS');
     END IF;
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RAISE_APPLICATION_ERROR(-20021, 'Error: No se encontró el canal/predio.');
+    WHEN OTHERS THEN
+        RAISE_APPLICATION_ERROR(-20022, 'Error inesperado al realizar el vinculo.');
 END;
 /
 
@@ -2687,3 +2663,4 @@ BEGIN
     WHERE
         FECHA_PAGO BETWEEN P_FECHA_INICIO AND P_FECHA_FIN;
 END;
+/
