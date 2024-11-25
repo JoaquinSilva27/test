@@ -188,3 +188,30 @@
   max-width: 300px; 
   box-sizing: border-box; 
 }
+
+.campos-modificar .campo select {
+  padding: 10px;
+  font-size: 1em;
+  border: 2px solid #004643; 
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  background-color: #ffffff; 
+  color: #333333; 
+  width: 100%; /* Asegura que ocupe todo el ancho disponible */
+  max-width: 300px; /* Igual que los inputs */
+  box-sizing: border-box; 
+  cursor: pointer; 
+}
+
+.campos-modificar .campo select:focus {
+  border-color: #004643; 
+  background-color: #fff7e6; /* Fondo ligeramente diferente al enfocar */
+}
+
+.campos-modificar .campo select option {
+  background-color: #ffffff;
+  color: #333333;
+  font-size: 1em;
+  padding: 5px; /* Espaciado interno para las opciones */
+}

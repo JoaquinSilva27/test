@@ -7,6 +7,15 @@ async function mostrarFormularioAgregar(selectedTable) {
     const fieldsContainer = document.getElementById('fields-container');
     fieldsContainer.innerHTML = ''; // Limpia cualquier campo previo
 
+    // Define los atributos especiales y sus valores permitidos
+    const atributosEspeciales = {
+        ROL: ["user", "admin"], 
+        PRIVILEGIOS: ["user", "admin"],
+        ESTADO_PROYECTO: ["Activo", "Terminado"], 
+        TIPO_CUOTA: ["Ordinaria", "Extraordinaria"], 
+        // Agrega más atributos según sea necesario
+    };
+
     try {
         console.log(`Obteniendo campos para la tabla: ${selectedTable}`);
         const response = await fetch(`http://localhost:3000/api/tables/columns/${selectedTable}`);
@@ -19,25 +28,53 @@ async function mostrarFormularioAgregar(selectedTable) {
 
         // Generar el formulario excluyendo PK, excepto si el nombre es RUT
         fields
-            .filter(field => !field.isPrimaryKey || field.name === 'RUT') // Excluye la PK, pero permite RUT
+            .filter(field => !field.isPrimaryKey || field.name === 'RUT_USUARIO') // Excluye la PK, pero permite RUT
             .forEach(field => {
                 const inputBox = document.createElement('div');
                 inputBox.className = 'input-box';
 
-                const input = document.createElement('input');
-                input.type = field.type;
-                input.name = field.name;
-                input.required = true;
-
-                // Agregar placeholder y validaciones específicas para campos de tipo date
-                if (field.type === 'date') {
-                    input.placeholder = 'dd-mm-aaaa'; // Placeholder con formato de fecha
-                    input.pattern = '\\d{4}-\\d{2}-\\d{2}'; // Patrón de validación para fechas
-                }
                 const label = document.createElement('label');
                 label.textContent = field.name;
 
-                inputBox.appendChild(input);
+                // Verifica si el campo es un atributo especial con opciones predefinidas
+                if (atributosEspeciales[field.name]) {
+                    const select = document.createElement('select');
+                    select.name = field.name;
+                    select.required = true;
+
+                    // Agrega las opciones al select
+                    const placeholderOption = document.createElement('option');
+                    placeholderOption.value = '';
+                    placeholderOption.textContent = '';
+                    placeholderOption.disabled = true;
+                    placeholderOption.selected = true;
+                    select.appendChild(placeholderOption);
+
+                    atributosEspeciales[field.name].forEach(opcion => {
+                        const option = document.createElement('option');
+                        option.value = opcion;
+                        option.textContent = opcion;
+                        select.appendChild(option);
+                    });
+
+                    inputBox.appendChild(select);
+                } else {
+                    const input = document.createElement('input');
+                    input.type = field.type === 'date' ? 'date' : field.type === 'number' ? 'number' : 'text';
+                    input.name = field.name;
+                    input.required = true;
+                    if (field.maxLength) {
+                        input.maxLength = field.maxLength; 
+                    }
+                    // Agregar placeholder y validaciones específicas para campos de tipo date
+                    if (field.type === 'date') {
+                        input.placeholder = 'dd-mm-aaaa'; // Placeholder con formato de fecha
+                        input.pattern = '\\d{4}-\\d{2}-\\d{2}'; // Patrón de validación para fechas
+                    }
+
+                    inputBox.appendChild(input);
+                }
+
                 inputBox.appendChild(label);
                 fieldsContainer.appendChild(inputBox);
             });
@@ -59,28 +96,26 @@ function convertirFormatoFecha(fechaISO) {
 // Función para enviar los datos de la entidad a la base de datos
 async function agregarEntidad() {
     const fieldsContainer = document.getElementById('fields-container');
-    const inputs = fieldsContainer.querySelectorAll('input'); // Obtener todos los inputs del formulario
+    const inputs = fieldsContainer.querySelectorAll('input, select'); // Incluye inputs y selects
 
     console.log('Tabla seleccionada en el frontend:', SelectedTable1); // Log para depuración
 
-
     const formData = {};
     let hasEmptyFields = false; // Variable para rastrear si hay campos vacíos
-    inputs.forEach(input => {
-        let value = input.value;
+
+    inputs.forEach(field => {
+        let value = field.value;
 
         if (!value.trim()) { // Si el campo está vacío
             hasEmptyFields = true;
         }
 
-        if (input.type === 'date') { 
+        if (field.type === 'date') { 
             // Convertir formato de fecha si es un campo de tipo 'date'
             value = convertirFormatoFecha(value);
         }
 
-        formData[input.name] = input.value; // Captura el valor de cada input por su atributo "name"
-
-
+        formData[field.name] = value; // Captura el valor de cada campo por su atributo "name"
     });
 
     if (hasEmptyFields) {
@@ -107,7 +142,6 @@ async function agregarEntidad() {
         alert('Ocurrió un error al intentar agregar el registro.');
     }
 }
-
 
 function ocultarOtrasSecciones() {
 document.getElementById('admin-registros-container').style.display = 'none';

@@ -441,7 +441,6 @@
 
 /* Ajustes para el contenido de la tabla en ingresos */
 .reporte-ingresos .reporte-detalle-contenido {
-  background: #fff;
   padding: 20px;
   border-radius: 12px;
   z-index: 1; 

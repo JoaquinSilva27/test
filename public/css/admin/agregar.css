@@ -153,3 +153,26 @@
     cursor: pointer; 
     background: transparent; 
 }
+
+.input-box select {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    color: #001e1d;
+    font-weight: 600;
+    padding: 0 0.5rem;
+    appearance: none;
+}
+
+.input-box select:focus~label,
+.input-box select:valid~label {
+    top: -5px;
+}
+
+.input-box select option {
+    background: #fff;
+    color: #001e1d;
+}

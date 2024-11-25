@@ -95,37 +95,62 @@ async function buscarParaModificar() {
     }
 }
 
+
+
+
 function mostrarFormularioModificar(selectedTable, registro) {
     const camposResultado = document.querySelector(".campos-modificar");
     camposResultado.innerHTML = "";
 
-    // Función para convertir fechas al formato DD-MM-YYYY
-    const convertirFecha = (valor) => {
-        if (typeof valor === "string" && valor.match(/^\d{4}-\d{2}-\d{2}T/)) {
-            const [fecha] = valor.split("T");
-            const [year, month, day] = fecha.split("-");
-            return `${day}-${month}-${year}`;
-        }
-        return valor;
+    // Lista de atributos especiales con opciones predefinidas
+    const atributosEspeciales = {
+        ROL: ["user", "admin"],
+        PRIVILEGIOS: ["user", "admin"],
+        ESTADO_PROYECTO: ["Activo", "Terminado"],
+        TIPO_CUOTA: ["Ordinaria", "Extraordinaria"],
+        // Agrega más atributos según sea necesario
     };
 
-    registro.data.forEach(({ columnName, value, editable }) => {
+    registro.data.forEach(({ columnName, value, editable, type, maxLength }) => {
         const campo = document.createElement("div");
         campo.className = "campo";
 
         const label = document.createElement("label");
-        label.textContent = columnName; // Nombre de la columna
+        label.textContent = columnName;
 
-        const input = document.createElement("input");
-        input.type = "text";
-        input.name = columnName;
+        let input;
 
-        // Convierte fechas al formato DD-MM-YYYY antes de asignarlas al input
-        input.value = value !== null ? convertirFecha(value) : ""; 
-        input.required = true;
+        // Si el campo está en atributosEspeciales, usamos un select
+        if (atributosEspeciales[columnName]) {
+            input = document.createElement("select");
+            input.name = columnName;
+            input.required = true;
 
+            // Agregar opciones al select
+            atributosEspeciales[columnName].forEach(optionValue => {
+                const option = document.createElement("option");
+                option.value = optionValue;
+                option.textContent = optionValue;
+                if (value === optionValue) option.selected = true;
+                input.appendChild(option);
+            });
+        } else {
+            // Crear un input normal para otros campos
+            input = document.createElement("input");
+            input.type = type; // "text", "number", o "date"
+            input.name = columnName;
+            input.value = value !== null ? value : ""; // Manejo de valores nulos
+            input.required = true;
+
+            // Validar manualmente la longitud máxima si está definida
+            if (maxLength) {
+                input.maxLength = maxLength; 
+            }
+        }
+
+        // Deshabilitar el campo si no es editable (por ejemplo, PK)
         if (!editable) {
-            input.disabled = true; // La PK no es editable
+            input.disabled = true;
         }
 
         campo.appendChild(label);
@@ -135,18 +160,46 @@ function mostrarFormularioModificar(selectedTable, registro) {
 
     ocultarOtrasSecciones();
     document.getElementById("modificar-section").style.display = "block";
+
+    // Configurar validación al botón de guardar
+    const guardarBtn = document.getElementById("btn-guardar-modificar");
+    guardarBtn.addEventListener("click", (event) => {
+        if (!validarFormularioAntesDeGuardar(registro.data)) {
+            event.preventDefault(); // Evita el envío del formulario si hay errores
+        } else {
+            guardarModificaciones(); // Solo se ejecuta si la validación es exitosa
+        }
+    });
 }
+
+function validarFormularioAntesDeGuardar(fields) {
+    const campos = document.querySelectorAll(".campos-modificar input, .campos-modificar select");
+    let formularioValido = true;
+
+    campos.forEach(campo => {
+        const maxLength = fields.find(field => field.columnName === campo.name)?.maxLength;
+
+        if (maxLength && campo.value.length > maxLength) {
+            formularioValido = false;
+            alert(`El valor ingresado en "${campo.name}" excede el máximo permitido de ${maxLength} caracteres.`);
+        }
+    });
+
+    return formularioValido; // Retorna true si todos los campos son válidos
+}
+
+
 async function guardarModificaciones() {
-    const campos = document.querySelectorAll(".campos-modificar input");
+    const campos = document.querySelectorAll(".campos-modificar input, .campos-modificar select");
     const updatedData = {};
-    let pk = null; // Inicializa la clave primaria
+    let pk = null;
 
     // Recolectar los valores de los campos editados
-    campos.forEach((campo) => {
+    campos.forEach(campo => {
         if (campo.name.toLowerCase().includes("pk") || campo.disabled) {
-            pk = campo.value; // Detecta la PK como un campo deshabilitado
+            pk = campo.value; // Detecta la PK
         } else {
-            updatedData[campo.name] = campo.value;
+            updatedData[campo.name] = campo.value; // Captura valores normales y selects
         }
     });
 
@@ -177,6 +230,8 @@ async function guardarModificaciones() {
         alert("Ocurrió un error al guardar las modificaciones.");
     }
 }
+
+
 
 function ocultarOtrasSecciones() {
     document.getElementById("admin-registros-container").style.display = "none";
