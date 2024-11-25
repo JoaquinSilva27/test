@@ -101,7 +101,6 @@ router.get("/profile/:rut", async (req, res) => {
         COALESCE(D.NOMBRE_DIRECTIVA, 'No asociado') AS NOMBRE_DIRECTIVA,
         CM.NOMBRE_COMUNA,
         R.NOMBRE_REGION,
-        U.ROL AS ROL,
         U.CORREO_USUARIO AS CORREO,
         TO_CHAR(U.TELEFONO_USUARIO) AS TELEFONO,
         U.DEUDA AS DEUDA
@@ -124,7 +123,6 @@ router.get("/profile/:rut", async (req, res) => {
       directiva: row["NOMBRE_DIRECTIVA"],
       comuna: row["NOMBRE_COMUNA"],
       region: row["NOMBRE_REGION"],
-      rol: row["ROL"],
       correo: row["CORREO"],
       telefono: row["TELEFONO"],
       deuda: row["DEUDA"]
@@ -170,6 +168,44 @@ router.post("/pay", async (req, res) => {
       } else {
           res.status(500).json({ success: false, message: "El monto que deseas ingresar excede la deuda actual de tu cuenta." });
       }
+  }
+});
+
+// Ruta para obtener el historial de pagos de un usuario
+router.get("/payment-history/:rut", async (req, res) => {
+  const { rut } = req.params;
+
+  if (!rut) {
+    return res.status(400).json({ success: false, message: "RUT es obligatorio." });
+  }
+
+  try {
+    const query = `
+      SELECT 
+        COD_HISTORIAL_PAGO,
+        TO_CHAR(FECHA_PAGO, 'DD/MM/YYYY') AS FECHA_PAGO,
+        PAGO
+      FROM SA_JS_JO_NR_HISTORIAL_PAGOS
+      WHERE RUT_USUARIO = :rut
+      ORDER BY FECHA_PAGO DESC
+    `;
+
+    const result = await Open(query, { rut });
+
+    if (!result || !result.rows || result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: "No hay historial de pagos disponible para este usuario." });
+    }
+
+    const history = result.rows.map((row) => ({
+      id: row["COD_HISTORIAL_PAGO"],
+      fecha: row["FECHA_PAGO"],
+      monto: row["PAGO"],
+    }));
+
+    res.status(200).json({ success: true, history });
+  } catch (error) {
+    console.error("Error al obtener el historial de pagos:", error);
+    res.status(500).json({ success: false, message: "Error interno del servidor. Verifica los logs para más detalles." });
   }
 });
 

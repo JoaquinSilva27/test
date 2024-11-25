@@ -46,7 +46,7 @@
         <!-- Pagar -->
         <div class="contenedor" id="pagar-contenedor" style="display:none;">
             <div class="contenedor-form user">
-                <h2>Hoy es un buen día para ponerte al día <span id="userNamePago">usuario</span></h2>
+                <h2>Paga seguro, paga hoy <span id="userNamePago">usuario</span></h2>
                 <div class="informacion_usuario">
                     <h3>Deuda total: <span id="debtAmount">0</span></h3>
                 </div>
@@ -87,7 +87,7 @@
                 <h2>Mis Datos</h2>
                 <ul class="lista-datos">
                     <li><strong>RUT:</strong> <span id="mis-datos-rut">Cargando...</span></li>
-                    <li><strong>Rol:</strong> <span id="mis-datos-rol">Cargando...</span></li>
+                    <!--<li><strong>Rol:</strong> <span id="mis-datos-rol">Cargando...</span></li>-->
                     <li><strong>Nombre:</strong> <span id="mis-datos-nombre">Cargando...</span></li>
                     <li><strong>Apellido Paterno:</strong> <span id="mis-datos-apellido-paterno">Cargando...</span></li>
                     <li><strong>Apellido Materno:</strong> <span id="mis-datos-apellido-materno">Cargando...</span></li>
@@ -103,42 +103,20 @@
         <div class="contenedor" id="historial-pagos-contenedor" style="display:none;">
             <div class="contenedor-historial">
                 <h2>Historial de Pagos</h2>
-                <form id="form-historial" onsubmit="mostrarHistorial(event)">
-                    <div class="form-group">
-                        <label for="mes">Selecciona el mes:</label>
-                        <select id="mes" class="dropdown">
-                            <option value="1">Enero</option>
-                            <option value="2">Febrero</option>
-                            <option value="3">Marzo</option>
-                            <option value="4">Abril</option>
-                            <option value="5">Mayo</option>
-                            <option value="6">Junio</option>
-                            <option value="7">Julio</option>
-                            <option value="8">Agosto</option>
-                            <option value="9">Septiembre</option>
-                            <option value="10">Octubre</option>
-                            <option value="11">Noviembre</option>
-                            <option value="12">Diciembre</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="anio">Selecciona el año:</label>
-                        <select id="anio" class="dropdown">
-                            <option value="2023">2022</option>
-                            <option value="2024">2023</option>
-                            <option value="2025">2024</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn">Buscar</button>
-                </form>
-
-                <div id="resultado-historial" class="resultado-historial">
-                    <!-- Aquí se mostrarán los resultados del historial -->
-                </div>
+                <table id="paymentHistoryTable">
+                    <thead>
+                        <tr> <!-- no pregunten que pasó aqui -->
+                            <th>Operación‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ </th>
+                            <th>Fecha de pago‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ ‎ </th>
+                            <th>Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- las filas se crean solas lol -->
+                    </tbody>
+                </table>
             </div>
         </div>
-    </div>
-
     <!-- Contenedor para el mensaje -->
     <div id="loader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background-color: rgba(255, 255, 255, 0.9); z-index: 9999;">
         <h2>Cargando...</h2>

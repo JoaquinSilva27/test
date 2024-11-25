@@ -68,9 +68,19 @@ function showmd() {
     document.getElementById('mis-datos-contenedor').style.display = 'block';
 }
 
-function showhdp() {
+async function showhdp() {
     ocultarSecciones();
-    document.getElementById('historial-pagos-contenedor').style.display = 'block';
+    const contenedor = document.getElementById('historial-pagos-contenedor');
+    contenedor.style.display = 'block';
+
+    const usuario = await obtenerSesionUsuario();
+    console.log("Usuario obtenido:", usuario);  // Verifica que el usuario tenga el formato correcto
+
+    if (usuario && usuario.rut) {
+        await cargarHistorialPagos(usuario.rut);
+    } else {
+        mostrarMensajeError("No se pudo cargar el historial de pagos.");
+    }
 }
 
 
@@ -151,7 +161,7 @@ async function obtenerMisDatos(rut) {
 
         if (data.success) {
             document.getElementById('mis-datos-rut').innerText = rut;
-            document.getElementById('mis-datos-rol').innerText = data.profile.rol || "No disponible";
+            //document.getElementById('mis-datos-rol').innerText = data.profile.rol || "No disponible";
             document.getElementById('mis-datos-nombre').innerText = data.profile.nombreCompleto.split(' ')[0];
             document.getElementById('mis-datos-apellido-paterno').innerText = data.profile.nombreCompleto.split(' ')[1] || "No disponible";
             document.getElementById('mis-datos-apellido-materno').innerText = data.profile.nombreCompleto.split(' ')[2] || "No disponible";
@@ -232,26 +242,59 @@ setTimeout(() => {
 
 
 //------------------Relacionado al historial de pagos------------------------
-function mostrarHistorial(event) {
-    event.preventDefault();
+async function cargarHistorialPagos(rut) {
+    console.log("Rut enviado al servidor:", rut);
 
-    // Obtén los valores seleccionados
-    const mes = document.getElementById('mes').value;
-    const anio = document.getElementById('anio').value;
+    try {
+        const response = await fetch(`/auth/payment-history/${rut}`);
+        
+        // Verificar si la respuesta es válida
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
 
-    // Formatea los datos del mes
-    const meses = [
-        'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
-        'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
-    ];
-    const mesNombre = meses[mes - 1];
+        // Imprimir el contenido de la respuesta antes de procesarlo
+        const textResponse = await response.text();
+        console.log("Respuesta del servidor (sin parsear):", textResponse);
 
-    // Muestra el resultado en el contenedor
-    const resultado = document.getElementById('resultado-historial');
-    resultado.innerHTML = `
-        <p>Mostrando historial de pagos para:</p>
-        <strong>${mesNombre} ${anio}</strong>
-        <p>No hay registros disponibles en este momento.</p>
-    `;
+        // Ahora parseamos el JSON si la respuesta es válida
+        const result = JSON.parse(textResponse);  // Usamos JSON.parse en lugar de response.json()
+
+        console.log("Datos del historial de pagos recibidos:", result);
+
+        const tbody = document.getElementById('paymentHistoryTable').querySelector('tbody');
+        tbody.innerHTML = ""; // Limpiar la tabla
+
+        // Manejo cuando no hay historial disponible
+        if (!result.success || !result.history || result.history.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" style="text-align: center;">No hay registros de pagos disponibles.</td>
+                </tr>
+            `;
+            return;
+        }
+
+        // Renderizar el historial de pagos
+        result.history.forEach((pago, index) => {
+            const row = `
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${pago.fecha}</td>
+                    <td>$${parseFloat(pago.monto).toLocaleString('es-CL')}</td>
+                </tr>
+            `;
+            tbody.innerHTML += row;
+        });
+    } catch (error) {
+        console.error("Error al cargar el historial de pagos:", error);
+
+        const tbody = document.getElementById('paymentHistoryTable').querySelector('tbody');
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="5" style="text-align: center; color: red;">Error al cargar el historial de pagos. Intente más tarde.</td>
+            </tr>
+        `;
+    }
 }
 //-----------------------Hasta aca----------------------------------------

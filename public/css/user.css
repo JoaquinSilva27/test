@@ -253,11 +253,14 @@ header {
 }
 
 .contenedor-historial {
-    text-align: center;
-    width: 90%;
-    min-height: 1000px;
-    margin: 0 auto;
-    margin-top: 5%;
+    margin: 20px auto; /* Centro horizontal automático */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: justify;
+    padding: 20px; /* Espaciado interno */
+    max-width: 800px; /* Ancho máximo */
 }
 
 .contenedor-historial h2 {
@@ -410,4 +413,73 @@ input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+/* Mejor estilo para la tabla del historial */
+.historial-table {
+    width: 100%; /* Ocupar todo el ancho disponible */
+    max-width: 800px; /* Limitar el ancho */
+    margin: 20px auto; /* Centrar la tabla */
+    border-collapse: collapse; /* Quitar espacio entre bordes */
+    background-color: #f9f9f9; /* Fondo claro */
+    border-radius: 10px; /* Bordes redondeados */
+    overflow: hidden; /* Aplicar redondeo a toda la tabla */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+.historial-table th, 
+.historial-table td {
+    padding: 12px 15px; /* Espaciado interno */
+    text-align: center; /* Centrar texto */
+    border: 1px solid #ddd; /* Bordes claros */
+}
+
+.historial-table th {
+    background-color: #004643; /* Color de fondo para encabezados */
+    color: #ffffff; /* Texto blanco */
+    font-size: 1.2em; /* Tamaño del texto */
+    font-weight: bold; /* Negrita */
+}
+
+.historial-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2; /* Fondo alternado */
+}
+
+.historial-table tbody tr:hover {
+    background-color: #f9bc60; /* Fondo al pasar el mouse */
+    color: #001e1d; /* Cambiar el color del texto */
+    transition: background-color 0.3s ease; /* Suavizar transición */
+}
+
+.btn-pago:hover {
+    background-color: #0088cc; /* Color más oscuro */
+    transform: translateY(-2px); /* Levantar botón al pasar el mouse */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra */
+}
+
+.btn-pago:focus {
+    outline: none; /* Quitar borde azul */
+    box-shadow: 0 0 5px #00aaff; /* Resaltar en enfoque */
+}
+
+input[type="number"]:hover {
+    border-color: #00aaff;
+}
+
+input[type="number"]:focus {
+    outline: none; /* Quitar el borde por defecto */
+    box-shadow: 0px 0px 8px rgba(0, 170, 255, 0.5); /* Efecto foco */
+}
+
+@media (max-width: 768px) {
+    .contenedor {
+        width: 90%; /* Reducir el ancho */
+        height: auto; /* Ajustar automáticamente la altura */
+        padding: 10px; /* Más espacio interno */
+    }
+
+    .historial-table {
+        font-size: 0.9em; /* Reducir tamaño de texto */
+        overflow-x: auto; /* Habilitar scroll horizontal */
+        display: block; /* Permitir que se ajuste al contenedor */
+    }
 }
