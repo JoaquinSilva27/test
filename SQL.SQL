@@ -2266,7 +2266,7 @@ BEGIN
 
     RETURN v_disponible;
 END;
-
+/
 /* GESTORES
 1. Gestor de Cuotas Pendientes por Usuario
 Este gestor calcula el total de cuotas pendientes por usuario. Puede ser útil para monitorear qué usuarios tienen pagos atrasados.

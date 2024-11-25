@@ -40,9 +40,9 @@ router.post("/login", async (req, res) => {
   try {
     // Consulta a la base de datos
     const query = `
-      SELECT ROL_CUENTA, CONTRASEÑA_CUENTA
+      SELECT PRIVILEGIOS, CONTRASEÑA
       FROM SA_JS_JO_NR_CUENTAS
-      WHERE RUT_CUENTA = :rut
+      WHERE NOMBRE_USUARIO = :rut
     `;
     const result = await Open(query, { rut });
 
@@ -54,8 +54,8 @@ router.post("/login", async (req, res) => {
 
     // Obtener los datos del usuario
     const user = result.rows[0];
-    const rol = user["ROL_CUENTA"]?.trim().toLowerCase();
-    const storedPassword = user["CONTRASEÑA_CUENTA"]?.trim();
+    const rol = user["PRIVILEGIOS"]?.trim().toLowerCase();
+    const storedPassword = user["CONTRASEÑA"]?.trim();
 
 
     console.log("Rol recuperado:", rol);
