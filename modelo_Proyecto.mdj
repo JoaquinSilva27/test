@@ -29188,7 +29188,7 @@
 							},
 							"name": "Apellido1_usuario",
 							"type": "varchar2",
-							"length": "100"
+							"length": "50"
 						},
 						{
 							"_type": "ERDColumn",
@@ -29198,7 +29198,7 @@
 							},
 							"name": "apellido2_usuario",
 							"type": "varchar2",
-							"length": "100"
+							"length": "50"
 						},
 						{
 							"_type": "ERDColumn",
@@ -29229,7 +29229,7 @@
 							},
 							"name": "correo_usuario",
 							"type": "varchar2",
-							"length": "50"
+							"length": "100"
 						},
 						{
 							"_type": "ERDColumn",
@@ -29499,7 +29499,7 @@
 							},
 							"name": "nombre_servicio",
 							"type": "varchar2",
-							"length": "50"
+							"length": "40"
 						},
 						{
 							"_type": "ERDColumn",
@@ -30332,7 +30332,7 @@
 							},
 							"name": "apellido1_presidente",
 							"type": "varchar2",
-							"length": "100"
+							"length": "50"
 						},
 						{
 							"_type": "ERDColumn",
@@ -30342,7 +30342,7 @@
 							},
 							"name": "apelllido2_presidente",
 							"type": "varchar2",
-							"length": "100"
+							"length": "50"
 						},
 						{
 							"_type": "ERDColumn",
@@ -30424,7 +30424,7 @@
 							},
 							"name": "apellido1_celador",
 							"type": "varchar2",
-							"length": "100"
+							"length": "50"
 						},
 						{
 							"_type": "ERDColumn",
@@ -30434,7 +30434,7 @@
 							},
 							"name": "apellido2_celador",
 							"type": "varchar2",
-							"length": "100"
+							"length": "50"
 						},
 						{
 							"_type": "ERDColumn",
@@ -30918,7 +30918,7 @@
 							},
 							"name": "nombre_region",
 							"type": "varchar2",
-							"length": "100"
+							"length": "50"
 						}
 					]
 				},
@@ -31025,7 +31025,7 @@
 							},
 							"name": "nombre_comuna",
 							"type": "varchar2",
-							"length": "200"
+							"length": "60"
 						},
 						{
 							"_type": "ERDColumn",
@@ -31164,7 +31164,7 @@
 							},
 							"name": "calle_direccion",
 							"type": "varchar2",
-							"length": "80"
+							"length": "60"
 						},
 						{
 							"_type": "ERDColumn",
