@@ -43,19 +43,27 @@
             </h2>
             <div id="mensaje-error" style="display:none; color: rgb(75, 212, 236); text-align: center; margin-top: 10px;"></div>
         </div>
-
-
-
-
         <!-- Pagar -->
         <div class="contenedor" id="pagar-contenedor" style="display:none;">
             <div class="contenedor-form user">
-                <h2>¡Hola {nombre_usuario}!</h2>
+                <h2>Hoy es un buen día para ponerte al día <span id="userNamePago">usuario</span></h2>
                 <div class="informacion_usuario">
-                    <h3>Monto a pagar:</h3>
-                    <h3>Fecha termino plazo:</h3>
+                    <h3>Deuda total: <span id="debtAmount">0</span></h3>
                 </div>
-                <button type="submit" class="btn">Pagar</button>
+                <!-- Nueva sección para ingresar el monto a pagar -->
+                <div class="pago-form">
+                    <label for="amountInput">Cantidad a pagar:</label>
+                    <input type="number" id="amountInput" placeholder="Ingrese la cantidad" />
+                    <button type="button" class="btn-pago" onclick="realizarPago()">Pagar</button>
+                    <div id="paymentMessage"></div>
+                </div>
+                <div class="pago-footer">
+                    <p>Pago seguro</p>
+                    <img src="/img/credito.png" alt="credito" />
+                    <img src="/img/pago.png" alt="pago" />
+                    <img src="/img/paypal.png" alt="paypal" />
+
+                </div>
             </div>
         </div>
         <!-- Perfil -->

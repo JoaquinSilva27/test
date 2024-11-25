@@ -3,10 +3,47 @@ function showMsj() {
     document.getElementById('contenedor').style.display = 'block';
 }
 
-function showpa() {
-    ocultarSecciones();
-    document.getElementById('pagar-contenedor').style.display = 'block';
+async function realizarPago() {
+    const rut = await obtenerSesionUsuario().then(usuario => usuario.rut); // Obtener el RUT del usuario
+    const cantidad = parseFloat(document.getElementById("amountInput").value);
+    const paymentMessage = document.getElementById("paymentMessage");
+
+    if (!cantidad || cantidad <= 0) {
+        paymentMessage.innerText = "Por favor, ingrese una cantidad válida.";
+        return;
+    }
+
+    try {
+        const response = await fetch("/auth/pay", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ rut, cantidad })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            paymentMessage.style.color = "green";
+            paymentMessage.innerText = data.message;
+
+            // Actualizar la deuda restante en la interfaz
+            const deudaActual = parseFloat(document.getElementById("debtAmount").innerText);
+            const nuevaDeuda = deudaActual - cantidad;
+            document.getElementById("debtAmount").innerText = nuevaDeuda >= 0 ? nuevaDeuda : 0;
+
+            // Limpiar el campo de entrada
+            document.getElementById("amountInput").value = "";
+        } else {
+            paymentMessage.style.color = "red";
+            paymentMessage.innerText = data.message;
+        }
+    } catch (error) {
+        console.error("Error al procesar el pago:", error);
+        paymentMessage.style.color = "red";
+        paymentMessage.innerText = "Error al procesar el pago.";
+    }
 }
+
 
 function ocultarSecciones() {
     // Oculta todas las secciones
@@ -64,12 +101,16 @@ async function obtenerPerfil(rut) {
     try {
         const response = await fetch(`/auth/profile/${rut}`);
         const data = await response.json();
-        console.log(data);
 
         if (data.success) {
             const primerNombre = data.profile.nombreCompleto.split(' ')[0];
             document.getElementById('mensaje-inicio').innerText = `¡Bienvenido/a ${primerNombre} :D!`;
 
+            // Actualizar la sección de "Pagar"
+            document.getElementById('userNamePago').innerText = primerNombre;
+            document.getElementById('debtAmount').innerText = data.profile.deuda || " Tu cuenta se encuentra al día";
+
+            // Resto de los datos de perfil
             document.getElementById('nombre-usuario').innerText = data.profile.nombreCompleto || "Nombre no disponible";
             document.getElementById('perfil-canal').innerText = data.profile.canal || "No asociado";
             document.getElementById('perfil-directiva').innerText = data.profile.directiva || "No asociado";
@@ -80,14 +121,24 @@ async function obtenerPerfil(rut) {
 
             ocultarLoader(); // Oculta el loader al completar
         } else {
-            console.error("Error al cargar el perfil:", data.message);
-            mostrarMensajeError("No se pudo cargar el perfil.");
-
+            mostrarMensajeError("Error al cargar el perfil.");
         }
     } catch (error) {
         console.error("Error al obtener el perfil:", error);
-        mostrarMensajeError("Perfil cargando, espere un momento ;)");
+        mostrarMensajeError("Sus datos se están cargando ;).");
+    }
+}
 
+// Función para mostrar la sección de "Pagar"
+async function showpa() {
+    ocultarSecciones(); // Oculta otras secciones
+    document.getElementById('pagar-contenedor').style.display = 'block'; // Muestra "Pagar"
+
+    // Obtener datos del usuario
+    const usuario = await obtenerSesionUsuario();
+    if (usuario) {
+        // Cargar y mostrar perfil con la deuda
+        await obtenerPerfil(usuario.rut);
     }
 }
 
@@ -120,16 +171,13 @@ async function obtenerMisDatos(rut) {
     }
 }
 
-
-
-
-
-
 // Llama a obtenerPerfil con el RUT dinámico
 (async () => {
-    const usuario = await obtenerSesionUsuario(); // Obtiene los datos del usuario
+    const usuario = await obtenerSesionUsuario();
     if (usuario) {
-        obtenerPerfil(usuario.rut); // Llama a la función para cargar el perfil usando el RUT del usuario
+        await obtenerPerfil(usuario.rut); // Cargar perfil después de obtener sesión
+    } else {
+        mostrarMensajeError("No se pudo obtener la sesión.");
     }
 })();
 
@@ -181,12 +229,6 @@ function ocultarLoader() {
 setTimeout(() => {
     ocultarLoader();
 }, 5000); // Oculta el loader después de 5 segundos
-
-
-//------------------Relacionado a mis datos----------------------------------
-
-//---------------------fin--------------------------------------------------
-
 
 
 //------------------Relacionado al historial de pagos------------------------

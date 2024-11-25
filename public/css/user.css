@@ -308,3 +308,106 @@ label {
     border-radius: 5px;
     font-size: 1em;
 }
+
+/* Contenedor principal */
+.contenedor-pago {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+/* Encabezado */
+.pago-header h1 {
+    font-size: 24px;
+    color: #333333;
+    margin-bottom: 20px;
+}
+
+/* Formulario de pago */
+.pago-form {
+    margin-bottom: 20px;
+}
+
+.pago-form label {
+    font-size: 14px;
+    color: #666666;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.pago-form input {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.pago-form input:focus {
+    border-color: #00aaff;
+    box-shadow: 0px 0px 8px rgba(0, 170, 255, 0.5);
+}
+
+.btn-pago {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #00aaff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.btn-pago:hover {
+    background-color: #0088cc;
+    transform: scale(1.05);
+}
+
+/* Mensaje de pago */
+#paymentMessage {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #ff0000;
+}
+
+/* Footer */
+.pago-footer {
+    margin-top: 20px;
+    font-size: 12px;
+    color: #888888;
+}
+
+.pago-footer img {
+    height: 24px;
+    margin: 0 5px;
+    vertical-align: middle;
+}
+
+/* Estilizar imágenes en el pie de pago */
+.pago-footer img {
+    height: 40px; /* Altura uniforme */
+    margin: 0 10px; /* Separación entre imágenes */
+    vertical-align: middle; /* Alinear verticalmente */
+}
+
+/* Quitar flechitas del input numérico */
+input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+    -webkit-appearance: none;  /* Safari y Chrome */
+    appearance: none;          /* Otros navegadores */
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

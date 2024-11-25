@@ -40,9 +40,10 @@ router.post("/login", async (req, res) => {
   try {
     // Consulta a la base de datos
     const query = `
-      SELECT ROL_CUENTA, CONTRASEÑA_CUENTA
+      SELECT PRIVILEGIOS, CONTRASEÑA
       FROM SA_JS_JO_NR_CUENTAS
-      WHERE RUT_CUENTA = :rut
+      WHERE NOMBRE_USUARIO = :rut
+
     `;
     const result = await Open(query, { rut });
 
@@ -54,8 +55,8 @@ router.post("/login", async (req, res) => {
 
     // Obtener los datos del usuario
     const user = result.rows[0];
-    const rol = user["ROL_CUENTA"]?.trim().toLowerCase();
-    const storedPassword = user["CONTRASEÑA_CUENTA"]?.trim();
+    const rol = user["PRIVILEGIOS"]?.trim().toLowerCase();
+    const storedPassword = user["CONTRASEÑA"]?.trim();
 
 
     console.log("Rol recuperado:", rol);
@@ -102,7 +103,8 @@ router.get("/profile/:rut", async (req, res) => {
         R.NOMBRE_REGION,
         U.ROL AS ROL,
         U.CORREO_USUARIO AS CORREO,
-        TO_CHAR(U.TELEFONO_USUARIO) AS TELEFONO
+        TO_CHAR(U.TELEFONO_USUARIO) AS TELEFONO,
+        U.DEUDA AS DEUDA
       FROM 
         SA_JS_JO_NR_USUARIOS U
         LEFT JOIN SA_JS_JO_NR_CANALES C ON U.COD_REGION = C.COD_CANAL
@@ -122,10 +124,12 @@ router.get("/profile/:rut", async (req, res) => {
       directiva: row["NOMBRE_DIRECTIVA"],
       comuna: row["NOMBRE_COMUNA"],
       region: row["NOMBRE_REGION"],
-      rol: row["ROL"],                    // Añadir el rol
-      correo: row["CORREO"],      // Añadir el correo
-      telefono: row["TELEFONO"],  // Añadir el teléfono
-    }))[0]; // Solo obtenemos el primer resultado
+      rol: row["ROL"],
+      correo: row["CORREO"],
+      telefono: row["TELEFONO"],
+      deuda: row["DEUDA"]
+    }))[0];
+    
     
 
     console.log("Perfil del usuario:", profile);
@@ -135,6 +139,40 @@ router.get("/profile/:rut", async (req, res) => {
     return res.status(500).json({ success: false, message: "Error interno del servidor." });
   }
 });
+
+router.post("/pay", async (req, res) => {
+  const { rut, cantidad } = req.body;
+
+  if (!rut || !cantidad) {
+      return res.status(400).json({ success: false, message: "RUT y cantidad son obligatorios." });
+  }
+
+  try {
+      const query = `
+          BEGIN
+              PAGAR(:rut, :cantidad);
+          END;
+      `;
+
+      const binds = { rut, cantidad };
+      await Open(query, binds); // Ejecuta la función de la base de datos
+
+      res.status(200).json({ success: true, message: "Pago exitoso." });
+  } catch (error) {
+      console.error("Error al realizar el pago:", error);
+      // Manejo de errores personalizados según los códigos de RAISE_APPLICATION_ERROR
+      if (error.errorNum === 20020) {
+          res.status(400).json({ success: false, message: "El monto excede la deuda actual." });
+      } else if (error.errorNum === 20021) {
+          res.status(404).json({ success: false, message: "Usuario no encontrado." });
+      } else if (error.errorNum === 20023) {
+          res.status(400).json({ success: false, message: "La cantidad debe ser positiva." });
+      } else {
+          res.status(500).json({ success: false, message: "El monto que deseas ingresar excede la deuda actual de tu cuenta." });
+      }
+  }
+});
+
 
 
 // Ruta de logout
