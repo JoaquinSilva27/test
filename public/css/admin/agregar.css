@@ -7,9 +7,9 @@
     max-width: 600px;
     margin: 5rem auto;
     text-align: center;
-    min-height: 300px; /* Altura mínima para al menos 2 campos */
-    max-height: 70vh; /* Altura máxima para limitar el tamaño */
-    overflow: hidden; /* Habilita el desplazamiento */
+    min-height: 300px; 
+    max-height: 70vh; 
+    overflow: hidden; 
 }
 
 .fixed-header {
@@ -23,17 +23,17 @@
 .fixed-header h3 {
     font-size: 2em;
     color: #001e1d;
-    margin: 0; /* Sin margen para evitar movimientos */
+    margin: 0; 
     text-align: center;
 }
 
 .scrollable-content {
-    overflow-y: auto; /* Habilitamos el desplazamiento vertical */
-    max-height: calc(70vh - 125px); /* Ajustamos la altura para el contenido desplazable */
+    overflow-y: auto; 
+    max-height: calc(70vh - 125px); 
     padding-right: 20px;
     margin-top: -5px;
     margin-left: 60px;
-    margin-right: 10px; /* Mueve el scroll hacia el borde */
+    margin-right: 10px; 
 }
 
 .fixed-footer {
@@ -63,7 +63,7 @@
 }
 
 .fixed-footer .btn-guardar:active {
-    background-color: #e6a555; /* Color más oscuro al presionar */
+    background-color: #e6a555;
 }
 
 /* Adaptación del estilo de los campos */
@@ -106,30 +106,30 @@
 
 /* Estilo para navegadores basados en WebKit (Chrome, Edge, Safari) */
 .scrollable-content::-webkit-scrollbar {
-    width: 12px; /* Ancho de la barra de desplazamiento */
-    height: 12px; /* Altura para scroll horizontal (si aplica) */
+    width: 12px; 
+    height: 12px;
 }
 
 
 .scrollable-content::-webkit-scrollbar-thumb:hover {
-    background: #f9bc60; /* Cambia de color cuando el usuario pasa el cursor */
+    background: #f9bc60; 
 }
 
 .scrollable-content::-webkit-scrollbar-track {
-    border-radius: 20px; /* Redondeado */
+    border-radius: 20px; 
 }
 
-/* Para navegadores basados en Firefox */
+
 .scrollable-content {
-    scrollbar-width: thin; /* Tamaño de la barra de desplazamiento */
-    scrollbar-color: #004643 #fffffe; /* Color del pulgar y del track */
-    border-radius: 20px; /* Redondeado */
+    scrollbar-width: thin; 
+    scrollbar-color: #004643 #fffffe; 
+    border-radius: 20px; 
     max-height: 400px;
 }
 
 
 .input-box input[type="date"]:invalid {
-    color: #fffffe; /* Cambia el color del texto si el campo no es válido */
+    color: #fffffe;
     opacity: 0;
 }
 
@@ -137,7 +137,7 @@
     position: relative;
     z-index: 1;
     font-size: 1rem;
-    color: #001e1d; /* Color del texto del input */
+    color: #001e1d; 
     border: none;
     outline: none;
     background: transparent;
@@ -150,6 +150,6 @@
     bottom: 0;
     width: 100%;
     height: 100%;
-    cursor: pointer; /* Asegura que el cursor indique interacción */
-    background: transparent; /* Haz que el fondo del icono sea transparente */
+    cursor: pointer; 
+    background: transparent; 
 }

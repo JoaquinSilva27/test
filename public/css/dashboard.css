@@ -1,14 +1,14 @@
 .sidebar {
     position: fixed;
     top: 0;
-    left: -250px; /* Oculto inicialmente */
+    left: -250px; 
     width: 250px;
     height: 100vh;
     background: #001e1d;
-    transition: left 0.3s ease; /* Transición para mover el sidebar */
+    transition: left 0.3s ease; 
     z-index: 100;
     display: flex;
-    flex-direction: column; /* Asegura que el contenido se alinee verticalmente */
+    flex-direction: column; 
 }
 
 .sidebar-header {
@@ -23,7 +23,7 @@
     margin: 0;
     background-color: #f9bc60;
     color: #001e1d;
-    position: relative; /* Cambia a relative para que no se desplace con el sidebar */
+    position: relative; 
     z-index: 101;
     cursor: default;
 }
@@ -38,35 +38,35 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%; /* Asegura que ocupe el ancho completo cuando el sidebar está cerrado */
+    width: 100%; 
     padding: 44px 100px;
     background: #004643;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 102; /* Asegura que esté por encima del sidebar */
-    transition: margin-left 0.3s ease, width 0.3s ease; /* Transición suave para cambios de ancho y margen */
+    z-index: 102; 
+    transition: margin-left 0.3s ease, width 0.3s ease; 
 }
 
 /* Sidebar abierto: El header se ajusta a un ancho menor */
 .main-header.expanded {
-    width: calc(100% - 250px); /* Ajusta el ancho cuando el sidebar está abierto */
-    margin-left: 250px; /* Desplaza el header para alinearse con el contenido */
+    width: calc(100% - 250px); 
+    margin-left: 250px; 
 }
 
 .sidebar.open {
-    left: 0; /* Hace visible el sidebar */
+    left: 0; 
 }
 
 .main-content.expanded,
 .main-header.expanded {
-    margin-left: 250px; /* Desplaza el contenido y el header de main-content */
+    margin-left: 250px; 
 }
 
 .logo-menu {
     display: flex;
     align-items: center;
-    transition: padding-left 0.5s ease; /* Transición suave para el movimiento */
+    transition: padding-left 0.5s ease; 
   }
 
 .icon-menu,
@@ -76,11 +76,11 @@
     cursor: pointer;
     margin-right: 10px; 
     text-shadow:
-        -1px -1px 0 #000,  /* Capa 1 alrededor del símbolo */
+        -1px -1px 0 #000,  
         1px -1px 0 #000,
         -1px  1px 0 #000,
         1px  1px 0 #000,
-        -2px -2px 0 #000,  /* Capa 2, más lejos */
+        -2px -2px 0 #000,  
          2px -2px 0 #000,
         -2px  2px 0 #000,
          2px  2px 0 #000
@@ -119,6 +119,6 @@ color: #fffffe;
 .main-content {
     margin-left: 0;
     transition: margin-left 0.3s ease;
-    padding-top: 80px; /* Espacio para el encabezado */
+    padding-top: 80px; 
 }
   

@@ -122,9 +122,9 @@ router.get("/profile/:rut", async (req, res) => {
       directiva: row["NOMBRE_DIRECTIVA"],
       comuna: row["NOMBRE_COMUNA"],
       region: row["NOMBRE_REGION"],
-      rol: row["ROL"],                    // Añadir el rol
-      correo: row["CORREO"],      // Añadir el correo
-      telefono: row["TELEFONO"],  // Añadir el teléfono
+      rol: row["ROL"],                   
+      correo: row["CORREO"],     
+      telefono: row["TELEFONO"], 
     }))[0]; // Solo obtenemos el primer resultado
     
 

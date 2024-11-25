@@ -9,7 +9,7 @@
     max-width: 800px;
     min-width: 700px;
     text-align: center;
-    margin-top: 200px; /* Reducido para mantener uniformidad */
+    margin-top: 200px; 
   }
   
   /* Estilo para el título de la sección */
@@ -23,7 +23,7 @@
   
   /* Selector del tipo de reporte */
   #reporte-select {
-    width: 70%; /* Más espacio para seleccionar opciones largas */
+    width: 70%; 
     padding: 10px;
     font-size: 1em;
     border: 2px solid #004643;
@@ -70,7 +70,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: left;
     max-height: 400px;
-    overflow-y: auto; /* Scroll para resultados largos */
+    overflow-y: auto; 
   }
   
   /* Contenedor dinámico del reporte */
@@ -79,9 +79,9 @@
     background-color: #edf7f6;
     border-radius: 12px;
     box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
-    width: 80%; /* Más ancho */
+    width: 80%; 
     min-width: 600px;
-    margin: 50px auto; /* Centrar */
+    margin: 50px auto; 
   }
   
   /* Cabecera del reporte dinámico */
@@ -89,9 +89,9 @@
   .reporte-detalle-header {
     display: flex;
     align-items: center;
-    justify-content: center; /* Centrar el contenido horizontalmente */
+    justify-content: center; 
     margin-bottom: 20px;
-    gap: 15px; /* Margen entre el símbolo y el título */
+    gap: 15px; 
     position: relative;
   }
   
@@ -103,7 +103,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute; /* Posicionarlo a la izquierda del contenedor */
+    position: absolute; 
     left: 0;
   }
   
@@ -137,9 +137,9 @@
   /* Contenedor para cada campo dinámico */
   .campo-dinamico {
     display: flex;
-    flex-direction: column; /* Asegura que el label esté encima del input */
-    gap: 5px; /* Espacio entre el label y el input */
-    margin-bottom: 15px; /* Espacio entre campos */
+    flex-direction: column;
+    gap: 5px; 
+    margin-bottom: 15px; 
     align-items: center;
     justify-content: center;
   }
@@ -158,55 +158,55 @@
     border: 2px solid #004643;
     border-radius: 5px;
     outline: none;
-    width: 100%; /* Ocupa todo el ancho disponible */
+    width: 100%; 
     background-color: #ffffff;
   }
 
  
   
   .campo-dinamico input:focus {
-    border-color: #f9bc60; /* Cambia el color del borde al enfocarse */
+    border-color: #f9bc60; 
   }
   
   
-  /* Estilo para navegadores basados en WebKit (Chrome, Edge, Safari) */
+ 
   .reporte-detalle-contenido::-webkit-scrollbar {
-    width: 12px; /* Ancho de la barra de desplazamiento */
-    height: 12px; /* Altura para scroll horizontal (si aplica) */
+    width: 12px;
+    height: 12px; 
   }
   
   
   .reporte-detalle-contenido::-webkit-scrollbar-thumb:hover {
-    background: #f9bc60; /* Cambia de color cuando el usuario pasa el cursor */
+    background: #f9bc60; 
   }
   
   .reporte-detalle-contenido::-webkit-scrollbar-track {
-    border-radius: 20px; /* Redondeado */
+    border-radius: 20px; 
   }
   
   /* Para navegadores basados en Firefox */
   .reporte-detalle-contenido {
-    scrollbar-width: thin; /* Tamaño de la barra de desplazamiento */
-    scrollbar-color: #004643 #fffffe; /* Color del pulgar y del track */
-    border-radius: 20px; /* Redondeado */
+    scrollbar-width: thin; 
+    scrollbar-color: #004643 #fffffe; 
+    border-radius: 20px; 
   }
   
   /* Estilo para el contenedor de sugerencias */
   .sugerencias {
-    list-style-type: none; /* Quita los puntos de lista */
+    list-style-type: none; 
     margin: 0;
     padding: 0;
     
     border-radius: 5px;
     background-color: #ffffff;
-    max-height: 150px; /* Altura máxima con scroll */
+    max-height: 150px; 
     overflow-y: auto;
-    position: absolute; /* Asegura que se posicione relativo al input */
+    position: absolute;
     width: 70%; 
     z-index: 1000;
     top: 100%;
-    left: 100px; /* Alineado con el inicio del input */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para destacar */
+    left: 100px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
   }
   
   /* Estilo para los elementos de las sugerencias */
@@ -214,7 +214,7 @@
     padding: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    font-size: 1em; /* Tamaño de texto legible */
+    font-size: 1em; 
   }
   
   /* Estilo al pasar el cursor sobre una sugerencia */
@@ -224,37 +224,37 @@
   }
   
   #opciones-reporte .input-wrapper input[type="date"] {
-    width: 100%; /* Ocupa todo el ancho */
-    height: 100%; /* Coincide con la altura del contenedor */
-    padding: 0 10px; /* Espaciado interno */
-    font-size: 1rem; /* Tamaño del texto */
-    border: none; /* Sin bordes adicionales */
-    outline: none; /* Sin borde de enfoque */
-    background-color: transparent; /* Fondo transparente */
-    color: #001e1d; /* Color del texto */
-    cursor: pointer; /* Hace clickeable todo el input */
+    width: 100%;
+    height: 100%; 
+    padding: 0 10px; 
+    font-size: 1rem; 
+    border: none; 
+    outline: none;
+    background-color: transparent; 
+    color: #001e1d; 
+    cursor: pointer;
 }
 
 #opciones-reporte .input-wrapper {
   position: relative;
-  width: 70%; /* Asegura que ocupe todo el ancho del contenedor */
-  height: 50px; /* Establece una altura consistente */
+  width: 70%; 
+  height: 50px; 
   display: flex;
   align-items: center;
-  border: 2px solid #004643; /* Borde externo */
-  border-radius: 8px; /* Bordes redondeados */
+  border: 2px solid #004643; 
+  border-radius: 8px; 
   overflow: hidden;
-  cursor: pointer; /* Hace que toda el área sea clickeable */
+  cursor: pointer;
 }
 
 #opciones-reporte .input-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
   position: absolute;
-  right: 10px; /* Alineado al borde derecho */
-  width: 100%; /* Tamaño del ícono */
-  height: 100%; /* Coincide con la altura del contenedor */
-  cursor: pointer; /* Permite interacción */
+  right: 10px; 
+  width: 100%; 
+  height: 100%;
+  cursor: pointer; 
   z-index: 2;
-  background: transparent; /* Fondo transparente */
+  background: transparent; 
 }
 
 /* Estilo general para la tabla */
@@ -266,7 +266,7 @@
   font-size: 16px;
   text-align: left;
   color: #001e1d;
-  background-color: #ffffff; /* Blanco puro */
+  background-color: #ffffff; 
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -275,10 +275,10 @@
 /* Encabezado de la tabla */
 .tabla-reporte thead {
   background-color: #004643;
-  color: #ffffff; /* Blanco */
+  color: #ffffff; 
   font-weight: bold;
   text-transform: uppercase;
-  text-align: center; /* Centra el texto en el encabezado */
+  text-align: center; 
 }
 
 /* Filas del cuerpo */
@@ -289,26 +289,26 @@
 
 /* Resaltar fila al pasar el cursor */
 .tabla-reporte tbody tr:hover {
-  background-color: #e6f7f5; /* Suave color de fondo */
+  background-color: #e6f7f5; 
 }
 
 /* Celdas del cuerpo */
 .tabla-reporte tbody td {
   padding: 12px;
-  text-align: center; /* Centra el contenido */
-  font-size: 16px; /* Ajusta el tamaño de texto */
+  text-align: center; 
+  font-size: 16px; 
 }
 
 /* Pie de tabla */
 .tabla-reporte tfoot {
   background-color: #f9bc60;
   font-weight: bold;
-  text-align: center; /* Centra el contenido del pie */
+  text-align: center; 
 }
 
 .tabla-reporte tfoot td {
   padding: 12px;
-  font-size: 16px; /* Ajusta el tamaño de texto */
+  font-size: 16px; 
 }
 
 /* Centrado del contenedor del reporte */
@@ -323,7 +323,7 @@
   width: auto;
   max-width: 800px;
   margin-top: 10%;
-  min-height: auto; /* Elimina la altura mínima */
+  min-height: auto; 
 }
 
 /* Título del reporte */
@@ -332,84 +332,84 @@
   font-weight: bold;
   color: #004643;
   text-align: center;
-  flex: 1; /* Asegura que ocupe espacio para mantener centrado */
+  flex: 1; 
   margin-top: 10px;
 }
 
 
 /* Estilo general para la tabla */
 .tabla-reporte-proyectos {
-  width: 100%; /* Asegura que la tabla ocupe todo el ancho disponible */
-  border-collapse: collapse; /* Quita el espacio entre bordes de celdas */
-  margin: 20px 0; /* Espaciado superior e inferior */
-  font-size: 16px; /* Tamaño de texto estándar */
-  font-family: 'Poppins', sans-serif; /* Fuente consistente */
-  text-align: left; /* Alineación del texto */
-  background-color: #f9f9f9; /* Fondo claro para las celdas */
-  border: 1px solid #ddd; /* Bordes suaves */
+  width: 100%; 
+  border-collapse: collapse; 
+  margin: 20px 0; 
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif; 
+  text-align: left; 
+  background-color: #f9f9f9; 
+  border: 1px solid #ddd; 
 }
 
 /* Estilo para el encabezado de la tabla */
 .tabla-reporte-proyectos thead {
-  background-color: #004643; /* Color oscuro para el encabezado */
-  color: #fff; /* Texto blanco para contraste */
-  font-weight: bold; /* Texto en negrita */
+  background-color: #004643; 
+  color: #fff; 
+  font-weight: bold; 
 }
 
 .tabla-reporte-proyectos thead th {
-  padding: 12px 15px; /* Espaciado interno para las celdas del encabezado */
-  text-transform: uppercase; /* Encabezados en mayúsculas */
+  padding: 12px 15px;
+  text-transform: uppercase; 
 }
 
 /* Estilo para las filas del cuerpo */
 .tabla-reporte-proyectos tbody tr {
-  border-bottom: 1px solid #ddd; /* Línea divisoria entre filas */
+  border-bottom: 1px solid #ddd; 
 }
 
 /* Estilo para las celdas */
 .tabla-reporte-proyectos tbody td {
-  padding: 10px 15px; /* Espaciado interno para las celdas */
-  color: #333; /* Color del texto */
+  padding: 10px 15px; 
+  color: #333; 
 }
 
 /* Estilo para las filas alternadas */
 .tabla-reporte-proyectos tbody tr:nth-child(even) {
-  background-color: #f2f2f2; /* Fondo diferente para filas pares */
+  background-color: #f2f2f2; 
 }
 
 /* Estilo para el pie de tabla */
 .tabla-reporte-proyectos tfoot td {
-  font-weight: bold; /* Texto en negrita */
-  padding: 10px 15px; /* Espaciado interno */
-  background-color: #f9bc60; /* Fondo amarillo */
-  color: #001e1d; /* Texto oscuro para contraste */
+  font-weight: bold; 
+  padding: 10px 15px; 
+  background-color: #f9bc60; 
+  color: #001e1d; 
 }
 
 /* Adaptación para dispositivos pequeños */
 @media screen and (max-width: 768px) {
   .tabla-reporte-proyectos {
-      font-size: 14px; /* Reduce el tamaño del texto en pantallas pequeñas */
+      font-size: 14px; 
   }
 
   .tabla-reporte-proyectos thead th {
-      padding: 10px; /* Ajusta el espaciado del encabezado */
+      padding: 10px; 
   }
 
   .tabla-reporte-proyectos tbody td {
-      padding: 8px; /* Ajusta el espaciado de las celdas */
+      padding: 8px; 
   }
 
   .tabla-reporte-proyectos tfoot td {
-      padding: 8px; /* Ajusta el espaciado del pie de tabla */
+      padding: 8px; 
   }
 }
 
 
 .reporte-ingresos {
   padding: 30px;
-  background: linear-gradient(135deg, #abd1c6, #edf7f6); /* Gradiente más sutil */
-  border-radius: 20px; /* Bordes aún más redondeados */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra para resaltar */
+  background: linear-gradient(135deg, #abd1c6, #edf7f6); 
+  border-radius: 20px; 
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
   max-width: 850px;
   margin: 50px auto;
   position: relative;
@@ -419,10 +419,10 @@
 /* Estilo del título solo para ingresos */
 .reporte-ingresos #reporte-titulo {
   font-size: 28px;
-  color: #004643; /* Tono oscuro del verde */
+  color: #004643; 
   text-align: center;
   margin-bottom: 20px;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para destacar el título */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
 }
 
 
@@ -434,9 +434,9 @@
   right: -80px;
   width: 250px;
   height: 250px;
-  background: rgba(0, 70, 67, 0.2); /* Otro círculo decorativo */
+  background: rgba(0, 70, 67, 0.2); 
   border-radius: 50%;
-  z-index: 0; /* Asegurar que esté detrás */
+  z-index: 0; 
 }
 
 /* Ajustes para el contenido de la tabla en ingresos */
@@ -444,7 +444,7 @@
   background: #fff;
   padding: 20px;
   border-radius: 12px;
-  z-index: 1; /* Para que esté encima de los decorativos */
+  z-index: 1; 
   position: relative;
 }
 
@@ -454,21 +454,21 @@
   margin: 20px 0;
   font-size: 16px;
   text-align: left;
-  background-color: #ffffff; /* Fondo blanco para contraste */
-  border-radius: 12px; /* Bordes redondeados */
-  overflow: hidden; /* Para manejar bordes redondeados */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  background-color: #ffffff; 
+  border-radius: 12px; 
+  overflow: hidden; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
   position: relative;
-  z-index: 1; /* Asegura que esté encima del fondo decorativo */
+  z-index: 1; 
 }
 
 /* Encabezado de la tabla */
 .reporte-ingresos .tabla-reporte-ingresos thead {
-  background-color: #004643; /* Verde oscuro */
-  color: #ffffff; /* Texto blanco */
+  background-color: #004643; 
+  color: #ffffff; 
   font-weight: bold;
   text-transform: uppercase;
-  text-align: center; /* Centrar texto */
+  text-align: center;
 }
 
 /* Celdas del encabezado */
@@ -478,17 +478,17 @@
 
 /* Cuerpo de la tabla */
 .reporte-ingresos .tabla-reporte-ingresos tbody tr {
-  border-bottom: 1px solid #abd1c6; /* Línea divisoria entre filas */
+  border-bottom: 1px solid #abd1c6;
   transition: background-color 0.3s ease;
 }
 
 /* Alternancia de filas */
 .reporte-ingresos .tabla-reporte-ingresos tbody tr:nth-child(even) {
-  background-color: #edf7f6; /* Fondo alternado */
+  background-color: #edf7f6; 
 }
 
 .reporte-ingresos .tabla-reporte-ingresos tbody tr:nth-child(odd) {
-  background-color: #ffffff; /* Fondo alternado */
+  background-color: #ffffff; 
 }
 
 /* Celdas del cuerpo */
@@ -496,21 +496,21 @@
   padding: 12px 20px;
   text-align: center;
   font-size: 16px;
-  color: #001e1d; /* Texto oscuro */
+  color: #001e1d; 
 }
 
 /* Resaltar filas al pasar el cursor */
 .reporte-ingresos .tabla-reporte-ingresos tbody tr:hover {
-  background-color: #f9bc60; /* Fondo amarillo claro */
-  color: #001e1d; /* Texto oscuro */
+  background-color: #f9bc60; 
+  color: #001e1d; 
 }
 
 /* Pie de la tabla */
 .reporte-ingresos .tabla-reporte-ingresos tfoot {
-  background-color: #004643; /* Verde oscuro */
-  color: #ffffff; /* Texto blanco */
+  background-color: #004643; 
+  color: #ffffff; 
   font-weight: bold;
-  text-align: right; /* Alinear texto a la derecha */
+  text-align: right; 
 }
 
 .reporte-ingresos .tabla-reporte-ingresos tfoot td {
@@ -519,21 +519,21 @@
 }
 
 .tabla-con-scroll {
-  max-height: 400px; /* Altura máxima del contenedor */
-  overflow-y: auto; /* Activa el scroll vertical */
-  overflow-x: hidden; /* Evita el scroll horizontal */
+  max-height: 400px; 
+  overflow-y: auto; 
+  overflow-x: hidden; 
 }
 
 /* Personalización del scroll */
 .tabla-con-scroll::-webkit-scrollbar {
-  width: 8px; /* Ancho del scroll */
+  width: 8px; 
 }
 
 .tabla-con-scroll::-webkit-scrollbar-thumb {
-  background-color: #abd1c6; /* Color del scroll */
-  border-radius: 4px; /* Bordes redondeados */
+  background-color: #abd1c6; 
+  border-radius: 4px; 
 }
 
 .tabla-con-scroll::-webkit-scrollbar-thumb:hover {
-  background-color: #004643; /* Color del scroll al pasar el cursor */
+  background-color: #004643; 
 }

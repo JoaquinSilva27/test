@@ -14,8 +14,8 @@ body {
   width: 5.4em;
   height: 5.4em;
   background-color: #004643;
-  display: none; /* Ocultar el loader por defecto */
-  z-index: 1000; /* Asegura que esté encima del contenido */
+  display: none; 
+  z-index: 1000; 
 }
 
 #hill {
