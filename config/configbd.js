@@ -3,9 +3,9 @@ const oracledb = require("oracledb");
 require("dotenv").config();
 
 const cns = {
-  user: process.env.DB_USER || "system",
-  password: process.env.DB_PASSWORD || "admin",
-  connectString: process.env.DB_CONNECTION || "DESKTOP-R34HRSG/XEPDB1",
+  user: process.env.DB_USER || "FRIKZ",
+  password: process.env.DB_PASSWORD || "1234",
+  connectString: process.env.DB_CONNECTION || "localhost/xe",
 };
 
 // Configuración del formato de salida

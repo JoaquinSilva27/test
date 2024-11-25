@@ -67,7 +67,7 @@ CREATE TABLE SA_JS_JO_NR_CUENTAS (
     NOMBRE_USUARIO VARCHAR2(12),
     PRIVILEGIOS VARCHAR2(20),
     CONTRASEÑA VARCHAR2(20),
-    CONSTRAINT PK_SA_JS_JO_NR_CUENTAS PRIMARY KEY(RUT_CUENTA)
+    CONSTRAINT PK_SA_JS_JO_NR_CUENTAS PRIMARY KEY(NOMBRE_USUARIO)
 );
 
 
@@ -2214,7 +2214,7 @@ BEGIN
     v_total_con_interes := v_total_cuota + (v_total_cuota * 0.00053 * v_dias_vencidos);
     RETURN v_total_con_interes;
 END;
-
+/
 -- EJEMPLO DE USO:
 SELECT COD_CUOTA,
        TOTAL_CUOTA,
@@ -2361,7 +2361,7 @@ BEGIN
         :NEW.RUT_USUARIO, v_cod_historial_cambio
     );
 END;
-
+/
 --
 
 CREATE OR REPLACE PROCEDURE VINCULAR_PREDIO_CANALES( -- PROCEDIMIENTO va en seccion de gestores de la pagina
