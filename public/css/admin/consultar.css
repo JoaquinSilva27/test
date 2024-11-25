@@ -119,9 +119,9 @@
     max-height: 150px;
     overflow-y: auto;
     position: absolute;
-    width: 355px; /* Ajuste al ancho del input */
+    width: 355px; 
     z-index: 1000;
-    top: 205px; /* Ajusta según el diseño */
+    top: 205px; 
 }
 
 .sugerencias-consultas li {

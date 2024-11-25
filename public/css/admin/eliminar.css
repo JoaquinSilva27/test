@@ -1,10 +1,10 @@
 /* Sección de Eliminar */
 #eliminar-section {
-    display: none; /* Oculta por defecto */
+    display: none; 
     padding: 20px;
     background: linear-gradient(135deg, #abd1c6, #edf7f6);;
-    border-radius: 10px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
     margin: 20px auto;
     max-width: 500px;
     min-width: 700px;
@@ -21,7 +21,7 @@
 
 .eliminar-busqueda {
     margin-bottom: 20px;
-    position: relative; /* Necesario para posicionar las sugerencias */
+    position: relative; 
 }
   
   /* Campo de búsqueda */
@@ -44,7 +44,7 @@
   .eliminar-busqueda button {
     margin-top: 10px;
     padding: 10px 20px;
-    background-color: #e16162; /* Rojo para destacar peligro */
+    background-color: #e16162; 
     color: #040404;
     border: none;
     border-radius: 5px;
@@ -54,7 +54,7 @@
   }
   
   .eliminar-busqueda button:hover {
-    background-color: #d62828; /* Rojo más oscuro al pasar el cursor */
+    background-color: #d62828; 
     color: #001e1d;
   }
 
@@ -66,13 +66,13 @@
   border: 1px solid #004643;
   border-radius: 5px;
   background-color: #ffffff;
-  max-height: 150px; /* Altura máxima con scroll */
+  max-height: 150px; 
   overflow-y: auto;
   position: absolute;
-  width: 80%; /* Ajustar al ancho del input */
-  z-index: 1000; /* Por encima de otros elementos */
-  left: 10%; /* Alinear con el input */
-  top: 110px; /* Justo debajo del input */
+  width: 80%; 
+  z-index: 1000; 
+  left: 10%; 
+  top: 110px; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 

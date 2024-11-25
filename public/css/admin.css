@@ -94,24 +94,24 @@ header {
 }
 
 .main-content {
-    position: relative; /* Establece un contexto para posicionamiento absoluto */
-    margin-left: 220px; /* Deja espacio para el sidebar */
+    position: relative; 
+    margin-left: 220px; 
     padding: 0;
     display: flex;
     flex-direction: column;
     height: 100vh;
-    overflow: hidden; /* Asegura que el contenido adicional no desborde */
+    overflow: hidden; 
 }
 
 .container-crud {
     position: absolute;
-    top: 50%; /* Centrado vertical */
-    left: 50%; /* Centrado horizontal */
-    transform: translate(-50%, -50%); /* Corrección del desplazamiento */
-    width: 90%; /* Adapta a pantallas pequeñas */
-    max-width: 800px; /* Límite superior */
-    height: auto; /* Ajustable al contenido */
-    padding: 2rem; /* Espaciado interno */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    width: 90%; 
+    max-width: 800px; 
+    height: auto; 
+    padding: 2rem; 
     background: linear-gradient(135deg, #abd1c6, #edf7f6);;
     border: 2px solid rgba(255,255,255,.5);
     border-radius: 20px;
@@ -124,13 +124,13 @@ header {
 
 .mensaje-inicio{
     position: absolute;
-    top: 50%; /* Centrado vertical */
-    left: 50%; /* Centrado horizontal */
-    transform: translate(-50%, -50%); /* Corrección del desplazamiento */
-    width: 90%; /* Adapta a pantallas pequeñas */
-    max-width: 800px; /* Límite superior */
-    height: auto; /* Ajustable al contenido */
-    padding: 2rem; /* Espaciado interno */
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    width: 90%; 
+    max-width: 800px; 
+    height: auto; 
+    padding: 2rem; 
     display: flex;
     justify-content: center;
     align-items: center;
@@ -196,7 +196,7 @@ header {
 /* Contenedor del Formulario */
 #form-container {
     width: 80%;
-    margin: 0 auto; /* Centrado horizontal */
+    margin: 0 auto; 
     background-color: #f0f0f0;
     padding: 20px;
     border-radius: 10px;
@@ -220,7 +220,7 @@ header {
     font-size: 1em;
     color: #333;
     background-color: #ffffff;
-    appearance: none; /* Oculta el ícono predeterminado del navegador */
+    appearance: none; 
     -webkit-appearance: none;
     -moz-appearance: none;
     background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-chevron-down" viewBox="0 0 16 16"> <path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/> </svg>');
@@ -234,7 +234,7 @@ header {
 }
 
 #entitySelect:focus {
-    border-color: #f9bc60; /* Cambia el color del borde al enfocarse */
+    border-color: #f9bc60; 
 }
 
 /* Estilo para las Opciones del Select */
@@ -246,7 +246,7 @@ header {
 
 /* Estilo del Botón de Guardar */
 .btn-guardar {
-    width: 100%; /* O ajusta al tamaño deseado */
+    width: 100%; 
     padding: 12px 20px;
     background-color: #004643;
     color: #ffffff;
@@ -265,5 +265,5 @@ header {
 }
 
 .btn-guardar:active {
-    background-color: #e6a555; /* Color un poco más oscuro para el clic */
+    background-color: #e6a555; 
 }

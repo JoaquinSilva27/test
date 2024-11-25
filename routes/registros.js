@@ -91,7 +91,7 @@ router.get(`${PREFIX}/columns/:table`, async (req, res) => {
     const fullTableName = `SA_JS_JO_NR_${table.toUpperCase()}`;
 
     const sql = `
-        SELECT COLUMN_NAME, DATA_TYPE, COLUMN_ID
+        SELECT COLUMN_NAME, DATA_TYPE, DATA_LENGTH, COLUMN_ID
         FROM USER_TAB_COLUMNS
         WHERE TABLE_NAME = :tableName
         ORDER BY COLUMN_ID
@@ -104,6 +104,7 @@ router.get(`${PREFIX}/columns/:table`, async (req, res) => {
             name: row.COLUMN_NAME,
             type: row.DATA_TYPE.includes('NUMBER') ? 'number' :
                 row.DATA_TYPE.includes('DATE') ? 'date' : 'text',
+            maxLength: row.DATA_TYPE.includes('CHAR') || row.DATA_TYPE.includes('VARCHAR2') ? row.DATA_LENGTH : null,
             isPrimaryKey: index === 0 && row.COLUMN_NAME !== 'RUT_USUARIO',
         }));
 
@@ -197,11 +198,21 @@ router.get(`${PREFIX}/:table/data/:pk`, async (req, res) => {
     // Convertir la clave primaria a número
     const numericPk = Number(pk);
     if (Number.isNaN(numericPk)) {
-        return res.status(400).json(`{ error: 'La clave primaria proporcionada no es válida.' }`);
+        return res.status(400).json({ error: 'La clave primaria proporcionada no es válida.' });
     }
 
     // Agregar prefijo al nombre de la tabla
     const fullTableName = `SA_JS_JO_NR_${table.toUpperCase()}`;
+
+    // Función para convertir una fecha ISO a formato DD-MM-YYYY
+    const convertirFecha = (fechaISO) => {
+        if (!fechaISO) return null; // Maneja valores nulos
+        const fecha = new Date(fechaISO);
+        const day = String(fecha.getDate()).padStart(2, '0');
+        const month = String(fecha.getMonth() + 1).padStart(2, '0');
+        const year = fecha.getFullYear();
+        return `${day}-${month}-${year}`;
+    };
 
     try {
         // Identificar la columna PK dinámica
@@ -221,7 +232,7 @@ router.get(`${PREFIX}/:table/data/:pk`, async (req, res) => {
 
         console.log(`Clave primaria identificada: ${pkColumn}`);
 
-        // Construir consulta para obtener todos los datos incluyendo la PK
+        // Consulta para obtener los datos de la fila
         const sql = `
             SELECT *
             FROM ${fullTableName}
@@ -233,16 +244,34 @@ router.get(`${PREFIX}/:table/data/:pk`, async (req, res) => {
             return res.status(404).json({ error: 'No se encontraron registros para el criterio proporcionado.' });
         }
 
-        // Devuelve los datos completos incluyendo la PK
         const row = result.rows[0];
 
-        console.log('Resultado de la consulta (con PK):', row);
+        // Consulta para obtener detalles de las columnas (DATA_TYPE y DATA_LENGTH)
+        const columnsQuery = `
+            SELECT COLUMN_NAME, DATA_TYPE, DATA_LENGTH
+            FROM USER_TAB_COLUMNS
+            WHERE TABLE_NAME = :tableName
+        `;
+        const columnsResult = await BD.Open(columnsQuery, [fullTableName], false);
 
-        // Adjunta información adicional para el frontend (ejemplo: marcar PK como no editable)
+        const columnDetails = columnsResult.rows.reduce((acc, col) => {
+            acc[col.COLUMN_NAME] = {
+                type: col.DATA_TYPE.includes('NUMBER') ? 'number' :
+                      col.DATA_TYPE.includes('DATE') ? 'date' : 'text',
+                maxLength: col.DATA_TYPE.includes('CHAR') || col.DATA_TYPE.includes('VARCHAR2') ? col.DATA_LENGTH : null,
+            };
+            return acc;
+        }, {});
+
+        console.log('Detalles de columnas:', columnDetails);
+
+        // Formatear la respuesta para incluir detalles adicionales
         const formattedResult = Object.entries(row).map(([key, value]) => ({
             columnName: key,
-            value: value,
+            value: key.toLowerCase().includes('fecha') && value ? convertirFecha(value) : value,
             editable: key !== pkColumn, // La PK no es editable
+            type: columnDetails[key]?.type || 'text', // Tipo de dato
+            maxLength: columnDetails[key]?.maxLength || null, // Longitud máxima si aplica
         }));
 
         return res.status(200).json({ pkColumn, data: formattedResult });

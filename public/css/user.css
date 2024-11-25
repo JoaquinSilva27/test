@@ -103,11 +103,11 @@ header {
 }
 
 .contenedor-vacio {
-    background: none; /* Sin fondo */
-    border: none;     /* Sin bordes */
-    width: auto;      /* Se adapta al contenido */
-    height: auto;     /* Se adapta al contenido */
-    box-shadow: none; /* Sin sombras */
+    background: none; 
+    border: none;     
+    width: auto;      
+    height: auto;     
+    box-shadow: none; 
 }
 
 .mensaje-inicio {
@@ -135,7 +135,7 @@ header {
 }
 
 .informacion_usuario h3 {
-    margin: 10px 0; /* Espaciado entre las líneas */
+    margin: 10px 0; 
 }
 
 
@@ -166,15 +166,15 @@ header {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%; /* Ocupa casi todo el ancho de la pantalla */
-    max-width: 1500px; /* Ancho máximo */
+    width: 100%; 
+    max-width: 1500px; 
     min-width: 800px;
-    margin: 20px auto; /* Centrado con margen superior e inferior */
-    background-color: #ffffff; /* Fondo blanco */
-    border-radius: 20px; /* Bordes redondeados */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    margin: 20px auto; 
+    background-color: #ffffff; 
+    border-radius: 20px; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     padding: 30px;
-    box-sizing: border-box; /* Incluye padding en el tamaño total */
+    box-sizing: border-box; 
 }
 
 /* Cabecera del perfil */
@@ -182,23 +182,23 @@ header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 20px; /* Espacio entre la cabecera y los datos */
+    margin-bottom: 20px; 
 }
 
 /* Foto de perfil */
 .foto-perfil {
-    width: 150px; /* Tamaño del círculo */
+    width: 150px; 
     height: 150px;
-    border-radius: 50%; /* Hace que sea circular */
-    overflow: hidden; /* Asegura que la imagen no se salga del contenedor */
-    border: 4px solid #004643; /* Bordes alrededor de la foto */
-    margin-bottom: 15px; /* Espaciado entre la foto y el nombre */
+    border-radius: 50%; 
+    overflow: hidden; 
+    border: 4px solid #004643; 
+    margin-bottom: 15px; 
 }
 
 .imagen-redonda {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Ajusta la imagen al círculo */
+    object-fit: cover; 
 }
 
 /* Nombre del usuario */
@@ -211,15 +211,15 @@ header {
 
 /* Datos del perfil */
 .perfil-datos {
-    width: 100%; /* Ocupa todo el ancho disponible */
-    text-align: left; /* Alinea el texto a la izquierda */
+    width: 100%; 
+    text-align: left;
     font-size: 1.2em;
     color: #001e1d;
-    line-height: 1.8em; /* Espaciado entre líneas */
+    line-height: 1.8em; 
 }
 
 .perfil-datos p {
-    margin: 10px 0; /* Espaciado entre líneas */
+    margin: 10px 0; 
 }
 
 .contenedor-datos {
@@ -299,9 +299,9 @@ label {
 }
 
 #mensaje-error {
-    display: none; /* Oculto por defecto */
-    color: rgb(75, 212, 236); /* Azul claro */
-    background-color: rgba(75, 212, 236, 0.1); /* Fondo claro */
+    display: none; 
+    color: rgb(75, 212, 236);
+    background-color: rgba(75, 212, 236, 0.1);
     text-align: center;
     margin-top: 10px;
     padding: 10px;

@@ -1,6 +1,6 @@
 /* Estilo general para la sección de Modificar */
 #modificar-section {
-    display: none; /* Se oculta por defecto */
+    display: none; 
     padding: 20px;
     background: linear-gradient(135deg, #abd1c6, #edf7f6);;
     border-radius: 10px;
@@ -96,19 +96,19 @@
   .campos-modificar .campo input {
     padding: 10px;
     font-size: 1em;
-    border: 2px solid #004643; /* Borde estándar */
+    border: 2px solid #004643; 
     border-radius: 5px;
     outline: none;
     transition: border-color 0.3s ease;
-    background-color: #ffffff; /* Fondo blanco para que sea visible */
-    color: #333333; /* Texto negro */
-    cursor: text; /* Indicar que es editable */
+    background-color: #ffffff; 
+    color: #333333; 
+    cursor: text; 
   }
   
   /* Al enfocar un campo */
 .campos-modificar .campo input:focus {
-  border-color: #004643; /* Cambiar el color del borde al enfocarse */
-  background-color: #fff7e6; /* Fondo ligeramente diferente al enfocar */
+  border-color: #004643; 
+  background-color: #fff7e6; 
 }
   
   /* Estilo para el botón de Guardar Cambios */
@@ -136,14 +136,14 @@
   margin: 0;
   padding: 0;
   position: absolute;
-  width: 420px; /* Ajusta al ancho del input */
+  width: 420px; 
   margin-left: 3px;
   background-color: #ffffff;
   border: 1px solid #000000;
   border-radius: 5px;
-  max-height: 150px; /* Altura máxima con scroll */
+  max-height: 150px; 
   overflow-y: auto;
-  z-index: 10; /* Asegura que esté encima de otros elementos */
+  z-index: 10; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -163,16 +163,16 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 15px;
-  max-height: 300px; /* Altura máxima */
-  overflow-y: auto; /* Permite scroll */
+  max-height: 300px;
+  overflow-y: auto; 
 }
 
 .campos-modificar .campo {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Alineación a la izquierda */
+  align-items: flex-start;
   justify-content: center;
-  width: 100%; /* Hace que el ancho sea consistente */
+  width: 100%; 
 }
 
 
@@ -184,7 +184,34 @@
 }
 
 .campos-modificar .campo input {
-  width: 100%; /* Asegura que el input ocupe todo el espacio disponible */
-  max-width: 300px; /* Máximo ancho para evitar inputs enormes */
-  box-sizing: border-box; /* Asegura que padding no afecte el ancho */
+  width: 100%; 
+  max-width: 300px; 
+  box-sizing: border-box; 
+}
+
+.campos-modificar .campo select {
+  padding: 10px;
+  font-size: 1em;
+  border: 2px solid #004643; 
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  background-color: #ffffff; 
+  color: #333333; 
+  width: 100%; /* Asegura que ocupe todo el ancho disponible */
+  max-width: 300px; /* Igual que los inputs */
+  box-sizing: border-box; 
+  cursor: pointer; 
+}
+
+.campos-modificar .campo select:focus {
+  border-color: #004643; 
+  background-color: #fff7e6; /* Fondo ligeramente diferente al enfocar */
+}
+
+.campos-modificar .campo select option {
+  background-color: #ffffff;
+  color: #333333;
+  font-size: 1em;
+  padding: 5px; /* Espaciado interno para las opciones */
 }
