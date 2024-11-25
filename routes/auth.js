@@ -41,7 +41,6 @@ router.post("/login", async (req, res) => {
     // Consulta a la base de datos
     const query = `
       SELECT PRIVILEGIOS, CONTRASEÑA
-      SELECT PRIVILEGIOS, CONTRASEÑA
       FROM SA_JS_JO_NR_CUENTAS
       WHERE NOMBRE_USUARIO = :rut
 
