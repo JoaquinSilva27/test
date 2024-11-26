@@ -1,11 +1,24 @@
--- Drop all tables
+-- Drop all triggers
 BEGIN
-    FOR t IN (SELECT table_name FROM user_tables) LOOP
-        EXECUTE IMMEDIATE 'DROP TABLE ' || t.table_name || ' CASCADE CONSTRAINTS';
+    FOR tr IN (SELECT trigger_name FROM user_triggers) LOOP
+        EXECUTE IMMEDIATE 'DROP TRIGGER ' || tr.trigger_name;
     END LOOP;
 END;
 /
-
+-- Drop all procedures
+BEGIN
+    FOR p IN (SELECT object_name FROM user_objects WHERE object_type = 'PROCEDURE') LOOP
+        EXECUTE IMMEDIATE 'DROP PROCEDURE ' || p.object_name;
+    END LOOP;
+END;
+/
+-- Drop all functions
+BEGIN
+    FOR f IN (SELECT object_name FROM user_objects WHERE object_type = 'FUNCTION') LOOP
+        EXECUTE IMMEDIATE 'DROP FUNCTION ' || f.object_name;
+    END LOOP;
+END;
+/
 -- Drop all sequences
 BEGIN
     FOR s IN (SELECT sequence_name FROM user_sequences) LOOP
@@ -14,29 +27,20 @@ BEGIN
 END;
 /
 
--- Drop all procedures
+-- Drop all tables
 BEGIN
-    FOR p IN (SELECT object_name FROM user_objects WHERE object_type = 'PROCEDURE') LOOP
-        EXECUTE IMMEDIATE 'DROP PROCEDURE ' || p.object_name;
+    FOR t IN (SELECT table_name FROM user_tables) LOOP
+        EXECUTE IMMEDIATE 'DROP TABLE ' || t.table_name || ' CASCADE CONSTRAINTS';
     END LOOP;
 END;
 /
 
--- Drop all functions
-BEGIN
-    FOR f IN (SELECT object_name FROM user_objects WHERE object_type = 'FUNCTION') LOOP
-        EXECUTE IMMEDIATE 'DROP FUNCTION ' || f.object_name;
-    END LOOP;
-END;
-/
 
--- Drop all triggers
-BEGIN
-    FOR tr IN (SELECT trigger_name FROM user_triggers) LOOP
-        EXECUTE IMMEDIATE 'DROP TRIGGER ' || tr.trigger_name;
-    END LOOP;
-END;
-/
+
+
+
+
+
 
 
 begin
@@ -50,6 +54,62 @@ begin
    	AGREGAR_TIPO_CUOTAS('ORDINARIA',1000);
 	AGREGAR_TIPO_CUOTAS('EXTRA ORDINARIA',2000);
 	AGREGAR_SERVICIOS('COMEDOR DE PAN');
+    AGREGAR_SERVICIOS('lamedor DE pan');
+	AGREGAR_CUOTAS(1,0,'01-01-2025',1);
+    AGREGAR_CUOTAS(2,0,'01-01-2025',2);
+    --
+    AGREGAR_USUARIOS(1,'nicolas','user','MONTAMINOS','URETRA',1,'LORONSONLAND@GMAIL.COM',1111,1,0);
+    AGREGAR_USUARIOS(2,'nicolas','admin','robles','alargado',1,'sadpapu@GMAIL.COM',666,2,0);
+    AGREGAR_PREDIOS(5,50,0,1);
+    AGREGAR_PREDIOS(6,125,0,2);
+    --
+    AGREGAR_SUBZONAS('PIEZA DE LORSON');
+	AGREGAR_ZONAS('CASA DE LORSON',1,1);
+	AGREGAR_SECTORES('POBLACION DE LORSON',1);
+    AGREGAR_SUBZONAS('PIEZA DE naiko');
+	AGREGAR_ZONAS('CASA DE naiko',2,2);
+	AGREGAR_SECTORES('POBLACION DE naiko(rankagua)',2);
+	--
+	AGREGAR_CANALES('canal DE LORSON',50,1);
+	AGREGAR_DIRECTIVAS('COME PANES',1);
+	AGREGAR_PRESIDENTES('NICOLAS','MONTAMINOS','URETRA',1);
+    AGREGAR_CANALES('canal DE naiko',100,2);
+	AGREGAR_DIRECTIVAS('COME burguer',2);
+	AGREGAR_PRESIDENTES('NICOLAS','sadnikaido','aña',2);
+	--
+	VINCULAR_PREDIO_CANALES(1,1,1);
+    VINCULAR_PREDIO_CANALES(1,2,2);
+    --
+    AGREGAR_PROYECTOS('FABRICA LADRILLOS','UNA FABRICA LADRILLOS','01-01-2024','01-01-2025','ACTIVO',1);
+	AGREGAR_COMPUERTAS(255,'PUERTA DEL BAÑO DE LORSON',1);
+	AGREGAR_CELADORES('NICOLITO','MONTAMINOS','IMBECIL',1);
+    AGREGAR_PROYECTOS('FABRICA monster','UNA FABRICA de mosnter','01-01-2024','01-01-2025','inactivo',2);
+	AGREGAR_COMPUERTAS(2565,'guitalla naiko',2);
+	AGREGAR_CELADORES('naikolito','aña','rodriguez',2);
+	--
+end;
+
+begin
+	AGREGAR_REGIONES('Maule norte');
+    AGREGAR_REGIONES('Maule sur');
+    AGREGAR_REGIONES('Maule sur');
+    AGREGAR_REGIONES('Bernardo O Higgins');
+	AGREGAR_DIRECCIONES('24 norte',3452);
+    AGREGAR_DIRECCIONES('calle aurora',325);
+    AGREGAR_DIRECCIONES('arturo pratt',777);
+    AGREGAR_DIRECCIONES('las aguas',424);
+	AGREGAR_COMUNAS('talca',1,1);
+    AGREGAR_COMUNAS('linares',2,2);
+    AGREGAR_COMUNAS('colbun',3,3);
+    AGREGAR_COMUNAS('rancagua',4,4);
+    --
+   	AGREGAR_TIPO_CUOTAS('ORDINARIA',1000);
+	AGREGAR_TIPO_CUOTAS('ORDINARIA',2000);
+    AGREGAR_TIPO_CUOTAS('ORDINARIA',3000);
+	AGREGAR_TIPO_CUOTAS('EXTRA ORDINARIA',2000);
+	AGREGAR_SERVICIOS('mantenimiento canal');
+    AGREGAR_SERVICIOS('mantenimiento compuerta');
+    AGREGAR_SERVICIOS('');
     AGREGAR_SERVICIOS('lamedor DE pan');
 	AGREGAR_CUOTAS(1,0,'01-01-2025',1);
     AGREGAR_CUOTAS(2,0,'01-01-2025',2);
