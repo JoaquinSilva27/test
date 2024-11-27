@@ -3,8 +3,8 @@ const oracledb = require("oracledb");
 require("dotenv").config();
 
 const cns = {
-  user: process.env.DB_USER || "C##JUAN",
-  password: process.env.DB_PASSWORD || "basededatos",
+  user: process.env.DB_USER || "FRIKZ",
+  password: process.env.DB_PASSWORD || "1234",
   connectString: process.env.DB_CONNECTION || "localhost/XE",
 };
 
