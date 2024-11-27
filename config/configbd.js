@@ -12,7 +12,7 @@ const cns = {
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 
 // Función para abrir una conexión y ejecutar SQL
-async function Open(sql, binds = {}, autoCommit = false) {
+async function Open(sql, binds = {}, autoCommit = true) {
   let cnn;
   try {
     cnn = await oracledb.getConnection(cns);

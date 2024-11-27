@@ -2201,14 +2201,20 @@ END;
 -- Funcion para calcular interes
 CREATE OR REPLACE FUNCTION calcular_total_con_interes(
     p_cod_cuota NUMBER
+    p_rut NUMBER
 ) RETURN NUMBER IS
     v_total_con_interes NUMBER := 0;
     v_dias_vencidos NUMBER := 0;
-    v_total_cuota NUMBER;
+    v_deuda NUMBER;
     v_fecha_vencimiento DATE;
 BEGIN
-    SELECT TOTAL_CUOTA, FECHA_VENCIMIENTO_CUOTA 
-    INTO v_total_cuota, v_fecha_vencimiento
+    -- obtener la deuda del usuario
+    SELECT DEUDA INTO v_deuda
+    from SA_JS_JO_NR_USUARIOS
+    where RUT_USUARIO = p_rut;
+
+    SELECT FECHA_VENCIMIENTO_CUOTA 
+    INTO v_fecha_vencimiento
     FROM SA_JS_JO_NR_CUOTAS
     WHERE COD_CUOTA = p_cod_cuota;
 
@@ -2216,7 +2222,9 @@ BEGIN
         v_dias_vencidos := SYSDATE - v_fecha_vencimiento;
     END IF;
     -- Calcular el total con interés (0.05% por día de atraso) (cambiar)
-    v_total_con_interes := v_total_cuota + (v_total_cuota * 0.00053 * v_dias_vencidos);
+    v_total_con_interes := v_deuda + (v_deuda * 0.00053 * v_dias_vencidos);
+
+    --
     RETURN v_total_con_interes;
 END;
 /

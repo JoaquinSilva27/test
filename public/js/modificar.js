@@ -187,7 +187,22 @@ function validarFormularioAntesDeGuardar(fields) {
 
     return formularioValido; // Retorna true si todos los campos son válidos
 }
-
+const convertirFecha = (valor) => {
+    if (typeof valor === 'string') {
+        // Intenta reconocer el formato ISO (e.g., 2024-11-11)
+        if (valor.match(/^\d{4}-\d{2}-\d{2}$/)) {
+            const [year, month, day] = valor.split('-');
+            return `${day}-${month}-${year}`;
+        }
+        // Intenta reconocer formato ISO extendido con hora (e.g., 2024-11-11T00:00:00)
+        if (valor.match(/^\d{4}-\d{2}-\d{2}T/)) {
+            const [fecha] = valor.split('T');
+            const [year, month, day] = fecha.split('-');
+            return `${day}-${month}-${year}`;
+        }
+    }
+    return valor; // Si no es una fecha reconocible, regresa el valor original
+};
 
 async function guardarModificaciones() {
     const campos = document.querySelectorAll(".campos-modificar input, .campos-modificar select");
@@ -199,17 +214,19 @@ async function guardarModificaciones() {
         if (campo.name.toLowerCase().includes("pk") || campo.disabled) {
             pk = campo.value; // Detecta la PK
         } else {
-            updatedData[campo.name] = campo.value; // Captura valores normales y selects
+            console.log(`campo name: ${campo.name} = ${campo.type}`);
+            updatedData[campo.name] = campo.type === 'date' || campo.name.toLowerCase().includes('fecha')
+            ? convertirFecha(campo.value)
+            : campo.value;
         }
     });
-
     if (!pk) {
         alert("No se puede actualizar el registro sin la clave primaria.");
         return;
     }
 
     const selectedTable = document.getElementById("entitySelect").value;
-
+    console.log(updatedData);
     try {
         const response = await fetch(`http://localhost:3000/api/tables/${selectedTable}`, {
             method: "PUT",
