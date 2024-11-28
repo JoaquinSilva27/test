@@ -1,12 +1,15 @@
 const { Router } = require('express');
 const router = Router();
 const BD = require('../config/configbd');
+const { isAuthenticated, authorizeRoles } = require('../middleware/sessionMiddleware');
+
+
 
 // Agregar prefijo para evitar conflictos (por ejemplo, "/tables")
 const PREFIX = '/tables';
 
 // CREATE: Llama a `INSERT_TABLA`
-router.post(`${PREFIX}/:table`, async (req, res) => {
+router.post(`${PREFIX}/:table`, isAuthenticated, authorizeRoles('admin'), async (req, res) => {
     const { table } = req.params;
     const data = req.body;
 
@@ -40,7 +43,7 @@ router.post(`${PREFIX}/:table`, async (req, res) => {
 });
 
 // UPDATE: Llama a `UPDATE_TABLA`
-router.put(`${PREFIX}/:table`, async (req, res) => {
+router.put(`${PREFIX}/:table`, isAuthenticated, authorizeRoles('admin'), async (req, res) => {
     const { table } = req.params;
     const data = req.body;
 
@@ -65,7 +68,7 @@ router.put(`${PREFIX}/:table`, async (req, res) => {
 });
 
 // DELETE: Llama a `ELIMINAR_TABLA`
-router.delete(`${PREFIX}/:table/:id`, async (req, res) => {
+router.delete(`${PREFIX}/:table/:id`, isAuthenticated, authorizeRoles('admin'), async (req, res) => {
     const { table, id } = req.params;
 
     const procedure = `ELIMINAR_${table.toUpperCase()}`;
