@@ -2199,8 +2199,8 @@ END;
 -- Funciones
 
 -- Funcion para calcular interes
-CREATE OR REPLACE FUNCTION calcular_total_con_interes(
-    p_cod_cuota NUMBER
+CREATE OR REPLACE FUNCTION SA_JS_JO_NR_calcular_total_con_interes(
+    p_cod_cuota NUMBER,
     p_rut NUMBER
 ) RETURN NUMBER IS
     v_total_con_interes NUMBER := 0;
@@ -2228,34 +2228,7 @@ BEGIN
     RETURN v_total_con_interes;
 END;
 /
-/* EJEMPLO DE USO:
-SELECT COD_CUOTA,
-       TOTAL_CUOTA,
-       calcular_total_con_interes(COD_CUOTA) AS TOTAL_CON_INTERES
-FROM SA_JS_JO_NR_CUOTAS
-WHERE COD_CUOTA = 101;  -- Reemplaza 101 con el código de la cuota que deseas consultar
-*/
 
--- fUNCION PARA VERIFICAR DISPONIBILIDAD DEL PROYECTO (No sé quien la hizo pero como me daba error la cambié)
-/*CREATE OR REPLACE FUNCTION verificar_disponibilidad_proyecto(
-    p_cod_proyecto NUMBER
-) RETURN BOOLEAN IS
-    v_disponible BOOLEAN := TRUE;
-    v_estado VARCHAR2(20);
-    v_cuotas_vencidas NUMBER;
-BEGIN
-    -- Verificar si el proyecto está activo
-    SELECT estado INTO v_estado
-    FROM SA_JS_JO_NR_PROYECTOS  -- Suponiendo que existe una tabla de proyectos
-    WHERE cod_proyecto = p_cod_proyecto;
-
-    IF v_estado != 'Activo' THEN
-        v_disponible := FALSE;
-    END IF;
-    RETURN v_disponible;
-    verificar_disponibilidad_proyecto;
-END;
-*/
 CREATE OR REPLACE FUNCTION verificar_disponibilidad_proyecto(
     p_cod_proyecto NUMBER
 ) RETURN BOOLEAN IS

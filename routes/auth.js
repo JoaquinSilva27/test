@@ -123,7 +123,7 @@ router.get("/profile/:rut", async (req, res) => {
 
           // Paso 2: Calcular la deuda con interés
           const calcularInteresQuery = `
-              SELECT TRUNC(calcular_total_con_interes(:codCuota, :rut), 0) AS deudaConInteres 
+              SELECT TRUNC(SA_JS_JO_NR_calcular_total_con_interes(:codCuota, :rut), 0) AS deudaConInteres 
               FROM DUAL
           `;
           const bindsInteres = {
