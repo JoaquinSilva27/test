@@ -2229,7 +2229,7 @@ BEGIN
 END;
 /
 
-CREATE OR REPLACE FUNCTION verificar_disponibilidad_proyecto(
+CREATE OR REPLACE FUNCTION SA_JS_JO_NR_verificar_disponibilidad_proyecto(
     p_cod_proyecto NUMBER
 ) RETURN BOOLEAN IS
     v_disponible BOOLEAN := TRUE;
