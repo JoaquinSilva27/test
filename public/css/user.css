@@ -168,7 +168,7 @@ header {
     justify-content: center;
     width: 100%; 
     max-width: 1500px; 
-    min-width: 800px;
+    min-width: 600px;
     margin: 20px auto; 
     background-color: #ffffff; 
     border-radius: 20px; 
@@ -191,7 +191,6 @@ header {
     height: 150px;
     border-radius: 50%; 
     overflow: hidden; 
-    border: 4px solid #004643; 
     margin-bottom: 15px; 
 }
 
@@ -212,7 +211,7 @@ header {
 /* Datos del perfil */
 .perfil-datos {
     width: 100%; 
-    text-align: left;
+    text-align: center;
     font-size: 1.2em;
     color: #001e1d;
     line-height: 1.8em; 

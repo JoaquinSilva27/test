@@ -12,7 +12,7 @@ const PREFIX = '/tables';
 router.post(`${PREFIX}/:table`, isAuthenticated, authorizeRoles('admin'), async (req, res) => {
     const { table } = req.params;
     const data = req.body;
-
+    console.log(`<< Ruta para agregar`);
     console.log(`Datos recibidos para la tabla ${table}:`, data);
 
     const procedure = `AGREGAR_${table.toUpperCase()}`;

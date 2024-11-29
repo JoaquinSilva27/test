@@ -134,6 +134,8 @@ async function agregarEntidad() {
         const result = await response.json();
         if (response.ok) {
             alert(result.message); // Muestra el mensaje de éxito del servidor
+            document.getElementById("second-section").style.display = "none";
+            document.getElementById("admin-registros-container").style.display = "block";
         } else {
             alert(`Error: ${result.error}`); // Muestra el error devuelto por el servidor
         }

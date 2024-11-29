@@ -123,10 +123,12 @@ header {
     margin-right: 40px;
     background-color: #e8e4e6;
     border-radius: 50%;
-    box-shadow: #001e1d;
+    border: 5px solid #0f3433; 
+    box-shadow: x 4px 10px  #001e1d;
     display: flex;
     justify-content: center;
     width:400px;
     height:400px;
     line-height:25px;
 }
+

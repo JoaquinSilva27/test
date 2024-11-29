@@ -165,9 +165,8 @@ function mostrarFormularioModificar(selectedTable, registro) {
     const guardarBtn = document.getElementById("btn-guardar-modificar");
     guardarBtn.addEventListener("click", (event) => {
         if (!validarFormularioAntesDeGuardar(registro.data)) {
+            alert("Formato de entrada no valido");
             event.preventDefault(); // Evita el envío del formulario si hay errores
-        } else {
-            guardarModificaciones(); // Solo se ejecuta si la validación es exitosa
         }
     });
 }
