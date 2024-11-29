@@ -26,12 +26,12 @@ async function realizarPago() {
             paymentMessage.style.color = "green";
             paymentMessage.innerText = data.message;
 
-            // Actualizar la deuda restante en la interfaz
+            // Actualiza la deuda
             const deudaActual = parseFloat(document.getElementById("debtAmount").innerText);
             const nuevaDeuda = deudaActual - cantidad;
             document.getElementById("debtAmount").innerText = nuevaDeuda >= 0 ? nuevaDeuda : 0;
 
-            // Limpiar el campo de entrada
+            // Limpia el campo
             document.getElementById("amountInput").value = "";
         } else {
             paymentMessage.style.color = "red";
@@ -46,7 +46,7 @@ async function realizarPago() {
 
 
 function ocultarSecciones() {
-    // Oculta todas las secciones
+    // Oculta todas las secciones para evitar que se vea feo
     document.getElementById('contenedor').style.display = 'none';
     document.getElementById('pagar-contenedor').style.display = 'none';
     document.getElementById('perfil-contenedor').style.display = 'none';
@@ -74,7 +74,7 @@ async function showhdp() {
     contenedor.style.display = 'block';
 
     const usuario = await obtenerSesionUsuario();
-    console.log("Usuario obtenido:", usuario);  // Verifica que el usuario tenga el formato correcto
+    console.log("Usuario obtenido:", usuario);
 
     if (usuario && usuario.rut) {
         await cargarHistorialPagos(usuario.rut);
@@ -95,10 +95,10 @@ async function obtenerSesionUsuario() {
         console.log("Datos de sesión:", data);
 
         if (data.success) {
-            return data.user; // Devuelve el usuario completo, incluyendo el RUT y nombre
+            return data.user;
         } else {
             alert("La sesión ha expirado. Por favor, inicia sesión nuevamente.");
-            window.location.href = "login.html";  // Redirigir al login si la sesión ha expirado
+            window.location.href = "login.html";
         }
     } catch (error) {
         console.error("Error al obtener la sesión:", error);
@@ -116,11 +116,11 @@ async function obtenerPerfil(rut) {
             const primerNombre = data.profile.nombreCompleto.split(' ')[0];
             document.getElementById('mensaje-inicio').innerText = `¡Bienvenido/a ${primerNombre} :D!`;
 
-            // Actualizar la sección de "Pagar"
+            // Datos de Pagar
             document.getElementById('userNamePago').innerText = primerNombre;
             document.getElementById('debtAmount').innerText = data.profile.deuda || " Tu cuenta se encuentra al día";
 
-            // Resto de los datos de perfil
+            // Datos de Mi Perfil
             document.getElementById('nombre-usuario').innerText = data.profile.nombreCompleto || "Nombre no disponible";
             document.getElementById('perfil-canal').innerText = data.profile.canal || "No asociado";
             document.getElementById('perfil-directiva').innerText = data.profile.directiva || "No asociado";
@@ -141,13 +141,13 @@ async function obtenerPerfil(rut) {
 
 // Función para mostrar la sección de "Pagar"
 async function showpa() {
-    ocultarSecciones(); // Oculta otras secciones
-    document.getElementById('pagar-contenedor').style.display = 'block'; // Muestra "Pagar"
+    ocultarSecciones();
+    document.getElementById('pagar-contenedor').style.display = 'block';
 
-    // Obtener datos del usuario
+    // Obtenemos los datos del user
     const usuario = await obtenerSesionUsuario();
     if (usuario) {
-        // Cargar y mostrar perfil con la deuda
+        // Mostrar la deuda y el perfil
         await obtenerPerfil(usuario.rut);
     }
 }
@@ -169,7 +169,7 @@ async function obtenerMisDatos(rut) {
             document.getElementById('mis-datos-correo').innerText = data.profile.correo || "No disponible";
             document.getElementById('mis-datos-telefono').innerText = data.profile.telefono || "No disponible";
 
-            ocultarLoader(); // Oculta el loader al completar
+            ocultarLoader();
         } else {
             console.error("Error al obtener los datos:", data.message);
             mostrarMensajeError("No se pudo cargar el perfil.");
@@ -181,11 +181,10 @@ async function obtenerMisDatos(rut) {
     }
 }
 
-// Llama a obtenerPerfil con el RUT dinámico
 (async () => {
     const usuario = await obtenerSesionUsuario();
     if (usuario) {
-        await obtenerPerfil(usuario.rut); // Cargar perfil después de obtener sesión
+        await obtenerPerfil(usuario.rut);
     } else {
         mostrarMensajeError("No se pudo obtener la sesión.");
     }
@@ -195,25 +194,21 @@ async function obtenerMisDatos(rut) {
 // Función para mostrar "Mis Datos"
 async function showmd() {
     ocultarSecciones();  // Oculta otras secciones si las hay
-    document.getElementById('mis-datos-contenedor').style.display = 'block'; // Muestra Mis Datos
-    
-    // Obtiene los datos del usuario logueado
+    document.getElementById('mis-datos-contenedor').style.display = 'block';
     const usuario = await obtenerSesionUsuario(); 
     if (usuario) {
-        // Llama a la API de perfil para obtener los datos del usuario
+        // Llama a la API de perfil para obtener los datos del user
         obtenerMisDatos(usuario.rut);
     }
 }
 
-// Función para los mensajes recualiaos de error
+// Función para los mensajes de error
 
 function mostrarMensajeError(mensaje) {
     const errorContainer = document.getElementById('mensaje-error');
     if (errorContainer) {
-        errorContainer.innerText = mensaje; // Inserta el mensaje
-        errorContainer.style.display = 'block'; // Hazlo visible
-
-        // Ocultar automáticamente el mensaje después de 5 segundos
+        errorContainer.innerText = mensaje;
+        errorContainer.style.display = 'block';
         setTimeout(() => {
             errorContainer.style.display = 'none';
         }, 2000);
@@ -233,12 +228,12 @@ function ocultarLoader() {
     if (usuario) {
         await obtenerPerfil(usuario.rut);
     }
-    ocultarLoader(); // Oculta el loader incluso si no hay datos adicionales
+    ocultarLoader();
 })();
 
 setTimeout(() => {
     ocultarLoader();
-}, 5000); // Oculta el loader después de 5 segundos
+}, 5000);
 
 
 //------------------Relacionado al historial de pagos------------------------
@@ -248,24 +243,23 @@ async function cargarHistorialPagos(rut) {
     try {
         const response = await fetch(`/auth/payment-history/${rut}`);
         
-        // Verificar si la respuesta es válida
         if (!response.ok) {
             throw new Error(`Error ${response.status}: ${response.statusText}`);
         }
 
-        // Imprimir el contenido de la respuesta antes de procesarlo
+        // Imprime la respuesta antes de procesarlo
         const textResponse = await response.text();
         console.log("Respuesta del servidor (sin parsear):", textResponse);
 
-        // Ahora parseamos el JSON si la respuesta es válida
-        const result = JSON.parse(textResponse);  // Usamos JSON.parse en lugar de response.json()
+        // Luego se "parsea" el JSON si la respuesta es valida (se transforman los datos)
+        const result = JSON.parse(textResponse);
 
         console.log("Datos del historial de pagos recibidos:", result);
 
         const tbody = document.getElementById('paymentHistoryTable').querySelector('tbody');
-        tbody.innerHTML = ""; // Limpiar la tabla
+        tbody.innerHTML = "";
 
-        // Manejo cuando no hay historial disponible
+        // En caso de que no hayan datos
         if (!result.success || !result.history || result.history.length === 0) {
             tbody.innerHTML = `
                 <tr>
@@ -275,7 +269,7 @@ async function cargarHistorialPagos(rut) {
             return;
         }
 
-        // Renderizar el historial de pagos
+        // El historial de pagos
         result.history.forEach((pago, index) => {
             const row = `
                 <tr>
@@ -292,9 +286,9 @@ async function cargarHistorialPagos(rut) {
         const tbody = document.getElementById('paymentHistoryTable').querySelector('tbody');
         tbody.innerHTML = `
             <tr>
-                <td colspan="5" style="text-align: center; color: red;">Error al cargar el historial de pagos. Intente más tarde.</td>
+                <td colspan="5" style="text-align: center; color: red;">No hay registro de pagos disponibles.</td>
             </tr>
         `;
     }
 }
-//-----------------------Hasta aca----------------------------------------
+//-----------------------Fin por fin :)----------------------------------------

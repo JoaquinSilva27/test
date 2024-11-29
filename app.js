@@ -3,7 +3,7 @@ const session = require("express-session");
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require("path");
-const { Open, testConnection } = require("./config/configbd"); // Asegúrate de que la ruta sea correcta
+const { Open, testConnection } = require("./config/configbd");
 
 
 
@@ -12,18 +12,13 @@ const { Open, testConnection } = require("./config/configbd"); // Asegúrate de 
 const crudRoutes = require('./routes/registros');
 const authRoutes = require("./routes/auth");
 const adminRoutes = require("./routes/admin");
-const entitiesRoutes = require('./routes/entities'); // Nueva ruta para las entidades
+const entitiesRoutes = require('./routes/entities');
 const registrosRoutes = require('./routes/registros');
 const reportesRoutes = require('./routes/reportes');
-
-//del user
-const historialRoutes = require("./routes/user/historial");
 
 
 // Crear la aplicación Express
 const app = express();
-
-// Verificar conexión con la base de datos antes de iniciar el servidor
 
 
 // Configuración del middleware de sesión
@@ -34,7 +29,7 @@ app.use(
         saveUninitialized: true,
         cookie: {
             maxAge: 15 * 60 * 1000, // 15 minutos en milisegundos
-            secure: false, // Cambiar a true si usas HTTPS
+            secure: false,
             httpOnly: true,
         },
     })
@@ -53,7 +48,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Rutas de prueba
 app.get("/test-db", async (req, res) => {
     try {
-        await testConnection(); // Probar conexión
+        await testConnection();
         res.json({ success: true, message: "Conexión exitosa" });
     } catch (err) {
         res.status(500).json({ success: false, message: err.message });
@@ -61,7 +56,7 @@ app.get("/test-db", async (req, res) => {
 });
 
 app.get("/execute-query", async (req, res) => {
-    const sql = "SELECT table_name FROM user_tables WHERE table_name LIKE 'SA_JS_JO_NR%'"; // Cambia a tu consulta
+    const sql = "SELECT table_name FROM user_tables WHERE table_name LIKE 'SA_JS_JO_NR%'";
     try {
         const result = await Open(sql);
         res.json({ success: true, data: result.rows });
@@ -72,16 +67,12 @@ app.get("/execute-query", async (req, res) => {
 
 
 
-app.use("/auth", authRoutes); // Autenticación
-app.use("/admin", adminRoutes); // Administración
-app.use('/api', crudRoutes); // Rutas para CRUD (Registros)
-app.use('/entities', entitiesRoutes); // Asegúrate de que esta línea esté en app.js
-app.use('/api/tables', registrosRoutes); // Rutas para tablas con prefijo
-app.use('/api/reportes', reportesRoutes); // Rutas específicas para reportes
-
-
-//del user
-app.use("/api", historialRoutes);
+app.use("/auth", authRoutes);
+app.use("/admin", adminRoutes);
+app.use('/api', crudRoutes);
+app.use('/entities', entitiesRoutes);
+app.use('/api/tables', registrosRoutes);
+app.use('/api/reportes', reportesRoutes);
 
 
 // Ruta por defecto para la página de inicio
