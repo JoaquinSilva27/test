@@ -2443,7 +2443,7 @@ END;
 
 --calcular deuda usuario
 
-CREATE OR REPLACE TRIGGER trg_calcular_deuda_usuarios-- BIEN
+CREATE OR REPLACE TRIGGER trg_calcular_deuda_usuarios
 AFTER INSERT OR UPDATE OF ACCIONES_PREDIO
 ON SA_JS_JO_NR_PREDIOS
 FOR EACH ROW
@@ -2643,7 +2643,7 @@ BEGIN
 END;
 /
 --3. Informe de ingresos desde X fecha hasta Y fecha
-create or replace NONEDITIONABLE PROCEDURE INFORME_INGRESOS_FECHA (
+create or replace PROCEDURE INFORME_INGRESOS_FECHA (
     P_FECHA_INICIO IN DATE,
     P_FECHA_FIN IN DATE,
     P_RESULTADO OUT SYS_REFCURSOR
