@@ -5,7 +5,7 @@ async function mostrarFormularioAgregar(selectedTable) {
     SelectedTable1 = selectedTable;
     document.querySelector('.fixed-header h3').textContent = `Agregar ${selectedTable.charAt(0).toUpperCase() + selectedTable.slice(1).toLowerCase()}`;
     const fieldsContainer = document.getElementById('fields-container');
-    fieldsContainer.innerHTML = ''; // Limpia cualquier campo previo
+    fieldsContainer.innerHTML = '';
 
     // Define los atributos especiales y sus valores permitidos
     const atributosEspeciales = {
@@ -13,7 +13,6 @@ async function mostrarFormularioAgregar(selectedTable) {
         PRIVILEGIOS: ["user", "admin"],
         ESTADO_PROYECTO: ["Activo", "Terminado"], 
         TIPO_CUOTA: ["Ordinaria", "Extraordinaria"], 
-        // Agrega más atributos según sea necesario
     };
 
     try {
@@ -28,7 +27,7 @@ async function mostrarFormularioAgregar(selectedTable) {
 
         // Generar el formulario excluyendo PK, excepto si el nombre es RUT
         fields
-            .filter(field => !field.isPrimaryKey || field.name === 'RUT_USUARIO') // Excluye la PK, pero permite RUT
+            .filter(field => !field.isPrimaryKey || field.name === 'RUT_USUARIO')
             .forEach(field => {
                 const inputBox = document.createElement('div');
                 inputBox.className = 'input-box';
@@ -68,8 +67,8 @@ async function mostrarFormularioAgregar(selectedTable) {
                     }
                     // Agregar placeholder y validaciones específicas para campos de tipo date
                     if (field.type === 'date') {
-                        input.placeholder = 'dd-mm-aaaa'; // Placeholder con formato de fecha
-                        input.pattern = '\\d{4}-\\d{2}-\\d{2}'; // Patrón de validación para fechas
+                        input.placeholder = 'dd-mm-aaaa';
+                        input.pattern = '\\d{4}-\\d{2}-\\d{2}';
                     }
 
                     inputBox.appendChild(input);
@@ -96,17 +95,17 @@ function convertirFormatoFecha(fechaISO) {
 // Función para enviar los datos de la entidad a la base de datos
 async function agregarEntidad() {
     const fieldsContainer = document.getElementById('fields-container');
-    const inputs = fieldsContainer.querySelectorAll('input, select'); // Incluye inputs y selects
+    const inputs = fieldsContainer.querySelectorAll('input, select');
 
-    console.log('Tabla seleccionada en el frontend:', SelectedTable1); // Log para depuración
+    console.log('Tabla seleccionada en el frontend:', SelectedTable1);
 
     const formData = {};
-    let hasEmptyFields = false; // Variable para rastrear si hay campos vacíos
+    let hasEmptyFields = false;
 
     inputs.forEach(field => {
         let value = field.value;
 
-        if (!value.trim()) { // Si el campo está vacío
+        if (!value.trim()) {
             hasEmptyFields = true;
         }
 
@@ -115,29 +114,29 @@ async function agregarEntidad() {
             value = convertirFormatoFecha(value);
         }
 
-        formData[field.name] = value; // Captura el valor de cada campo por su atributo "name"
+        formData[field.name] = value;
     });
 
     if (hasEmptyFields) {
         alert('Por favor, completa todos los campos antes de enviar.');
-        return; // Detiene la ejecución si hay campos vacíos
+        return;
     }
-    console.log('Datos recolectados:', formData); // Verifica qué datos estás enviando
+    console.log('Datos recolectados:', formData);
 
     try {
         const response = await fetch(`http://localhost:3000/api/tables/${SelectedTable1}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData) // Convierte los datos a JSON
+            body: JSON.stringify(formData)
         });
 
         const result = await response.json();
         if (response.ok) {
-            alert(result.message); // Muestra el mensaje de éxito del servidor
+            alert(result.message);
             document.getElementById("second-section").style.display = "none";
             document.getElementById("admin-registros-container").style.display = "block";
         } else {
-            alert(`Error: ${result.error}`); // Muestra el error devuelto por el servidor
+            alert(`Error: ${result.error}`);
         }
     } catch (error) {
         console.error("Error al agregar el registro:", error);

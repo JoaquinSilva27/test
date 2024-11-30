@@ -252,14 +252,14 @@ header {
 }
 
 .contenedor-historial {
-    margin: 20px auto; /* Centro horizontal automático */
+    margin: 20px auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: justify;
-    padding: 20px; /* Espaciado interno */
-    max-width: 800px; /* Ancho máximo */
+    padding: 20px;
+    max-width: 800px;
 }
 
 .contenedor-historial h2 {
@@ -396,16 +396,16 @@ label {
 
 /* Estilizar imágenes en el pie de pago */
 .pago-footer img {
-    height: 40px; /* Altura uniforme */
-    margin: 0 10px; /* Separación entre imágenes */
-    vertical-align: middle; /* Alinear verticalmente */
+    height: 40px;
+    margin: 0 10px;
+    vertical-align: middle;
 }
 
 /* Quitar flechitas del input numérico */
 input[type="number"] {
-    -moz-appearance: textfield; /* Firefox */
-    -webkit-appearance: none;  /* Safari y Chrome */
-    appearance: none;          /* Otros navegadores */
+    -moz-appearance: textfield;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
@@ -415,49 +415,49 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 /* Mejor estilo para la tabla del historial */
 .historial-table {
-    width: 100%; /* Ocupar todo el ancho disponible */
-    max-width: 800px; /* Limitar el ancho */
-    margin: 20px auto; /* Centrar la tabla */
-    border-collapse: collapse; /* Quitar espacio entre bordes */
-    background-color: #f9f9f9; /* Fondo claro */
-    border-radius: 10px; /* Bordes redondeados */
-    overflow: hidden; /* Aplicar redondeo a toda la tabla */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .historial-table th, 
 .historial-table td {
-    padding: 12px 15px; /* Espaciado interno */
-    text-align: center; /* Centrar texto */
-    border: 1px solid #ddd; /* Bordes claros */
+    padding: 12px 15px;
+    text-align: center;
+    border: 1px solid #ddd;
 }
 
 .historial-table th {
-    background-color: #004643; /* Color de fondo para encabezados */
-    color: #ffffff; /* Texto blanco */
-    font-size: 1.2em; /* Tamaño del texto */
-    font-weight: bold; /* Negrita */
+    background-color: #004643;
+    color: #ffffff;
+    font-size: 1.2em;
+    font-weight: bold;
 }
 
 .historial-table tbody tr:nth-child(even) {
-    background-color: #f2f2f2; /* Fondo alternado */
+    background-color: #f2f2f2;
 }
 
 .historial-table tbody tr:hover {
-    background-color: #f9bc60; /* Fondo al pasar el mouse */
-    color: #001e1d; /* Cambiar el color del texto */
-    transition: background-color 0.3s ease; /* Suavizar transición */
+    background-color: #f9bc60;
+    color: #001e1d;
+    transition: background-color 0.3s ease;
 }
 
 .btn-pago:hover {
-    background-color: #0088cc; /* Color más oscuro */
-    transform: translateY(-2px); /* Levantar botón al pasar el mouse */
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra */
+    background-color: #0088cc;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .btn-pago:focus {
-    outline: none; /* Quitar borde azul */
-    box-shadow: 0 0 5px #00aaff; /* Resaltar en enfoque */
+    outline: none;
+    box-shadow: 0 0 5px #00aaff;
 }
 
 input[type="number"]:hover {
@@ -465,20 +465,20 @@ input[type="number"]:hover {
 }
 
 input[type="number"]:focus {
-    outline: none; /* Quitar el borde por defecto */
-    box-shadow: 0px 0px 8px rgba(0, 170, 255, 0.5); /* Efecto foco */
+    outline: none;
+    box-shadow: 0px 0px 8px rgba(0, 170, 255, 0.5);
 }
 
 @media (max-width: 768px) {
     .contenedor {
-        width: 90%; /* Reducir el ancho */
-        height: auto; /* Ajustar automáticamente la altura */
-        padding: 10px; /* Más espacio interno */
+        width: 90%;
+        height: auto;
+        padding: 10px;
     }
 
     .historial-table {
-        font-size: 0.9em; /* Reducir tamaño de texto */
-        overflow-x: auto; /* Habilitar scroll horizontal */
-        display: block; /* Permitir que se ajuste al contenedor */
+        font-size: 0.9em;
+        overflow-x: auto;
+        display: block;
     }
 }

@@ -4,7 +4,7 @@ function showMsj() {
 }
 
 async function realizarPago() {
-    const rut = await obtenerSesionUsuario().then(usuario => usuario.rut); // Obtener el RUT del usuario
+    const rut = await obtenerSesionUsuario().then(usuario => usuario.rut);
     const cantidad = parseFloat(document.getElementById("amountInput").value);
     const paymentMessage = document.getElementById("paymentMessage");
 
@@ -129,7 +129,7 @@ async function obtenerPerfil(rut) {
             document.getElementById('perfil-correo').innerText = data.profile.correo || "No disponible";
             document.getElementById('perfil-telefono').innerText = data.profile.telefono || "No disponible";
 
-            ocultarLoader(); // Oculta el loader al completar
+            ocultarLoader();
         } else {
             mostrarMensajeError("Error al cargar el perfil.");
         }
@@ -193,11 +193,11 @@ async function obtenerMisDatos(rut) {
 //---------------------fin--------------------------------------------------
 // Función para mostrar "Mis Datos"
 async function showmd() {
-    ocultarSecciones();  // Oculta otras secciones si las hay
+    ocultarSecciones();
     document.getElementById('mis-datos-contenedor').style.display = 'block';
     const usuario = await obtenerSesionUsuario(); 
     if (usuario) {
-        // Llama a la API de perfil para obtener los datos del user
+        // Llama a la API de perfil
         obtenerMisDatos(usuario.rut);
     }
 }

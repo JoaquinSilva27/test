@@ -20,7 +20,7 @@ router.get('/ingresos', async (req, res) => {
         const binds = {
             P_FECHA_INICIO: convertirFechaDDMMYY(fechaInicio),
             P_FECHA_FIN: convertirFechaDDMMYY(fechaFin),
-            P_CURSOR: { type: oracledb.CURSOR, dir: oracledb.BIND_OUT }, // Bind para el cursor
+            P_CURSOR: { type: oracledb.CURSOR, dir: oracledb.BIND_OUT },
         };
 
         const sql = `BEGIN INFORME_INGRESOS_FECHA(:P_FECHA_INICIO, :P_FECHA_FIN, :P_CURSOR); END;`;

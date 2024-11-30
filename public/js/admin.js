@@ -16,7 +16,7 @@ let currentAction = null; // Variable global para guardar la acción seleccionad
 
 async function fetchEntities() {
   try {
-      const response = await fetch('/entities/getEntities'); // Llama al endpoint del backend
+      const response = await fetch('/entities/getEntities');
       if (!response.ok) {
           throw new Error('Error al obtener las entidades.');
       }
@@ -31,7 +31,7 @@ async function fetchEntities() {
 // Poblar el selector con las entidades obtenidas
 function populateEntitySelect(entities) {
   const formContainer = document.getElementById('form-container');
-  formContainer.innerHTML = ''; // Limpia el contenido previo
+  formContainer.innerHTML = '';
 
   const options = entities.map(entity =>
       `<option value="${entity}">${entity.charAt(0).toUpperCase() + entity.slice(1).toLowerCase()}</option>`
@@ -73,7 +73,7 @@ function showMsj() {
 }
 
 function setAction(action) {
-  currentAction = action; // Guarda la acción seleccionada
+  currentAction = action;
   console.log(`Acción seleccionada: ${action}`);
 
   // Cambia el título según la acción seleccionada
@@ -109,13 +109,13 @@ function proceedWithAction() {
   console.log(`Procediendo con la acción: ${currentAction} sobre la entidad: ${selectedEntity}`);
 
   if (currentAction  === "Agregar") {
-      mostrarFormularioAgregar(selectedEntity); // Llamará a la función en agregar.js
+      mostrarFormularioAgregar(selectedEntity);
   } else if (currentAction  === "Consultar") {
-      mostrarFormularioConsulta(selectedEntity); // Llamará a la función en consultar.js
+      mostrarFormularioConsulta(selectedEntity);
   } else if (currentAction  === "Modificar") {
-      prepararFormularioModificar(selectedEntity); // Llamará a la función en modificar.js
+      prepararFormularioModificar(selectedEntity);
   } else if (currentAction  === "Eliminar") {
-      mostrarFormularioEliminar(selectedEntity); // Llamará a la función en eliminar.js
+      mostrarFormularioEliminar(selectedEntity);
   }
 }
 

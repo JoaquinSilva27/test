@@ -27,8 +27,8 @@ async function Open(sql, binds = {}, autoCommit = true) {
       while ((row = await cursor.getRow())) {
         rows.push(row);
       }
-      await cursor.close(); // Asegúrate de cerrar el cursor
-      return rows; // Devuelve las filas del cursor
+      await cursor.close();
+      return rows;
     }
     return result;
   } catch (err) {
@@ -51,8 +51,8 @@ async function OpenProcedure(procedure, binds, autoCommit = false) {
       .join(", ");
     const sql = `BEGIN ${procedure}(${placeholders}); END;`;
 
-    console.log("SQL generado:", sql); // Depuración
-    console.log("Valores de binds:", binds); // Depuración
+    console.log("SQL generado:", sql);
+    console.log("Valores de binds:", binds);
 
     const result = await connection.execute(sql, binds, { autoCommit });
     return result;
@@ -78,7 +78,7 @@ async function OpenCursorProcedure(procedure, binds) {
     // Agregar el cursor como un parámetro de salida (BIND_OUT)
     const options = {
       ...binds,
-      P_CURSOR: { type: oracledb.CURSOR, dir: oracledb.BIND_OUT }, // Configuración para P_CURSOR
+      P_CURSOR: { type: oracledb.CURSOR, dir: oracledb.BIND_OUT },
     };
 
     console.log("SQL generado:", sql);
@@ -94,11 +94,11 @@ async function OpenCursorProcedure(procedure, binds) {
 
     while ((row = await cursor.getRow())) {
       console.log("Fila obtenida del cursor:", row);
-      rows.push(row); // Agregar cada fila a la lista de resultados
+      rows.push(row);
     }
 
-    await cursor.close(); // Asegúrate de cerrar el cursor
-    return rows; // Devuelve las filas obtenidas
+    await cursor.close();
+    return rows;
   } catch (err) {
     console.error("Error en OpenCursorProcedure:", err);
     throw err;
@@ -115,11 +115,11 @@ async function OpenSimpleCursorProcedure(procedure) {
     const sql = `BEGIN ${procedure}(:P_CURSOR); END;`;
 
     const binds = {
-      P_CURSOR: { type: oracledb.CURSOR, dir: oracledb.BIND_OUT }, // Solo el cursor
+      P_CURSOR: { type: oracledb.CURSOR, dir: oracledb.BIND_OUT },
     };
 
-    console.log("SQL generado:", sql); // Para depuración
-    console.log("Binds utilizados:", binds); // Para depuración
+    console.log("SQL generado:", sql);
+    console.log("Binds utilizados:", binds);
 
     const result = await cnn.execute(sql, binds);
 
@@ -132,7 +132,7 @@ async function OpenSimpleCursorProcedure(procedure) {
       rows.push(row);
     }
     await cursor.close();
-    return rows; // Devuelve todas las filas del cursor
+    return rows;
   } catch (err) {
     console.error("Error en OpenSimpleCursorProcedure:", err);
     throw err;
@@ -198,7 +198,7 @@ async function OpenDoubleCursorProcedure(procedure, binds, cursor1, cursor2) {
     }
     await cursorTerminados.close();
 
-    return { activos, terminados }; // Devuelve los dos conjuntos de datos
+    return { activos, terminados };
   } catch (err) {
     console.error("Error en OpenDoubleCursorProcedure:", err);
     throw err;

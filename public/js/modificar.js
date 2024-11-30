@@ -108,7 +108,6 @@ function mostrarFormularioModificar(selectedTable, registro) {
         PRIVILEGIOS: ["user", "admin"],
         ESTADO_PROYECTO: ["Activo", "Terminado"],
         TIPO_CUOTA: ["Ordinaria", "Extraordinaria"],
-        // Agrega más atributos según sea necesario
     };
 
     registro.data.forEach(({ columnName, value, editable, type, maxLength }) => {
@@ -142,7 +141,7 @@ function mostrarFormularioModificar(selectedTable, registro) {
             input.value = value !== null ? value : ""; // Manejo de valores nulos
             input.required = true;
 
-            // Validar manualmente la longitud máxima si está definida
+            // Validar manualmente la longitud máxima
             if (maxLength) {
                 input.maxLength = maxLength; 
             }
@@ -211,7 +210,7 @@ async function guardarModificaciones() {
     // Recolectar los valores de los campos editados
     campos.forEach(campo => {
         if (campo.name.toLowerCase().includes("pk") || campo.disabled) {
-            pk = campo.value; // Detecta la PK
+            pk = campo.value;
         } else {
             console.log(`campo name: ${campo.name} = ${campo.type}`);
             updatedData[campo.name] = campo.type === 'date' || campo.name.toLowerCase().includes('fecha')

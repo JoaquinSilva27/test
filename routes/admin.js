@@ -16,7 +16,5 @@ router.post("/crear", isAuthenticated, authorizeRoles("admin"), (req, res) => {
   res.json({ success: true, message: "Recurso creado por admin" });
 });
 
-// Otras rutas de administrador
-// ...
 
 module.exports = router;

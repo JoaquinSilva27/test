@@ -209,7 +209,7 @@ router.get(`${PREFIX}/:table/data/:pk`, async (req, res) => {
 
     // Función para convertir una fecha ISO a formato DD-MM-YYYY
     const convertirFecha = (fechaISO) => {
-        if (!fechaISO) return null; // Maneja valores nulos
+        if (!fechaISO) return null;
         const fecha = new Date(fechaISO);
         const day = String(fecha.getDate()).padStart(2, '0');
         const month = String(fecha.getMonth() + 1).padStart(2, '0');
@@ -272,9 +272,9 @@ router.get(`${PREFIX}/:table/data/:pk`, async (req, res) => {
         const formattedResult = Object.entries(row).map(([key, value]) => ({
             columnName: key,
             value: key.toLowerCase().includes('fecha') && value ? convertirFecha(value) : value,
-            editable: key !== pkColumn, // La PK no es editable
-            type: columnDetails[key]?.type || 'text', // Tipo de dato
-            maxLength: columnDetails[key]?.maxLength || null, // Longitud máxima si aplica
+            editable: key !== pkColumn,
+            type: columnDetails[key]?.type || 'text',
+            maxLength: columnDetails[key]?.maxLength || null,
         }));
 
         return res.status(200).json({ pkColumn, data: formattedResult });

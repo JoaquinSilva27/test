@@ -1,6 +1,6 @@
 async function consultarEntidad() {
-    const selectedTable = document.getElementById('entitySelect').value; // Tabla seleccionada
-    const consultaInput = document.getElementById('consulta-input').value; // Valor ingresado o seleccionado
+    const selectedTable = document.getElementById('entitySelect').value;
+    const consultaInput = document.getElementById('consulta-input').value;
 
     if (!consultaInput) {
         alert('Por favor, selecciona o ingresa un valor válido.');
@@ -16,7 +16,7 @@ async function consultarEntidad() {
             return;
         }
 
-        const datosEntidad = await response.json(); // Aquí obtienes el array de datos
+        const datosEntidad = await response.json();
         console.log('Datos obtenidos del procedimiento:', datosEntidad);
 
         if (!Array.isArray(datosEntidad) || datosEntidad.length === 0) {
@@ -29,7 +29,7 @@ async function consultarEntidad() {
 
         // Actualiza los resultados en el frontend
         const camposResultado = document.querySelector('.campos-resultado');
-        camposResultado.innerHTML = ''; // Limpia el contenido previo
+        camposResultado.innerHTML = '';
 
         // Función para convertir fechas al formato DD-MM-YYYY
         const convertirFecha = (valor) => {
@@ -47,12 +47,12 @@ async function consultarEntidad() {
             campo.className = 'campo';
 
             const label = document.createElement('label');
-            label.textContent = key; // Nombre de la columna
+            label.textContent = key;
 
             const input = document.createElement('input');
             input.type = 'text';
-            input.value = value !== null ? convertirFecha(value) : ''; // Maneja valores nulos y convierte fechas
-            input.disabled = true; // El campo está deshabilitado para edición
+            input.value = value !== null ? convertirFecha(value) : '';
+            input.disabled = true;
 
             campo.appendChild(label);
             campo.appendChild(input);
@@ -103,7 +103,7 @@ function configurarBusquedaConsulta(selectedTable) {
             const resultados = await buscarSugerenciasConsulta(query, selectedTable);
             mostrarSugerenciasConsulta(resultados, sugerenciasConsulta, consultaInput);
         } else {
-            sugerenciasConsulta.innerHTML = ''; // Limpia las sugerencias si el input está vacío
+            sugerenciasConsulta.innerHTML = '';
         }
     };
     // Asocia el listener al input y guárdalo para poder eliminarlo después

@@ -29,7 +29,7 @@ router.post("/login", async (req, res) => {
   if (localUser) {
     // Guardar en la sesión
     req.session.user = { rut: localUser.rut, rol: localUser.rol };
-    console.log("Sesión iniciada:", req.session.user);  // Verifica que la sesión está activa
+    console.log("Sesión iniciada:", req.session.user);
 
     return res.status(200).json({
       success: true,
@@ -98,7 +98,7 @@ router.get("/profile/:rut", async (req, res) => {
   console.log("Estado actual del cache:", deudaCache);
   try {
       let deudaConInteres;
-      const hoy = new Date().toISOString().split("T")[0]; // Fecha actual sin la hora
+      const hoy = new Date().toISOString().split("T")[0];
 
       // Verificar si la deuda está en el cache y si fue actualizada hoy
       if (deudaCache[rut] && deudaCache[rut].ultimaActualizacion === hoy) {
@@ -184,7 +184,7 @@ router.get("/profile/:rut", async (req, res) => {
           region: row["NOMBRE_REGION"],
           correo: row["CORREO"],
           telefono: row["TELEFONO"],
-          deuda: deudaConInteres // Usar la deuda con interés calculada o almacenada
+          deuda: deudaConInteres
       }))[0];
 
       console.log("Perfil del usuario:", profile);
@@ -229,7 +229,6 @@ router.post("/pay", async (req, res) => {
 
           console.log(`Cache actualizado para el RUT ${rut}:`, deudaCache[rut]);
       } else {
-          // Si no hay cache, simplemente elimínalo (opcional)
           delete deudaCache[rut];
           console.log(`Cache eliminado para el RUT ${rut}.`);
       }

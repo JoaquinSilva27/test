@@ -34,7 +34,7 @@ document.getElementById('loginForm').addEventListener('submit', async (event) =>
         await new Promise(resolve => setTimeout(resolve, 4000));
 
         if (data.success) {
-            const rol = data.data?.rol; // Acceso al rol correcto
+            const rol = data.data?.rol;
             if (rol === "admin") {
                 window.location.href = "/admin.html";
             } else if (rol === "user") {
