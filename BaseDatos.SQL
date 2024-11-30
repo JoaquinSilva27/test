@@ -427,7 +427,7 @@ END;
 /
 
 -- FUNCION: verifica que no haya ninguna comuna asociada a la region que se desea eliminar, si existe entonces no se elimna
-CREATE OR REPLACE TRIGGER SA_JS_JO_NR_trg_prevenir_eliminacion_region
+CREATE OR REPLACE TRIGGER trg_prevenir_eliminacion_region
 BEFORE DELETE ON SA_JS_JO_NR_REGIONES
 FOR EACH ROW
 DECLARE
